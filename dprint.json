@@ -13,7 +13,8 @@
   },
   "excludes": [
     "**/*-lock.json",
-    "**/node_modules"
+    "**/node_modules",
+    "varapress.css"
   ],
   "plugins": [
     "https://plugins.dprint.dev/json-0.21.3.wasm",
