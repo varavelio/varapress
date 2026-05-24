@@ -1,0 +1,249 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "VDL (Varavel Definition Language)",
+  "scopeName": "source.vdl",
+  "config": {
+    "name": "VDL (Varavel Definition Language)"
+  },
+  "fileTypes": ["vdl"],
+  "patterns": [
+    { "include": "#comments" },
+    { "include": "#docstrings" },
+    { "include": "#annotations" },
+    { "include": "#declarations" },
+    { "include": "#keywords" },
+    { "include": "#constants-language" },
+    { "include": "#constants-numeric" },
+    { "include": "#spreads" },
+    { "include": "#strings" },
+    { "include": "#types-primitive" },
+    { "include": "#types-container" },
+    { "include": "#types-usage" },
+    { "include": "#fields" },
+    { "include": "#references" },
+    { "include": "#operators" }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.vdl",
+          "match": "//.*$"
+        },
+        {
+          "name": "comment.block.vdl",
+          "begin": "/\\*",
+          "end": "\\*/"
+        }
+      ]
+    },
+    "docstrings": {
+      "name": "string.quoted.docstring.multi.vdl",
+      "begin": "\"\"\"",
+      "end": "\"\"\"",
+      "patterns": [
+        {
+          "match": "(\\./[a-zA-Z0-9_\\-\\./]+\\.md)",
+          "captures": {
+            "1": { "name": "markup.underline.link.vdl" }
+          }
+        }
+      ]
+    },
+    "strings": {
+      "name": "string.quoted.double.vdl",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.vdl",
+          "match": "\\\\."
+        }
+      ]
+    },
+    "annotations": {
+      "patterns": [
+        {
+          "comment": "Annotation with argument: @name(...)",
+          "name": "meta.annotation.vdl",
+          "begin": "(@[a-zA-Z_][a-zA-Z0-9_]*)\\s*(\\()",
+          "beginCaptures": {
+            "1": { "name": "storage.type.annotation.vdl" },
+            "2": { "name": "punctuation.definition.parameters.begin.vdl" }
+          },
+          "end": "\\)",
+          "endCaptures": {
+            "0": { "name": "punctuation.definition.parameters.end.vdl" }
+          },
+          "patterns": [
+            { "include": "#docstrings" },
+            { "include": "#strings" },
+            { "include": "#constants-language" },
+            { "include": "#constants-numeric" },
+            { "include": "#spreads" },
+            { "include": "#types-usage" },
+            { "include": "#operators" }
+          ]
+        },
+        {
+          "comment": "Annotation flag: @name",
+          "name": "storage.type.annotation.vdl",
+          "match": "@[a-zA-Z_][a-zA-Z0-9_]*"
+        }
+      ]
+    },
+    "declarations": {
+      "patterns": [
+        {
+          "comment": "Type or enum declaration: type Foo { / enum Bar {",
+          "name": "meta.declaration.type.vdl",
+          "match": "\\b(type|enum)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+          "captures": {
+            "1": { "name": "keyword.control.vdl" },
+            "2": { "name": "entity.name.type.class.vdl" }
+          }
+        },
+        {
+          "comment": "Const declaration: const name ...",
+          "name": "meta.declaration.constant.vdl",
+          "match": "\\b(const)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+          "captures": {
+            "1": { "name": "keyword.control.vdl" },
+            "2": { "name": "variable.other.constant.vdl" }
+          }
+        }
+      ]
+    },
+    "keywords": {
+      "patterns": [
+        {
+          "name": "keyword.control.vdl",
+          "match": "\\b(include)\\b"
+        }
+      ]
+    },
+    "constants-language": {
+      "patterns": [
+        {
+          "name": "constant.language.boolean.vdl",
+          "match": "\\b(true|false)\\b"
+        }
+      ]
+    },
+    "constants-numeric": {
+      "patterns": [
+        {
+          "name": "constant.numeric.float.vdl",
+          "match": "\\b\\d+\\.\\d+\\b"
+        },
+        {
+          "name": "constant.numeric.integer.vdl",
+          "match": "\\b\\d+\\b"
+        }
+      ]
+    },
+    "spreads": {
+      "patterns": [
+        {
+          "comment": "Spread member: ...TypeName",
+          "match": "(\\.\\.\\.)(([a-zA-Z_][a-zA-Z0-9_]*))",
+          "captures": {
+            "1": { "name": "keyword.operator.spread.vdl" },
+            "2": { "name": "entity.name.type.class.vdl" }
+          }
+        }
+      ]
+    },
+    "types-primitive": {
+      "patterns": [
+        {
+          "name": "storage.type.primitive.vdl",
+          "match": "\\b(string|int|float|bool|datetime)\\b"
+        }
+      ]
+    },
+    "types-container": {
+      "patterns": [
+        {
+          "comment": "Map type: map[ValueType]",
+          "name": "storage.type.container.vdl",
+          "match": "\\b(map)\\b"
+        }
+      ]
+    },
+    "types-usage": {
+      "patterns": [
+        {
+          "comment": "Enum member reference: EnumName.MemberName",
+          "match": "\\b([A-Z][a-zA-Z0-9]*)\\.(([A-Z][a-zA-Z0-9]*))",
+          "captures": {
+            "1": { "name": "entity.name.type.class.vdl" },
+            "2": { "name": "variable.other.enummember.vdl" }
+          }
+        },
+        {
+          "comment": "PascalCase type/enum reference",
+          "name": "entity.name.type.class.vdl",
+          "match": "\\b[A-Z][a-zA-Z0-9]*\\b"
+        }
+      ]
+    },
+    "fields": {
+      "patterns": [
+        {
+          "comment": "Field/key name: identifier followed by optional ? then a type, {, [, string or end of line",
+          "match": "^\\s+([a-z_][a-zA-Z0-9_]*)(\\?)?(?=\\s+[a-zA-Z\\[{\"]|\\s*$)",
+          "captures": {
+            "1": { "name": "variable.other.property.vdl" },
+            "2": { "name": "keyword.operator.optional.vdl" }
+          }
+        }
+      ]
+    },
+    "references": {
+      "patterns": [
+        {
+          "comment": "camelCase/lowercase identifier used as a value reference",
+          "name": "entity.name.type.class.vdl",
+          "match": "(?<=[=\\s\\[])([a-z_][a-zA-Z0-9_]*)\\b"
+        }
+      ]
+    },
+    "operators": {
+      "patterns": [
+        {
+          "name": "keyword.operator.optional.vdl",
+          "match": "\\?"
+        },
+        {
+          "name": "keyword.operator.assignment.vdl",
+          "match": "="
+        },
+        {
+          "name": "punctuation.section.braces.begin.vdl",
+          "match": "\\{"
+        },
+        {
+          "name": "punctuation.section.braces.end.vdl",
+          "match": "\\}"
+        },
+        {
+          "name": "punctuation.section.brackets.begin.vdl",
+          "match": "\\["
+        },
+        {
+          "name": "punctuation.section.brackets.end.vdl",
+          "match": "\\]"
+        },
+        {
+          "name": "punctuation.definition.parameters.begin.vdl",
+          "match": "\\("
+        },
+        {
+          "name": "punctuation.definition.parameters.end.vdl",
+          "match": "\\)"
+        }
+      ]
+    }
+  }
+}
