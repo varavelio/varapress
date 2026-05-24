@@ -1,0 +1,23 @@
+{
+  "name": "varapress",
+  "version": "0.0.0",
+  "description": "A clean, fast, and responsive all-in-one theme for Zola",
+  "author": "Varavel",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/varavelio/varapress.git"
+  },
+  "bugs": {
+    "url": "https://github.com/varavelio/varapress/issues"
+  },
+  "homepage": "https://github.com/varavelio/varapress#readme",
+  "scripts": {
+    "format": "dprint fmt --config ./dprint.json --log-level warn",
+    "lint": "dprint check --config ./dprint.json --log-level warn"
+  },
+  "devDependencies": {
+    "dprint": "0.54.0"
+  }
+}
