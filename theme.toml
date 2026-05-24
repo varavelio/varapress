@@ -1,0 +1,23 @@
+name = "VaraPress"
+description = "A clean, fast, and responsive all-in-one Zola theme for Varavel projects"
+tags = [
+  "blog",
+  "documentation",
+  "docs",
+  "landing",
+  "responsive",
+]
+license = "MIT"
+homepage = "https://github.com/varavelio/varapress"
+min_version = "0.22.1" # Always same as in .devcontainer/Dockerfile
+demo = "https://press.varavel.com"
+
+[author]
+name = "Varavel"
+homepage = "https://varavel.com"
+
+# Any variable there can be overridden in the end user `zola.toml`
+# You don't need to prefix variables by the theme name but as this will
+# be merged with user data, some kind of prefix or nesting is preferable
+# Use snake_casing to be consistent with the rest of Zola
+[extra]

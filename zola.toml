@@ -1,0 +1,16 @@
+# The URL the site will be built for
+base_url = "https://press.varavel.com"
+
+# Whether to automatically compile all Sass files in the sass directory
+compile_sass = false
+
+# Whether to build a search index to be used later on by a JavaScript library
+build_search_index = true
+
+# Customize the code highlighting
+[markdown.highlighting]
+light_theme = "github-light-default"
+dark_theme = "github-dark-default"
+extra_grammars = [
+  "https://cdn.jsdelivr.net/gh/varavelio/vdl@v0.5.0-alpha.6/editors/vscode/language/vdl.tmLanguage.json",
+]
