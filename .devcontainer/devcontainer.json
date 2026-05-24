@@ -1,0 +1,31 @@
+{
+  "build": {
+    "dockerfile": "./Dockerfile",
+    "context": ".."
+  },
+  "remoteUser": "root",
+  "mounts": [
+    "source=${localEnv:HOME}/.claude,target=/root/.claude,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.config/opencode,target=/root/.config/opencode,type=bind,consistency=cached",
+    "source=${localEnv:HOME}/.local/share/opencode,target=/root/.local/share/opencode,type=bind,consistency=cached"
+  ],
+  "postCreateCommand": "bash ./.devcontainer/post-create.sh",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "bradlc.vscode-tailwindcss",
+        "dprint.dprint",
+        "tamasfe.even-better-toml"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "dprint.dprint",
+
+        "css.validate": false,
+        "files.associations": {
+          "*.css": "tailwindcss"
+        }
+      }
+    }
+  }
+}
