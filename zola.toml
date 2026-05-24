@@ -11,4 +11,4 @@ build_search_index = true
 [markdown.highlighting]
 light_theme = "github-light-default"
 dark_theme = "github-dark-default"
-extra_grammars = ["grammars/vdl.tmLanguage.json"]
+extra_grammars = ["grammars/vdl.json"]
