@@ -13,8 +13,9 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "bradlc.vscode-tailwindcss",
         "dprint.dprint",
+        "karunamurti.tera",
+        "bradlc.vscode-tailwindcss",
         "tamasfe.even-better-toml"
       ],
       "settings": {
