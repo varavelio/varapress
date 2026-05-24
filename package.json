@@ -18,6 +18,9 @@
     "lint": "dprint check --config ./dprint.json --log-level warn"
   },
   "devDependencies": {
-    "dprint": "0.54.0"
+    "@tailwindcss/cli": "4.3.0",
+    "@tailwindcss/typography": "0.5.19",
+    "dprint": "0.54.0",
+    "tailwindcss": "4.3.0"
   }
 }
