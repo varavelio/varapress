@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 /* Tailwind Typography plugin used by rich text surfaces (`prose`). */
 @plugin "@tailwindcss/typography";
 
