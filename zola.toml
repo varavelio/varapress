@@ -1,4 +1,5 @@
-# The URL the site will be built for
+title = "VaraPress"
+description = "A clean, fast, and responsive all-in-one Zola theme for Varavel projects"
 base_url = "https://press.varavel.com"
 
 # Whether to automatically compile all Sass files in the sass directory
