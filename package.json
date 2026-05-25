@@ -22,9 +22,10 @@
     "build:zola": "rm -rf ./public && zola build",
     "build:css": "tailwindcss --minify --input ./tailwind.css --output ./static/css/varapress.css",
 
-    "lint": "npm run lint:dprint && npm run lint:djlint && npm run lint:zola",
+    "lint": "npm run lint:dprint && npm run lint:djlint && npm run lint:djlint:format && npm run lint:zola",
     "lint:dprint": "dprint check --config ./dprint.json --log-level warn",
-    "lint:djlint": "djlint ./templates --configuration ./djlint.toml --check",
+    "lint:djlint": "djlint ./templates --configuration ./djlint.toml --lint",
+    "lint:djlint:format": "djlint ./templates --configuration ./djlint.toml --check",
     "lint:zola": "zola check",
 
     "format": "npm run format:dprint",
