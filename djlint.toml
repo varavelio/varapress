@@ -1,6 +1,0 @@
-profile = "jinja"
-extension = "html"
-format_css = true
-format_js = true
-indent = 2
-max_blank_lines = 1

@@ -11,9 +11,7 @@ RUN set -e && \
   # Update and install system dependencies
   apt-get update -qq && \
   apt-get install -yqq --no-install-recommends \
-  git wget curl zip unzip p7zip-full tree ripgrep python3 python3-pip && \
-  # Install djlint
-  pip3 install --no-cache-dir --break-system-packages -q djlint && \
+  git wget curl zip unzip p7zip-full tree ripgrep && \
   # Clean up
   rm -rf /var/lib/apt/lists/*
 
