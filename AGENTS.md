@@ -60,6 +60,8 @@ Always read `package.json` to see which commands are available.
 
 ## General instructions
 
+It's imperative that you follow the following instructions
+
 1. **Always read the brand documents first** before proposing design changes.
 2. **Use `tailwind.css` tokens** — it is the source of truth for the design system.
 3. **Run `npm run lint` before finalizing** any task.
@@ -67,3 +69,5 @@ Always read `package.json` to see which commands are available.
 5. **Compiled CSS lives at `static/css/varapress.css`** — do not edit it directly.
 6. **Geist fonts are downloaded** with the `static/fonts/download.sh` script and used in `tailwind.css`.
 7. **Context7 MCP** — If the Context7 MCP server is available, use it at any time to look up up-to-date documentation and information about Zola or any other tool in the stack (TailwindCSS, Alpine.js, etc.).
+8. **Run `npm run ci` after changes** — After making any changes, always run `npm run ci` to verify all checks pass. If there are errors, fix them before finishing the task.
+9. **Complete tasks 100%** — When assigned a task, complete it 100%. Do not stop until the task is fully finished.
