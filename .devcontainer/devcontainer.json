@@ -14,6 +14,7 @@
     "vscode": {
       "extensions": [
         "dprint.dprint",
+        "monosans.djlint",
         "karunamurti.tera",
         "bradlc.vscode-tailwindcss",
         "tamasfe.even-better-toml"
@@ -25,6 +26,14 @@
         "css.validate": false,
         "files.associations": {
           "*.css": "tailwindcss"
+        },
+
+        "djlint": {
+          "useVenv": false,
+          "pythonPath": "/usr/bin/python3"
+        },
+        "[html]": {
+          "editor.defaultFormatter": "monosans.djlint"
         }
       }
     }

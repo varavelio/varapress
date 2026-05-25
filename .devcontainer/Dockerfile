@@ -13,7 +13,7 @@ RUN set -e && \
   apt-get install -yqq --no-install-recommends \
   git wget curl zip unzip p7zip-full tree ripgrep python3 python3-pip && \
   # Install djlint
-  pip3 install --no-cache-dir --break-system-packages -qq djlint && \
+  pip3 install --no-cache-dir --break-system-packages -q djlint && \
   # Clean up
   rm -rf /var/lib/apt/lists/*
 
