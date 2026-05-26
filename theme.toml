@@ -17,7 +17,12 @@ name = "Varavel"
 homepage = "https://varavel.com"
 
 # Any variable there can be overridden in the end user `zola.toml`
-# You don't need to prefix variables by the theme name but as this will
-# be merged with user data, some kind of prefix or nesting is preferable
-# Use snake_casing to be consistent with the rest of Zola
 [extra]
+# Favicon shown in the browser tab.
+varapress_favicon = "https://cdn.jsdelivr.net/gh/varavelio/brand@v1.0.2/dist/avatar-dark.svg"
+# Logo shown in the docs header (light theme).
+varapress_logo_light = "https://cdn.jsdelivr.net/gh/varavelio/brand@v1.0.2/dist/logo-black.svg"
+# Logo shown in the docs header (dark theme).
+varapress_logo_dark = "https://cdn.jsdelivr.net/gh/varavelio/brand@v1.0.2/dist/logo-white.svg"
+# Set to false to hide the text title and only show the logo.
+varapress_show_title = true
