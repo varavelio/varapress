@@ -2,7 +2,7 @@
 
 {{ 
   icons::render(
-    name=name, 
+    name=name | default(value=""), 
     class=class | default(value="")
   )
 }}

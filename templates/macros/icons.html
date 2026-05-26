@@ -1,18 +1,25 @@
 {% macro render(name, class="") %}
   {% set icon_path = "static/icons/" ~ name ~ ".svg" %}
   {% set svg_content = load_data(path=icon_path, format="plain", required=false) %}
+  {% set icon_class = "varapress-icon" %}
+
+  {% if class %}
+    {% set icon_class = icon_class ~ " " ~ class %}
+  {% endif %}
   
   {% if svg_content %}
     {{ 
       svg_content 
         | regex_replace(pattern='(width|height|class)="[^"]*"', rep="") 
-        | replace(from="<svg ", to='<svg class="varapress-icon ' ~ class ~ '" ') 
+        | replace(from="<svg ", to='<svg class="' ~ icon_class ~ '" ') 
         | safe 
     }}
   {% else %}
+    {% set icon_class = icon_class ~ " text-red-500!" %}
+
     {# Alert from Lucide #}
     <svg
-      class="varapress-icon {{ class }} text-red-500!"
+      class="{{ icon_class }}"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
