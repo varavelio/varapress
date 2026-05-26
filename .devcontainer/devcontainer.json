@@ -23,6 +23,7 @@
         "editor.defaultFormatter": "dprint.dprint",
 
         "css.validate": false,
+        "tailwindCSS.lint.suggestCanonicalClasses": "ignore",
         "files.associations": {
           "*.css": "tailwindcss"
         }
