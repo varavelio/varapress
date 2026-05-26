@@ -48,6 +48,52 @@ These documents contain the Varavel brand guidelines and design system. Every vi
 
 1. **No Sass** — `compile_sass = false` in `zola.toml`. Do not use `.scss`/`.sass` files.
 
+### Template organization
+
+Root templates are thin delegators that extend `base/main.html` and fill blocks via `{% include %}`. Actual content lives in subdirectories:
+
+```
+templates/
+  base/main.html           → Base HTML shell, blocks, script loading
+  docs.html               → Delegator (extends base, includes docs/ blocks)
+  docs/
+    head.html              → SEO head extra
+    header.html            → Header (logo, theme toggle, hamburger)
+    sidebar.html           → Desktop + mobile sidebar nav
+    content.html           → Breadcrumbs, prose content, prev/next
+    toc.html               → Desktop + mobile TOC
+    body-extra.html        → TOC scroll-spy script
+  section.html             → Delegator
+  section/
+    head.html, content.html
+  page.html                → Delegator
+  page/
+    head.html
+```
+
+### Script loading
+
+JavaScript files in `static/js/` are inlined directly into templates using Zola's `load_data` function instead of `<script src="...">`. This avoids extra HTTP requests and ensures scripts are available immediately:
+
+```tera
+{# theme-init.js runs synchronously in <head> for FOUC prevention #}
+<script>{{ load_data(path="js/theme-init.js") | safe }}</script>
+
+{# Alpine.js store inlined after layout markup #}
+<script>{{ load_data(path="js/alpine/varapress.js") | safe }}</script>
+```
+
+The `static/js/` files serve as the canonical, documented source. They are never loaded directly, `load_data` reads and inlines them at build time.
+
+Use as little JavaScript as possible, limit it to when it's really necessary, and prioritize keeping it short and focused.
+
+Try to load JavaScript only where it's used; don't load JavaScript in places where it's not used.
+
+### Theme initialization
+
+1. **FOUC prevention** — `static/js/theme-init.js` is inlined in `<head>` (separate file kept as canonical source). It runs synchronously before the first paint.
+2. **Runtime API** — Exposes `window.__varapressTheme` with `.get()` and `.set(theme)` methods. Alpine.js store syncs with it via `varapress-theme-change` custom event.
+
 ## Testing strategy
 
 - **Linting**: `npm run lint` runs `dprint check` and `zola check`
