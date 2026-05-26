@@ -25,5 +25,9 @@ mv $TMP_DIR/LICENSE-LUCIDE $ICONS_DIR/LICENSE-LUCIDE
 mv -f $TMP_DIR/simple-icons/simple-icons-$SIMPLE_ICONS_VERSION/icons/*.svg $ICONS_DIR
 mv -f $TMP_DIR/lucide/icons/*.svg $ICONS_DIR
 
+# Download Varavel logo
+rm -rf $ICONS_DIR/varavel.svg
+wget -q -O $ICONS_DIR/varavel.svg https://raw.githubusercontent.com/varavelio/brand/refs/tags/v1.0.2/dist/logo-black.svg
+
 # Clean up temporary directory
 rm -rf $TMP_DIR
