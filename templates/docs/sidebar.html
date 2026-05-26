@@ -63,12 +63,12 @@
 
   {# Mobile sidebar drawer #}
   <div class="desk:hidden">
-    <div class="fixed inset-0 z-30 bg-black/50"
+    <div class="fixed inset-0 z-30 bg-black/50 isolate"
          x-show="sidebarOpen"
          x-transition.opacity.duration.200
          x-on:click="closeSidebar()"
          aria-hidden="true"></div>
-    <aside class="fixed inset-y-0 left-0 z-40 w-64 max-w-[80vw] bg-base-200 border-r border-base-400 flex flex-col"
+    <aside class="fixed inset-y-0 left-0 z-40 w-64 max-w-[80vw] bg-base-200 border-r border-base-400 flex flex-col isolate"
            x-show="sidebarOpen"
            x-transition:enter="-translate-x-full"
            x-transition:enter-end="translate-x-0"

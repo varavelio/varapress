@@ -48,16 +48,16 @@
       {% endblock header %}
 
       {% block layout %}
-        <div class="flex flex-1 min-h-0 justify-center relative">
+        <div class="flex flex-1 min-h-0 justify-center relative isolate">
           {% block sidebar_bg %}
           {% endblock sidebar_bg %}
-          <div class="flex flex-1 min-w-0 min-h-0 w-full max-w-[80rem] z-10 relative">
+          <div class="flex flex-1 min-w-0 min-h-0 w-full max-w-[80rem] relative isolate">
             {% block sidebar %}
             {% endblock sidebar %}
 
             {% block main_content %}
               <main class="flex-1 min-w-0 min-h-0 overflow-y-auto">
-                <div class="desk:max-w-[48rem] mx-auto px-4 py-6 desk:px-8 desk:py-12">
+                <div class="desk:max-w-[48rem] mx-auto px-4 py-6 desk:px-8 desk:py-12 pb-20 desk:pb-12">
                   <article class="prose dark:prose-invert max-w-none">
                     {% if page %}
                       {{ page.content | safe }}
