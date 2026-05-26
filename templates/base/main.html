@@ -43,7 +43,7 @@
     {% endblock head_extra %}
   </head>
   <body {% block body_attrs %}{% endblock %}>
-    <div class="flex h-dvh flex-col overflow-x-hidden">
+    <div class="flex h-dvh flex-col">
       {% block header %}
       {% endblock header %}
 
@@ -51,7 +51,7 @@
         <div class="flex flex-1 min-h-0 justify-center relative">
           {% block sidebar_bg %}
           {% endblock sidebar_bg %}
-          <div class="flex flex-1 min-h-0 max-w-[80rem] z-10 relative">
+          <div class="flex flex-1 min-w-0 min-h-0 w-full max-w-[80rem] z-10 relative">
             {% block sidebar %}
             {% endblock sidebar %}
 
