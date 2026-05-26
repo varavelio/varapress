@@ -1,0 +1,109 @@
+<main class="flex-1 min-w-0 min-h-0 overflow-y-auto bg-base-100"
+      x-data="tocScroll">
+  <div class="desk:max-w-[48rem] mx-auto px-4 py-6 desk:px-8 desk:py-12">
+    {% if page %}
+      {% if page.components | length > 1 %}
+        <nav class="flex items-center flex-wrap gap-1.5 text-sm text-content-muted mb-6"
+             aria-label="Breadcrumb">
+          {% for component in page.components %}
+            {% if not loop.last %}
+              {% set section_path_parts = page.components | slice(end=loop.index) %}
+              {% set section_path = section_path_parts | join(sep="/") %}
+              {% set section_obj = get_section(path=section_path ~ "/_index.md") %}
+              <a href="{{ section_obj.permalink | safe }}"
+                 class="hover:text-content transition-colors">{{ section_obj.title }}</a>
+              <svg class="size-4 text-content-muted shrink-0"
+                   viewBox="0 0 24 24"
+                   fill="none"
+                   stroke="currentColor"
+                   stroke-width="2"
+                   stroke-linecap="round"
+                   stroke-linejoin="round">
+                <polyline points="9 18 15 12 9 6" />
+              </svg>
+            {% endif %}
+          {% endfor %}
+          <span class="text-content font-medium">{{ page.title }}</span>
+        </nav>
+      {% endif %}
+      <article class="prose dark:prose-invert max-w-none">
+        {% if page.components | length <= 1 %}<h1>{{ page.title }}</h1>{% endif %}
+        {{ page.content | safe }}
+      </article>
+
+      {% set parent_section = false %}
+      {% if page.components | length > 1 %}
+        {% set parent_path_parts = page.components | slice(end=page.components | length - 1) %}
+        {% set parent_path = parent_path_parts | join(sep="/") %}
+        {% if parent_path %}
+          {% set parent_section = get_section(path=parent_path ~ "/_index.md") %}
+        {% endif %}
+      {% endif %}
+
+      {% if parent_section and parent_section.pages | length > 1 %}
+        {% set siblings = parent_section.pages %}
+        {% set prev_page = false %}
+        {% set found_current = false %}
+        {% set next_page = false %}
+        {% for sibling in siblings %}
+          {% if sibling.permalink == page.permalink %}
+            {% set_global found_current = true %}
+          {% elif not found_current %}
+            {% set_global prev_page = sibling %}
+          {% elif found_current and not next_page %}
+            {% set_global next_page = sibling %}
+          {% endif %}
+        {% endfor %}
+        <nav class="mt-12 pt-6 border-t border-base-400"
+             aria-label="Previous and next navigation">
+          <div class="flex flex-col desk:flex-row desk:justify-between gap-4">
+            {% if prev_page %}
+              <a href="{{ prev_page.permalink | safe }}"
+                 class="group flex flex-col flex-1 p-4 rounded-lg border border-base-400 hover:border-base-300 hover:bg-base-200 transition-colors desk:items-start">
+                <span class="text-xs text-content-muted">Previous</span>
+                <span class="text-sm font-medium text-content group-hover:text-info transition-colors">{{ prev_page.title }}</span>
+              </a>
+            {% else %}
+              <div class="flex-1 hidden desk:block"></div>
+            {% endif %}
+            {% if next_page %}
+              <a href="{{ next_page.permalink | safe }}"
+                 class="group flex flex-col flex-1 p-4 rounded-lg border border-base-400 hover:border-base-300 hover:bg-base-200 transition-colors desk:items-end desk:text-right">
+                <span class="text-xs text-content-muted">Next</span>
+                <span class="text-sm font-medium text-content group-hover:text-info transition-colors">{{ next_page.title }}</span>
+              </a>
+            {% else %}
+              <div class="flex-1 hidden desk:block"></div>
+            {% endif %}
+          </div>
+        </nav>
+      {% endif %}
+    {% elif section %}
+      <article class="prose dark:prose-invert max-w-none">
+        <h1>{{ section.title }}</h1>
+        {{ section.content | safe }}
+        {% if section.pages | length > 0 %}
+          <h2>Pages in this section</h2>
+          <ul>
+            {% for child in section.pages %}
+              <li>
+                <a href="{{ child.permalink | safe }}">{{ child.title }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        {% if section.subsections | length > 0 %}
+          <h2>Subsections</h2>
+          <ul>
+            {% for sub_path in section.subsections %}
+              {% set sub = get_section(path=sub_path) %}
+              <li>
+                <a href="{{ sub.permalink | safe }}">{{ sub.title }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+      </article>
+    {% endif %}
+  </div>
+</main>
