@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    {% block title %}
+      {% if page and page.title and config.title %}
+        {% if page.title != config.title %}
+          <title>{{ page.title }} — {{ config.title }}</title>
+        {% else %}
+          <title>{{ config.title }}</title>
+        {% endif %}
+      {% elif section and section.title and config.title %}
+        {% if section.title != config.title %}
+          <title>{{ section.title }} — {{ config.title }}</title>
+        {% else %}
+          <title>{{ config.title }}</title>
+        {% endif %}
+      {% else %}
+        <title>{{ config.title }}</title>
+      {% endif %}
+    {% endblock title %}
+
+    {% block seo %}
+      <meta name="description" content="{{ config.description }}">
+      <meta name="keywords" content="{{ config.description }}">
+      <meta property="og:title" content="{{ config.title }}">
+      <meta property="og:description" content="{{ config.description }}">
+      <meta property="og:type" content="website">
+    {% endblock seo %}
+
+    <link rel="stylesheet" href="{{ get_url(path='css/varapress.css') }}">
+    <script>
+      {{ load_data(path="js/theme-init.js") | safe }}
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.15.12/dist/cdn.min.js" defer></script>
+
+    {% block head_extra %}
+    {% endblock head_extra %}
+  </head>
+  <body {% block body_attrs %}{% endblock %}>
+    <div class="flex h-dvh flex-col overflow-x-hidden">
+      {% block header %}
+      {% endblock header %}
+
+      {% block layout %}
+        <div class="flex flex-1 min-h-0 justify-center relative">
+          {% block sidebar_bg %}
+          {% endblock sidebar_bg %}
+          <div class="flex flex-1 min-h-0 max-w-[80rem] z-10 relative">
+            {% block sidebar %}
+            {% endblock sidebar %}
+
+            {% block main_content %}
+              <main class="flex-1 min-w-0 min-h-0 overflow-y-auto">
+                <div class="desk:max-w-[48rem] mx-auto px-4 py-6 desk:px-8 desk:py-12">
+                  <article class="prose dark:prose-invert max-w-none">
+                    {% if page %}
+                      {{ page.content | safe }}
+                    {% elif section %}
+                      {{ section.content | safe }}
+                    {% endif %}
+                  </article>
+                </div>
+              </main>
+            {% endblock main_content %}
+
+            {% block toc %}
+            {% endblock toc %}
+          </div>
+        </div>
+      {% endblock layout %}
+    </div>
+
+    {% block body_extra %}
+    {% endblock body_extra %}
+  </body>
+</html>
