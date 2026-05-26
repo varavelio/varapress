@@ -10,7 +10,9 @@
   {% if svg_content %}
     {{ 
       svg_content 
-        | regex_replace(pattern='(width|height|class)="[^"]*"', rep="") 
+        | regex_replace(pattern='\s+', rep=' ') 
+        | regex_replace(pattern='> <', rep='><') 
+        | regex_replace(pattern=' (width|height|class)="[^"]*"', rep="") 
         | replace(from="<svg ", to='<svg class="' ~ icon_class ~ '" ') 
         | safe 
     }}
