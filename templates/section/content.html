@@ -1,0 +1,33 @@
+<main class="flex-1 min-h-0 overflow-y-auto">
+  <div class="desk:max-w-[48rem] mx-auto px-4 py-6 desk:px-8 desk:py-12">
+    <article class="prose dark:prose-invert max-w-none">
+      <h1>{{ section.title }}</h1>
+      {{ section.content | safe }}
+
+      {% if section.pages | length > 0 %}
+        <h2>Pages</h2>
+        <ul>
+          {% for child in section.pages %}
+            <li>
+              <a href="{{ child.permalink | safe }}">{{ child.title }}</a>
+              {% if child.description %}— {{ child.description }}{% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+
+      {% if section.subsections | length > 0 %}
+        <h2>Sections</h2>
+        <ul>
+          {% for sub_path in section.subsections %}
+            {% set sub = get_section(path=sub_path) %}
+            <li>
+              <a href="{{ sub.permalink | safe }}">{{ sub.title }}</a>
+              {% if sub.description %}— {{ sub.description }}{% endif %}
+            </li>
+          {% endfor %}
+        </ul>
+      {% endif %}
+    </article>
+  </div>
+</main>
