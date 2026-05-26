@@ -1,0 +1,8 @@
+{% import "macros/icons.html" as icons %}
+
+{{ 
+  icons::render(
+    name=name, 
+    class=class | default(value="")
+  )
+}}
