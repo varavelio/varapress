@@ -1,3 +1,5 @@
+{% set favicon = config.extra.varapress_favicon | default(value="https://cdn.jsdelivr.net/gh/varavelio/brand@v1.0.2/dist/avatar-dark.svg") %}
+ 
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -30,6 +32,7 @@
       <meta property="og:type" content="website">
     {% endblock seo %}
 
+    <link rel="shortcut icon" href="{{ favicon }}">
     <link rel="stylesheet" href="{{ get_url(path='css/varapress.css') }}">
     <script>
       {{ load_data(path="js/theme-init.js") | safe }}
