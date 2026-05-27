@@ -1,0 +1,124 @@
+{% import "macros/icons.html" as icons %}
+
+{#
+  Macro: Button
+  Versatile button component that renders as <button> or <a> when href is provided.
+
+  Parameters:
+    text         - Button label text (required)
+    href         - If provided, renders as <a> instead of <button>
+    target       - Link target (e.g. "_blank")
+    icon         - Icon name rendered before the label (from static/icons/)
+    icon_right   - Icon name rendered after the label
+    size         - "sm" | "md" (default) | "lg"
+    radius       - "sm" | "md" (default) | "lg" | "full"
+    variant      - "solid" (default) | "outline" | "ghost"
+    color        - "neutral" (default) | "info" | "success" | "warning" | "error"
+    wide         - "true" to span full width
+    disabled     - "true" to disable interaction
+    type         - Button type attribute (default: "button")
+    class        - Additional CSS classes
+#}
+
+{% macro render(text, href="", target="", icon="", icon_right="", size="md", radius="md", variant="solid", color="neutral", wide="false", disabled="false", type="button", class="") %}
+  {% set base_classes = "relative inline-flex items-center gap-2 border font-medium transition-all duration-75 cursor-pointer select-none no-underline focus-visible:outline-2" %}
+
+  {% if disabled == "true" %}
+    {% set state_classes = "cursor-not-allowed opacity-50" %}
+  {% else %}
+    {% set state_classes = "active:translate-y-px" %}
+  {% endif %}
+
+  {# Size #}
+  {% if size == "sm" %}
+    {% set size_classes = "h-8 px-3 text-xs" %}
+  {% elif size == "lg" %}
+    {% set size_classes = "h-12 px-6 text-base" %}
+  {% else %}
+    {% set size_classes = "h-10 px-4 text-sm" %}
+  {% endif %}
+
+  {# Width #}
+  {% if wide == "true" %}
+    {% set width_classes = "w-full" %}
+  {% else %}
+    {% set width_classes = "w-auto" %}
+  {% endif %}
+
+  {# Radius #}
+  {% if radius == "sm" %}
+    {% set radius_classes = "rounded-sm" %}
+  {% elif radius == "lg" %}
+    {% set radius_classes = "rounded-lg" %}
+  {% elif radius == "full" %}
+    {% set radius_classes = "rounded-full" %}
+  {% else %}
+    {% set radius_classes = "rounded-md" %}
+  {% endif %}
+
+  {# Variant + Color #}
+  {% if variant == "solid" %}
+    {% if color == "info" %}
+      {% set variant_classes = "border-info bg-info text-white outline-info hover:bg-info/80 focus-visible:outline-offset-2" %}
+    {% elif color == "success" %}
+      {% set variant_classes = "border-success bg-success text-white outline-success hover:bg-success/80 focus-visible:outline-offset-2" %}
+    {% elif color == "warning" %}
+      {% set variant_classes = "border-warning bg-warning text-white outline-warning hover:bg-warning/80 focus-visible:outline-offset-2" %}
+    {% elif color == "error" %}
+      {% set variant_classes = "border-error bg-error text-white outline-error hover:bg-error/80 focus-visible:outline-offset-2" %}
+    {% else %}
+      {% set variant_classes = "border-content bg-content text-base-100 outline-content hover:bg-content/80 focus-visible:outline-offset-2" %}
+    {% endif %}
+  {% elif variant == "outline" %}
+    {% if color == "info" %}
+      {% set variant_classes = "border-info/30 bg-transparent text-info outline-info hover:bg-info/10" %}
+    {% elif color == "success" %}
+      {% set variant_classes = "border-success/30 bg-transparent text-success outline-success hover:bg-success/10" %}
+    {% elif color == "warning" %}
+      {% set variant_classes = "border-warning/30 bg-transparent text-warning outline-warning hover:bg-warning/10" %}
+    {% elif color == "error" %}
+      {% set variant_classes = "border-error/30 bg-transparent text-error outline-error hover:bg-error/10" %}
+    {% else %}
+      {% set variant_classes = "border-base-400 bg-transparent text-content outline-content hover:bg-base-300" %}
+    {% endif %}
+  {% elif variant == "ghost" %}
+    {% if color == "info" %}
+      {% set variant_classes = "border-transparent bg-transparent text-info outline-info hover:bg-info/10" %}
+    {% elif color == "success" %}
+      {% set variant_classes = "border-transparent bg-transparent text-success outline-success hover:bg-success/10" %}
+    {% elif color == "warning" %}
+      {% set variant_classes = "border-transparent bg-transparent text-warning outline-warning hover:bg-warning/10" %}
+    {% elif color == "error" %}
+      {% set variant_classes = "border-transparent bg-transparent text-error outline-error hover:bg-error/10" %}
+    {% else %}
+      {% set variant_classes = "border-transparent bg-transparent text-content outline-content hover:bg-base-300" %}
+    {% endif %}
+  {% endif %}
+
+  {% set all_classes = base_classes ~ " " ~ state_classes ~ " " ~ size_classes ~ " " ~ width_classes ~ " " ~ radius_classes ~ " " ~ variant_classes %}
+  {% if class %}
+    {% set all_classes = all_classes ~ " " ~ class %}
+  {% endif %}
+
+  {% if href %}
+    {% if disabled == "true" %}
+      <a aria-disabled="true" class="{{ all_classes }}">{{ text }}</a>
+    {% else %}
+      {% set resolved_rel = "" %}
+      {% if target == "_blank" %}
+        {% set resolved_rel = ' rel="noopener noreferrer"' %}
+      {% endif %}
+      <a href="{{ href }}"{% if target %} target="{{ target }}"{% endif %}{{ resolved_rel | safe }} class="{{ all_classes }}">
+        {% if icon %}{{ icons::render(name=icon, class="size-4 shrink-0") }}{% endif %}
+        {{ text }}
+        {% if icon_right %}{{ icons::render(name=icon_right, class="size-4 shrink-0") }}{% endif %}
+      </a>
+    {% endif %}
+  {% else %}
+    <button type="{{ type }}"{% if disabled == "true" %} disabled{% endif %} class="{{ all_classes }}">
+      {% if icon %}{{ icons::render(name=icon, class="size-4 shrink-0") }}{% endif %}
+      {{ text }}
+      {% if icon_right %}{{ icons::render(name=icon_right, class="size-4 shrink-0") }}{% endif %}
+    </button>
+  {% endif %}
+{% endmacro %}
