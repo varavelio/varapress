@@ -25,7 +25,8 @@
           {% set sub = get_section(path=sub_path) %}
           <div class="mb-4">
             <a href="{{ sub.permalink | safe }}"
-               class="block text-sm font-semibold text-content hover:text-info transition-colors {% if current_url == sub.permalink %}text-info{% endif %}">
+               class="flex items-center gap-1.5 text-sm font-semibold text-content hover:text-info transition-colors {% if current_url == sub.permalink %}text-info{% endif %}">
+              {% if sub.extra and sub.extra.icon %}{{ icons::render(name=sub.extra.icon, class="size-4 shrink-0") }}{% endif %}
               {{ sub.title }}
             </a>
             {% if sub.pages | length > 0 %}
@@ -33,7 +34,8 @@
                 {% for child_page in sub.pages %}
                   <li>
                     <a href="{{ child_page.permalink | safe }}"
-                       class="block py-1 text-sm text-content-muted hover:text-content hover:bg-base-300 rounded-sm px-2 -mx-2 transition-colors {% if current_url == child_page.permalink %}text-info font-medium bg-base-300{% endif %}">
+                       class="flex items-center gap-1.5 py-1 text-sm text-content-muted hover:text-content hover:bg-base-300 rounded-sm px-2 -mx-2 transition-colors {% if current_url == child_page.permalink %}text-info font-medium bg-base-300{% endif %}">
+                      {% if child_page.extra and child_page.extra.icon %}{{ icons::render(name=child_page.extra.icon, class="size-4 shrink-0") }}{% endif %}
                       {{ child_page.title }}
                     </a>
                   </li>
@@ -50,7 +52,8 @@
             {% for child_page in nav_section.pages %}
               <li>
                 <a href="{{ child_page.permalink | safe }}"
-                   class="block py-1 text-sm text-content-muted hover:text-content hover:bg-base-300 rounded-sm px-2 -mx-2 transition-colors {% if current_url == child_page.permalink %}text-info font-medium bg-base-300{% endif %}">
+                   class="flex items-center gap-1.5 py-1 text-sm text-content-muted hover:text-content hover:bg-base-300 rounded-sm px-2 -mx-2 transition-colors {% if current_url == child_page.permalink %}text-info font-medium bg-base-300{% endif %}">
+                  {% if child_page.extra and child_page.extra.icon %}{{ icons::render(name=child_page.extra.icon, class="size-4 shrink-0") }}{% endif %}
                   {{ child_page.title }}
                 </a>
               </li>
@@ -80,16 +83,7 @@
         <button class="p-1.5 rounded-md hover:bg-base-300 transition-colors"
                 x-on:click="closeSidebar()"
                 aria-label="Close navigation">
-          <svg class="size-5"
-               viewBox="0 0 24 24"
-               fill="none"
-               stroke="currentColor"
-               stroke-width="2"
-               stroke-linecap="round"
-               stroke-linejoin="round">
-            <line x1="18" y1="6" x2="6" y2="18" />
-            <line x1="6" y1="6" x2="18" y2="18" />
-          </svg>
+          {{ icons::render(name="x", class="size-5") }}
         </button>
       </div>
       <nav class="flex-1 min-h-0 overflow-y-auto px-4 py-4">
@@ -98,15 +92,21 @@
             {% set sub = get_section(path=sub_path) %}
             <div class="mb-4">
               <a href="{{ sub.permalink | safe }}"
-                 class="block text-sm font-semibold text-content hover:text-info transition-colors {% if current_url == sub.permalink %}text-info{% endif %}"
-                 x-on:click="closeSidebar()">{{ sub.title }}</a>
+                 class="flex items-center gap-1.5 text-sm font-semibold text-content hover:text-info transition-colors {% if current_url == sub.permalink %}text-info{% endif %}"
+                 x-on:click="closeSidebar()">
+                {% if sub.extra and sub.extra.icon %}{{ icons::render(name=sub.extra.icon, class="size-4 shrink-0") }}{% endif %}
+                {{ sub.title }}
+              </a>
               {% if sub.pages | length > 0 %}
                 <ul class="mt-1.5 space-y-1">
                   {% for child_page in sub.pages %}
                     <li>
                       <a href="{{ child_page.permalink | safe }}"
-                         class="block py-1 text-sm text-content-muted hover:text-content hover:bg-base-300 rounded-sm px-2 -mx-2 transition-colors {% if current_url == child_page.permalink %}text-info font-medium bg-base-300{% endif %}"
-                         x-on:click="closeSidebar()">{{ child_page.title }}</a>
+                         class="flex items-center gap-1.5 py-1 text-sm text-content-muted hover:text-content hover:bg-base-300 rounded-sm px-2 -mx-2 transition-colors {% if current_url == child_page.permalink %}text-info font-medium bg-base-300{% endif %}"
+                         x-on:click="closeSidebar()">
+                        {% if child_page.extra and child_page.extra.icon %}{{ icons::render(name=child_page.extra.icon, class="size-4 shrink-0") }}{% endif %}
+                        {{ child_page.title }}
+                      </a>
                     </li>
                   {% endfor %}
                 </ul>
@@ -121,8 +121,11 @@
               {% for child_page in nav_section.pages %}
                 <li>
                   <a href="{{ child_page.permalink | safe }}"
-                     class="block py-1 text-sm text-content-muted hover:text-content hover:bg-base-300 rounded-sm px-2 -mx-2 transition-colors {% if current_url == child_page.permalink %}text-info font-medium bg-base-300{% endif %}"
-                     x-on:click="closeSidebar()">{{ child_page.title }}</a>
+                     class="flex items-center gap-1.5 py-1 text-sm text-content-muted hover:text-content hover:bg-base-300 rounded-sm px-2 -mx-2 transition-colors {% if current_url == child_page.permalink %}text-info font-medium bg-base-300{% endif %}"
+                     x-on:click="closeSidebar()">
+                    {% if child_page.extra and child_page.extra.icon %}{{ icons::render(name=child_page.extra.icon, class="size-4 shrink-0") }}{% endif %}
+                    {{ child_page.title }}
+                  </a>
                 </li>
               {% endfor %}
             </ul>

@@ -12,20 +12,7 @@
       <button class="flex items-center justify-center size-12 rounded-full bg-base-200 border border-base-400 shadow-sm hover:bg-base-300 transition-colors"
               x-on:click="toggleToc()"
               aria-label="Table of contents">
-        <svg class="size-5"
-             viewBox="0 0 24 24"
-             fill="none"
-             stroke="currentColor"
-             stroke-width="2"
-             stroke-linecap="round"
-             stroke-linejoin="round">
-          <line x1="8" y1="6" x2="21" y2="6" />
-          <line x1="8" y1="12" x2="21" y2="12" />
-          <line x1="8" y1="18" x2="21" y2="18" />
-          <line x1="3" y1="6" x2="3.01" y2="6" />
-          <line x1="3" y1="12" x2="3.01" y2="12" />
-          <line x1="3" y1="18" x2="3.01" y2="18" />
-        </svg>
+        {{ icons::render(name="list", class="size-5") }}
       </button>
     </div>
 
@@ -48,16 +35,7 @@
           <button class="p-1.5 rounded-md hover:bg-base-300 transition-colors"
                   x-on:click="tocOpen = false"
                   aria-label="Close table of contents">
-            <svg class="size-5"
-                 viewBox="0 0 24 24"
-                 fill="none"
-                 stroke="currentColor"
-                 stroke-width="2"
-                 stroke-linecap="round"
-                 stroke-linejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18" />
-              <line x1="6" y1="6" x2="18" y2="18" />
-            </svg>
+            {{ icons::render(name="x", class="size-5") }}
           </button>
         </div>
         <nav class="flex-1 min-h-0 overflow-y-auto px-4 py-4 space-y-1"

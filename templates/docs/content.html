@@ -12,18 +12,13 @@
               {% set section_obj = get_section(path=section_path ~ "/_index.md") %}
               <a href="{{ section_obj.permalink | safe }}"
                  class="hover:text-content transition-colors">{{ section_obj.title }}</a>
-              <svg class="size-4 text-content-muted shrink-0"
-                   viewBox="0 0 24 24"
-                   fill="none"
-                   stroke="currentColor"
-                   stroke-width="2"
-                   stroke-linecap="round"
-                   stroke-linejoin="round">
-                <polyline points="9 18 15 12 9 6" />
-              </svg>
+              {{ icons::render(name="chevron-right", class="size-4 text-content-muted shrink-0") }}
             {% endif %}
           {% endfor %}
-          <span class="text-content font-medium">{{ page.title }}</span>
+          <span class="text-content font-medium inline-flex items-center gap-1.5">
+            {% if page.extra and page.extra.icon %}{{ icons::render(name=page.extra.icon, class="size-4 shrink-0") }}{% endif %}
+            {{ page.title }}
+          </span>
         </nav>
       {% endif %}
       <article class="prose dark:prose-invert max-w-none">
