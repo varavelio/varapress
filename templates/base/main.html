@@ -1,5 +1,5 @@
 {% set favicon = config.extra.varapress_favicon | default(value="https://cdn.jsdelivr.net/gh/varavelio/brand@v1.0.2/dist/avatar-dark.svg") %}
- 
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -34,10 +34,9 @@
 
     <link rel="shortcut icon" href="{{ favicon }}">
     <link rel="stylesheet" href="{{ get_url(path='css/varapress.css') }}">
-    <script>
-      {{ load_data(path="js/theme-init.js") | safe }}
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.15.12/dist/cdn.min.js" defer></script>
+
+    <script>{{ load_data(path="js/theme-init.js") | safe }}</script>
+    <script src="{{ get_url(path='libs/alpinejs/alpine.min.js') }}" defer></script>
 
     {% block head_extra %}
     {% endblock head_extra %}
