@@ -3,59 +3,40 @@
 {% set logo_dark = config.extra.varapress_logo_dark | default(value="https://cdn.jsdelivr.net/gh/varavelio/brand@v1.0.2/dist/logo-white.svg") %}
 
 <header class="h-14 shrink-0 bg-base-100 border-b border-base-400">
-  <div class="mx-auto max-w-[80rem] h-full flex items-center gap-3 px-4 desk:px-6">
-    <div class="flex-auto min-w-0 flex items-center">
-      <button class="desk:hidden flex-none p-2 rounded-md hover:bg-base-300 transition-colors"
-              x-on:click="toggleSidebar()"
-              aria-label="Toggle navigation">
-        {{ icons::render(name="menu", class="size-5") }}
+  <div class="mx-auto max-w-[80rem] h-full flex items-center justify-between gap-3 px-4">
+    <div class="flex-auto min-w-0 flex items-center justify-start">
+      <button 
+        class="desk:hidden flex-none p-2 -ml-2 mr-2 rounded-md hover:bg-base-300 transition-colors"
+        x-on:click="toggleSidebar()"
+        aria-label="Toggle navigation"
+      >
+        {{ icons::render(name="menu") }}
       </button>
       <div class="min-w-0 overflow-x-auto overflow-y-hidden">
-        <div class="flex items-center gap-3 whitespace-nowrap">
+        <a href="/" class="group flex items-center justify-start whitespace-nowrap">
           {% if logo_light or logo_dark %}
-            <span class="flex-none h-6">
-              <img x-show="resolvedTheme === 'light'"
-                   src="{{ logo_light }}"
-                   class="h-6 w-auto"
-                   alt="{{ config.title }}">
-              <img x-show="resolvedTheme === 'dark'"
-                   src="{{ logo_dark }}"
-                   class="h-6 w-auto"
-                   alt="{{ config.title }}">
+            <span class="flex-none h-6 mr-2">
+              <img x-show="resolvedTheme === 'light'" src="{{ logo_light }}" class="h-6 w-auto" alt="{{ config.title }}">
+              <img x-show="resolvedTheme === 'dark'" src="{{ logo_dark }}" class="h-6 w-auto" alt="{{ config.title }}">
             </span>
           {% endif %}
           {% if show_title %}
-            <a href="/"
-               class="font-semibold text-content hover:text-info transition-colors">
+            <span class="font-semibold text-content group-hover:text-info transition-colors">
               {{ config.title }}
-            </a>
+            </span>
           {% endif %}
-          {% if section and section.components and section.components | length > 0 and section.components[0] != "_index" %}
-            <span class="text-content-muted select-none">/</span>
-            <a href="{{ section.permalink | safe }}"
-               class="font-semibold text-content-muted hover:text-content transition-colors">
-              {{ section.title }}
-            </a>
-          {% elif page and page.components | length > 0 %}
-            {% set root_section_path = page.components[0] %}
-            {% if root_section_path and root_section_path != "_index" %}
-              {% set root_section = get_section(path=root_section_path ~ "/_index.md") %}
-              <span class="text-content-muted select-none">/</span>
-              <a href="{{ root_section.permalink | safe }}"
-                 class="font-semibold text-content-muted hover:text-content transition-colors">
-                {{ root_section.title }}
-              </a>
-            {% endif %}
-          {% endif %}
-        </div>
+        </a>
       </div>
     </div>
     <div class="flex items-center gap-2 flex-none">
-      <button class="p-2 rounded-md hover:bg-base-300 transition-colors"
-              x-on:click="cycleTheme()"
-              aria-label="Toggle theme">
-        <span x-show="themeIcon === 'sun'">{{ icons::render(name="sun", class="size-5") }}</span>
-        <span x-show="themeIcon === 'moon'">{{ icons::render(name="moon", class="size-5") }}</span>
+      <button
+        class="p-2 -mr-2 rounded-md hover:bg-base-300 transition-colors"
+        x-on:click="cycleTheme()"
+        aria-label="Toggle theme"
+      >
+        <span x-show="theme === 'system'">{{ icons::render(name="laptop-minimal") }}</span>
+        <span x-show="theme === 'light'">{{ icons::render(name="sun-medium") }}</span>
+        <span x-show="theme === 'dark'">{{ icons::render(name="moon-star") }}</span>
       </button>
     </div>
   </div>

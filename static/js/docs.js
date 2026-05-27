@@ -37,14 +37,13 @@ document.addEventListener("alpine:init", () => {
     tocOpen: false,
 
     /**
-     * The saved theme preference: `"light"`, `"dark"`, or `"system"`.
+     * The saved theme preference: `"light"`, `"dark"`, or `"system"` (reactive).
      * @type {"light" | "dark" | "system"}
      */
     theme: "system",
 
     /**
-     * The concrete theme applied to the document: `"light"` or `"dark"`.
-     * Updated via the `varapress-theme-change` custom event.
+     * The concrete theme applied to the document: `"light"` or `"dark"` (reactive).
      * @type {"light" | "dark"}
      */
     resolvedTheme: "light",
@@ -65,10 +64,6 @@ document.addEventListener("alpine:init", () => {
       this.sidebarOpen = !this.sidebarOpen;
     },
 
-    closeSidebar() {
-      this.sidebarOpen = false;
-    },
-
     toggleToc() {
       this.tocOpen = !this.tocOpen;
     },
@@ -80,22 +75,11 @@ document.addEventListener("alpine:init", () => {
         system: "light",
       };
       const next = cycle[this.theme] || "system";
-      if (window.__varapressTheme) {
-        window.__varapressTheme.set(next);
-      }
+      if (window.__varapressTheme) window.__varapressTheme.set(next);
     },
 
     get themeLabel() {
-      return this.theme === "system"
-        ? "System"
-        : this.theme.charAt(0).toUpperCase() + this.theme.slice(1);
-    },
-
-    get themeIcon() {
-      if (this.theme === "system") {
-        return this.resolvedTheme === "dark" ? "moon" : "sun";
-      }
-      return this.theme;
+      return this.theme.charAt(0).toUpperCase() + this.theme.slice(1);
     },
   }));
 
