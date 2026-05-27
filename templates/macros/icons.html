@@ -8,18 +8,24 @@
   {% endif %}
   
   {% if svg_content %}
+    {% if 'fill="none"' in svg_content %}
+      {% set inject_attrs = 'class="' ~ icon_class ~ '" fill="none" stroke="currentColor"' %}
+    {% else %}
+      {% set inject_attrs = 'class="' ~ icon_class ~ '" fill="currentColor" stroke="none"' %}
+    {% endif %}
+
     {{ 
       svg_content 
         | regex_replace(pattern='\s+', rep=' ') 
         | regex_replace(pattern='> <', rep='><') 
-        | regex_replace(pattern=' (width|height|class)="[^"]*"', rep="") 
-        | replace(from="<svg ", to='<svg class="' ~ icon_class ~ '" ') 
+        | regex_replace(pattern=' (class|fill|stroke)="[^"]*"', rep="") 
+        | replace(from="<svg ", to='<svg ' ~ inject_attrs ~ ' ') 
         | safe 
     }}
   {% else %}
     {% set icon_class = icon_class ~ " text-red-500!" %}
 
-    {# Alert from Lucide #}
+    {# Alert fallback from Lucide #}
     <svg
       class="{{ icon_class }}"
       viewBox="0 0 24 24"
