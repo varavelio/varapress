@@ -94,6 +94,27 @@ Try to load JavaScript only where it's used; don't load JavaScript in places whe
 1. **FOUC prevention** — `static/js/theme-init.js` is inlined in `<head>` (separate file kept as canonical source). It runs synchronously before the first paint.
 2. **Runtime API** — Exposes `window.__varapressTheme` with `.get()` and `.set(theme)` methods. Alpine.js store syncs with it via `varapress-theme-change` custom event.
 
+### Icons
+
+Icons come from two sources:
+
+- **Lucide** — general-purpose line icons (e.g., `house`, `bell`, `search`)
+- **Simple Icons** — brand/platform logos (e.g., `github`, `x`, `discord`)
+
+They are downloaded to `static/icons/` by `scripts/download-icons.sh` and rendered through two entry points:
+
+| Context             | Usage                                              | File                             |
+| ------------------- | -------------------------------------------------- | -------------------------------- |
+| Templates (`.html`) | `{{ icons::render(name="bell", class="size-5") }}` | `templates/macros/icons.html`    |
+| Markdown content    | `{{ icon(name="github") }}`                        | `templates/shortcodes/icon.html` |
+
+**IMPERATIVE rules for working with icons:**
+
+1. **Only use icons already included in the project.** Never download, import, create new or reference external icons. The project ships with thousands of icons — if the one you need isn't there, ask first.
+2. **To find an icon**, search inside `static/icons/`. With 5000+ files, browsing is impractical — use your search tools (grep/glob by name) to locate the exact `.svg` file.
+3. **The icon name** is the filename without the `.svg` extension. For example, `static/icons/github.svg` becomes `name="github"`.
+4. **The macro auto-detects** whether an icon is a Lucide line icon (`fill="none"`) or a Simple Icons solid icon, and applies the correct `fill`/`stroke` attributes automatically.
+
 ## Testing strategy
 
 - **Linting**: `npm run lint` runs `dprint check` and `zola check`
