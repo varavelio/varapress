@@ -1,3 +1,13 @@
+{# 
+  Shortcode: Icon Wrapper
+  Renders inline SVG icons directly within Markdown content. 
+  It acts as a user-friendly wrapper for the core icons macro.
+  
+  Usage in .md files: 
+  {{ icon(name="varavel") }}
+  {{ icon(name="house", class="text-blue-500 size-8") }}
+#}
+
 {% import "macros/icons.html" as icons %}
 
 {{ 

@@ -1,3 +1,15 @@
+{# 
+  Macro: Core Icon Engine
+  Dynamically loads and renders SVG files from the 'static/icons/' directory
+  which are downloaded using the `scripts/download-icons.sh` script.
+  
+  Features:
+  - Auto-detects line icons (Lucide) vs. solid icons (Simple Icons).
+  - Strips hardcoded conflicting attributes (class, fill, stroke) using Regex.
+  - Injects standardized Tailwind classes and context-aware colors (currentColor).
+  - Provides a red fallback icon if the requested icon doesn't exist.
+#}
+
 {% macro render(name, class="") %}
   {% set icon_path = "static/icons/" ~ name ~ ".svg" %}
   {% set svg_content = load_data(path=icon_path, format="plain", required=false) %}
