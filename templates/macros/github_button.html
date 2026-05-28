@@ -1,0 +1,172 @@
+{% import "macros/icons.html" as icons %}
+
+{#
+  Macro: GithubButton
+  GitHub repository button with live stars, forks, and tag badges fetched at build time.
+
+  Parameters:
+    repo        - Repository in "user/repo" format (required)
+    href        - Custom URL override (defaults to github.com/user/repo)
+    size        - "sm" | "md" (default) | "lg"
+    radius      - "sm" | "md" (default) | "lg" | "full"
+    variant     - "solid" | "outline" (default) | "ghost"
+    color       - "neutral" (default) | "info" | "success" | "warning" | "error"
+    target      - Link target (default: "_blank")
+    wide        - "true" to span full width
+    show_stars  - "true" (default) | "false" to hide stars badge
+    show_forks  - "true" | "false" (default) to show forks badge
+    show_tag    - "true" (default) | "false" to hide tag badge
+    class       - Additional CSS classes
+#}
+
+{% macro render(repo, href="", size="md", radius="md", variant="outline", color="neutral", target="_blank", wide="false", show_stars="true", show_forks="false", show_tag="true", class="") %}
+  {% set resolved_href = href %}
+  {% if not href %}
+    {% set resolved_href = "https://github.com/" ~ repo %}
+  {% endif %}
+
+  {% set api_url = "https://api.github.com/repos/" ~ repo %}
+  {% set repo_data = load_data(url=api_url, format="json", required=false) %}
+  {% set tag_data = load_data(url=api_url ~ "/releases/latest", format="json", required=false) %}
+
+  {% set tag_name = "" %}
+  {% if tag_data and tag_data.tag_name %}
+    {% set tag_name = tag_data.tag_name %}
+  {% endif %}
+
+  {% set show_badges = "false" %}
+  {% if show_stars == "true" and repo_data %}
+    {% set show_badges = "true" %}
+  {% endif %}
+  {% if show_forks == "true" and repo_data %}
+    {% set show_badges = "true" %}
+  {% endif %}
+  {% if show_tag == "true" and tag_name %}
+    {% set show_badges = "true" %}
+  {% endif %}
+
+  {# Base #}
+  {% set btn = "relative inline-flex items-center border font-medium transition-all duration-75 cursor-pointer select-none no-underline focus-visible:outline-2 active:translate-y-px" %}
+
+  {# Size #}
+  {% if size == "sm" %}
+    {% set size_cls = "h-8 px-3 text-xs" %}
+  {% elif size == "lg" %}
+    {% set size_cls = "h-12 px-6 text-base" %}
+  {% else %}
+    {% set size_cls = "h-10 px-4 text-sm" %}
+  {% endif %}
+
+  {# Width #}
+  {% if wide == "true" %}
+    {% set width_cls = "w-full" %}
+  {% else %}
+    {% set width_cls = "w-auto" %}
+  {% endif %}
+
+  {# Radius #}
+  {% if radius == "sm" %}
+    {% set radius_cls = "rounded-sm" %}
+  {% elif radius == "lg" %}
+    {% set radius_cls = "rounded-lg" %}
+  {% elif radius == "full" %}
+    {% set radius_cls = "rounded-full" %}
+  {% else %}
+    {% set radius_cls = "rounded-md" %}
+  {% endif %}
+
+  {# Variant + Color #}
+  {% if variant == "solid" %}
+    {% if color == "info" %}
+      {% set variant_cls = "border-info bg-info text-white outline-info hover:bg-info/80 focus-visible:outline-offset-2" %}
+    {% elif color == "success" %}
+      {% set variant_cls = "border-success bg-success text-white outline-success hover:bg-success/80 focus-visible:outline-offset-2" %}
+    {% elif color == "warning" %}
+      {% set variant_cls = "border-warning bg-warning text-white outline-warning hover:bg-warning/80 focus-visible:outline-offset-2" %}
+    {% elif color == "error" %}
+      {% set variant_cls = "border-error bg-error text-white outline-error hover:bg-error/80 focus-visible:outline-offset-2" %}
+    {% else %}
+      {% set variant_cls = "border-content bg-content text-base-100 outline-content hover:bg-content/80 focus-visible:outline-offset-2" %}
+    {% endif %}
+  {% elif variant == "ghost" %}
+    {% if color == "info" %}
+      {% set variant_cls = "border-transparent bg-transparent text-info outline-info hover:bg-info/10" %}
+    {% elif color == "success" %}
+      {% set variant_cls = "border-transparent bg-transparent text-success outline-success hover:bg-success/10" %}
+    {% elif color == "warning" %}
+      {% set variant_cls = "border-transparent bg-transparent text-warning outline-warning hover:bg-warning/10" %}
+    {% elif color == "error" %}
+      {% set variant_cls = "border-transparent bg-transparent text-error outline-error hover:bg-error/10" %}
+    {% else %}
+      {% set variant_cls = "border-transparent bg-transparent text-content outline-content hover:bg-base-300" %}
+    {% endif %}
+  {% else %}
+    {% if color == "info" %}
+      {% set variant_cls = "border-info/30 bg-transparent text-info outline-info hover:bg-info/10" %}
+    {% elif color == "success" %}
+      {% set variant_cls = "border-success/30 bg-transparent text-success outline-success hover:bg-success/10" %}
+    {% elif color == "warning" %}
+      {% set variant_cls = "border-warning/30 bg-transparent text-warning outline-warning hover:bg-warning/10" %}
+    {% elif color == "error" %}
+      {% set variant_cls = "border-error/30 bg-transparent text-error outline-error hover:bg-error/10" %}
+    {% else %}
+      {% set variant_cls = "border-base-400 bg-transparent text-content outline-content hover:bg-base-300" %}
+    {% endif %}
+  {% endif %}
+
+  {% set all = btn ~ " " ~ size_cls ~ " " ~ width_cls ~ " " ~ radius_cls ~ " " ~ variant_cls %}
+  {% if class %}
+    {% set all = all ~ " " ~ class %}
+  {% endif %}
+
+  {% set badge = "inline-flex items-center justify-center rounded-full border font-medium whitespace-nowrap h-5 px-2 text-[11px] gap-1 border-base-400 bg-base-100 text-content" %}
+
+  <a href="{{ resolved_href }}"{% if target %} target="{{ target }}"{% endif %} rel="noopener noreferrer" class="{{ all }}">
+    <span class="inline-flex min-w-0 flex-1 items-center gap-2">
+      {{ icons::render(name="github", class="size-4 shrink-0") }}
+      <span class="truncate font-mono">{{ repo }}</span>
+    </span>
+    {% if show_badges == "true" %}
+      <span class="inline-flex shrink-0 flex-wrap items-center justify-end gap-1.5 pl-2">
+        {% if show_stars == "true" and repo_data %}
+          {% set stars = repo_data.stargazers_count %}
+          {% if stars >= 1000000 %}
+            {% set raw = stars / 1000000 | round(precision=1) %}
+            {% set stars_text = raw ~ "M" %}
+          {% elif stars >= 1000 %}
+            {% set raw = stars / 1000 | round(precision=1) %}
+            {% set stars_text = raw ~ "k" %}
+          {% else %}
+            {% set stars_text = stars %}
+          {% endif %}
+          <span class="{{ badge }} min-w-11">
+            {{ icons::render(name="star", class="size-3") }}
+            <span class="font-mono tabular-nums">{{ stars_text }}</span>
+          </span>
+        {% endif %}
+        {% if show_forks == "true" and repo_data %}
+          {% set forks = repo_data.forks_count %}
+          {% if forks >= 1000000 %}
+            {% set raw = forks / 1000000 | round(precision=1) %}
+            {% set forks_text = raw ~ "M" %}
+          {% elif forks >= 1000 %}
+            {% set raw = forks / 1000 | round(precision=1) %}
+            {% set forks_text = raw ~ "k" %}
+          {% else %}
+            {% set forks_text = forks %}
+          {% endif %}
+          <span class="{{ badge }} min-w-11">
+            {{ icons::render(name="git-fork", class="size-3") }}
+            <span class="font-mono tabular-nums">{{ forks_text }}</span>
+          </span>
+        {% endif %}
+        {% if show_tag == "true" and tag_name %}
+          <span class="{{ badge }} min-w-14 font-mono">
+            {{ icons::render(name="tag", class="size-3") }}
+            {{ tag_name }}
+          </span>
+        {% endif %}
+      </span>
+    {% endif %}
+  </a>
+{% endmacro %}
