@@ -2,15 +2,14 @@
   x-data="tocScroll"
   class="
     flex-1 min-w-0 min-h-0 overflow-y-auto bg-base-100
-    p-4 not-desk:pb-22
-    {% if page %}pt-0{% endif %}
+    p-4 not-desk:pb-22 [&:has(>nav:first-child)]:pt-0
   "
 >
   {% if page %}
     {% if page.components | length > 1 %}
       <nav
         class="
-          py-4 mb-4 bg-base-100 text-content-muted sticky top-0
+          py-4 bg-base-100 text-content-muted sticky top-0
           flex items-center flex-nowrap gap-1.5 text-sm whitespace-nowrap
           overflow-x-auto
         "
@@ -21,7 +20,7 @@
             {% set section_path_parts = page.components | slice(end=loop.index) %}
             {% set section_path = section_path_parts | join(sep="/") %}
             {% set section_obj = get_section(path=section_path ~ "/_index.md") %}
-            <a 
+            <a
               href="{{ section_obj.permalink | safe }}"
               class="hover:text-content transition-colors"
             >
@@ -72,8 +71,10 @@
         {% endif %}
       {% endfor %}
 
-      <nav class="mt-12 pt-6 border-t border-base-400"
-            aria-label="Previous and next navigation">
+      <nav
+        class="mt-12 pt-6 border-t border-base-400"
+        aria-label="Previous and next navigation"
+      >
         <div class="flex flex-col desk:flex-row desk:justify-between gap-4">
           {% if prev_page %}
             <a
@@ -87,7 +88,7 @@
             <div class="flex-1 hidden desk:block"></div>
           {% endif %}
           {% if next_page %}
-            <a 
+            <a
               href="{{ next_page.permalink | safe }}"
               class="group flex flex-col flex-1 p-4 rounded-lg border border-base-400 hover:border-base-300 hover:bg-base-200 transition-colors desk:items-end desk:text-right"
             >
@@ -103,6 +104,42 @@
   {% endif %}
 
   {% if section %}
+    {% if section.components | length > 1 %}
+      <nav
+        class="
+          py-4 bg-base-100 text-content-muted sticky top-0
+          flex items-center flex-nowrap gap-1.5 text-sm whitespace-nowrap
+          overflow-x-auto
+        "
+        aria-label="Breadcrumb"
+      >
+        {% for component in section.components %}
+          {% if not loop.last %}
+            {% set section_path_parts = section.components | slice(end=loop.index) %}
+            {% set section_path = section_path_parts | join(sep="/") %}
+            {% set section_obj = get_section(path=section_path ~ "/_index.md") %}
+            <a
+              href="{{ section_obj.permalink | safe }}"
+              class="hover:text-content transition-colors"
+            >
+              {{ section_obj.title }}
+            </a>
+            {{ icons::render(name="chevron-right", class="size-4 text-content-muted shrink-0") }}
+          {% endif %}
+        {% endfor %}
+
+        <span
+          class="text-content font-medium inline-flex items-center gap-1.5"
+          x-data x-init="$el.scrollIntoView({ block: 'nearest', inline: 'center' })"
+        >
+          {% if section.extra and section.extra.icon %}
+            {{ icons::render(name=section.extra.icon, class="size-4 shrink-0") }}
+          {% endif %}
+          {{ section.title }}
+        </span>
+      </nav>
+    {% endif %}
+
     <article class="prose dark:prose-invert max-w-none">
       <h1>{{ section.title }}</h1>
       {{ section.content | safe }}
