@@ -94,6 +94,17 @@ Try to load JavaScript only where it's used; don't load JavaScript in places whe
 1. **FOUC prevention** — `static/js/theme-init.js` is inlined in `<head>` (separate file kept as canonical source). It runs synchronously before the first paint.
 2. **Runtime API** — Exposes `window.__varapressTheme` with `.get()` and `.set(theme)` methods. Alpine.js store syncs with it via `varapress-theme-change` custom event.
 
+### Component macros
+
+Tera macros are available in `templates/macros/`. Each file exposes a `render` macro.
+
+**Shared conventions:**
+
+- All parameters use strings (`"true"` / `"false"` for booleans).
+- `color` accepts: `neutral` (default), `info`, `success`, `warning`, `error`.
+- `size` defaults to `"md"` unless noted.
+- `class` appends extra CSS classes to any macro.
+
 ### Icons
 
 Icons come from two sources:
