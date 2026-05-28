@@ -10,6 +10,5 @@ build_search_index = true
 
 # Customize the code highlighting
 [markdown.highlighting]
-light_theme = "github-light-default"
-dark_theme = "github-dark-default"
+theme = "github-dark"
 extra_grammars = ["grammars/vdl.json"]
