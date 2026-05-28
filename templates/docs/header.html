@@ -29,6 +29,13 @@
       </div>
     </div>
     <div class="flex items-center gap-2 flex-none">
+      {% set github_repo = config.extra.varapress_github_repo | default(value="varavelio/varapress") %}
+      {% if github_repo %}
+        <div class="hidden desk:block">
+          {{ github_button::render(repo=github_repo, variant="ghost") }}
+        </div>
+      {% endif %}
+
       <button
         class="p-2 -mr-2 rounded-md hover:bg-base-300 transition-colors"
         x-on:click="cycleTheme()"
