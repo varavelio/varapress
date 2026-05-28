@@ -152,4 +152,9 @@
   .varapress-icon {
     @apply size-6 text-current;
   }
+
+  /* Alpine.js cloak */
+  [x-cloak] {
+    display: none !important;
+  }
 }
