@@ -1,7 +1,6 @@
 +++
 title = "Quickstart"
 description = "Start writing documentation with VaraPress in under five minutes."
-template = "docs.html"
 weight = 3
 +++
 

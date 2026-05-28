@@ -1,9 +1,6 @@
 +++
 title = "VaraPress Documentation"
 description = "Learn how to use VaraPress to build documentation, blogs, and landing pages for your projects."
-template = "docs.html"
-weight = 1
-sort_by = "weight"
 +++
 
 VaraPress is the official Zola theme for **Varavel** projects. It gives you everything you need to build professional documentation, blogs, and landing pages, all with the Varavel design system baked in.

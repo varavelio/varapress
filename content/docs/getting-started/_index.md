@@ -1,8 +1,6 @@
 +++
 title = "Getting Started"
 description = "Install and configure VaraPress in your Zola project."
-template = "docs.html"
-weight = 1
 sort_by = "weight"
 +++
 

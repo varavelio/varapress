@@ -1,7 +1,6 @@
 +++
 title = "Installation"
 description = "How to install the VaraPress theme in your Zola project."
-template = "docs.html"
 weight = 1
 +++
 

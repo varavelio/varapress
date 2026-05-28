@@ -1,7 +1,6 @@
 +++
 title = "Configuration"
 description = "Configure VaraPress to match your project's needs."
-template = "docs.html"
 weight = 2
 +++
 
