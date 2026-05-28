@@ -34,9 +34,6 @@
           class="text-content font-medium inline-flex items-center gap-1.5"
           x-data x-init="$el.scrollIntoView({ block: 'nearest', inline: 'center' })"
         >
-          {% if page.extra and page.extra.icon %}
-            {{ icons::render(name=page.extra.icon, class="size-4 shrink-0") }}
-          {% endif %}
           {{ page.title }}
         </span>
       </nav>
@@ -132,9 +129,6 @@
           class="text-content font-medium inline-flex items-center gap-1.5"
           x-data x-init="$el.scrollIntoView({ block: 'nearest', inline: 'center' })"
         >
-          {% if section.extra and section.extra.icon %}
-            {{ icons::render(name=section.extra.icon, class="size-4 shrink-0") }}
-          {% endif %}
           {{ section.title }}
         </span>
       </nav>
