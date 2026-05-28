@@ -1,0 +1,68 @@
+{% import "macros/icons.html" as icons %}
+
+{#
+  Macro: Alert
+  Static alert banner for conveying status information. No close button (use JS for that).
+
+  Parameters:
+    title        - Alert title text
+    description  - Alert description text
+    color        - "neutral" (default) | "info" | "success" | "warning" | "error"
+    icon         - Override the default icon name
+    class        - Additional CSS classes
+#}
+
+{% macro render(title="", description="", color="neutral", icon="", class="") %}
+  {% set base = "relative rounded-lg border p-4" %}
+
+  {# Color variants #}
+  {% if color == "info" %}
+    {% set color_cls = "border-info/40 bg-info/2 text-info" %}
+    {% set default_icon = "info" %}
+  {% elif color == "success" %}
+    {% set color_cls = "border-success/40 bg-success/2 text-success" %}
+    {% set default_icon = "circle-check" %}
+  {% elif color == "warning" %}
+    {% set color_cls = "border-warning/40 bg-warning/2 text-warning" %}
+    {% set default_icon = "triangle-alert" %}
+  {% elif color == "error" %}
+    {% set color_cls = "border-error/40 bg-error/2 text-error" %}
+    {% set default_icon = "circle-x" %}
+  {% else %}
+    {% set color_cls = "border-base-400 bg-base-200/2 text-content" %}
+    {% set default_icon = "info" %}
+  {% endif %}
+
+  {% set resolved_icon = icon %}
+  {% if not icon %}
+    {% set resolved_icon = default_icon %}
+  {% endif %}
+
+  {% set all = base ~ " " ~ color_cls %}
+  {% if class %}
+    {% set all = all ~ " " ~ class %}
+  {% endif %}
+
+  {% set role = "status" %}
+  {% if color == "error" or color == "warning" %}
+    {% set role = "alert" %}
+  {% endif %}
+
+  <div class="{{ all }}" role="{{ role }}">
+    <div class="flex gap-3">
+      {% if title %}
+        <div class="mt-0.5 shrink-0">
+          {{ icons::render(name=resolved_icon, class="size-5") }}
+        </div>
+      {% endif %}
+      <div class="flex-1">
+        {% if title %}
+          <h3 class="font-medium">{{ title }}</h3>
+        {% endif %}
+        {% if description %}
+          <p class="text-sm leading-relaxed opacity-90">{{ description }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endmacro %}

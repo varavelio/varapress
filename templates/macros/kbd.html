@@ -1,0 +1,28 @@
+{#
+  Macro: Kbd
+  Keyboard key indicator for shortcut display.
+
+  Parameters:
+    text   - Key label (e.g. "⌘", "Shift", "K") (required)
+    size   - "sm" | "md" (default) | "lg"
+    class  - Additional CSS classes
+#}
+
+{% macro render(text, size="md", class="") %}
+  {% set base = "inline-flex items-center justify-center rounded-sm border border-b-2 border-base-400 bg-base-200 font-mono font-medium text-content-muted" %}
+
+  {% if size == "sm" %}
+    {% set size_cls = "h-5 px-1.5 text-[10px]" %}
+  {% elif size == "lg" %}
+    {% set size_cls = "h-7 px-2.5 text-xs" %}
+  {% else %}
+    {% set size_cls = "h-6 px-2 text-[11px]" %}
+  {% endif %}
+
+  {% set all = base ~ " " ~ size_cls %}
+  {% if class %}
+    {% set all = all ~ " " ~ class %}
+  {% endif %}
+
+  <kbd class="{{ all }}">{{ text }}</kbd>
+{% endmacro %}

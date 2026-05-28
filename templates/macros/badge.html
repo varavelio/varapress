@@ -1,0 +1,70 @@
+{#
+  Macro: Badge
+  Compact status indicator or label with variant and color support.
+
+  Parameters:
+    text     - Badge content (required)
+    size     - "sm" | "md" (default) | "lg"
+    variant  - "soft" (default) | "solid" | "outline"
+    color    - "neutral" (default) | "info" | "success" | "warning" | "error"
+    class    - Additional CSS classes
+#}
+
+{% macro render(text, size="md", variant="soft", color="neutral", class="") %}
+  {% set base = "inline-flex items-center justify-center rounded-full border font-medium whitespace-nowrap" %}
+
+  {# Size #}
+  {% if size == "sm" %}
+    {% set size_cls = "h-5 px-2 text-[11px]" %}
+  {% elif size == "lg" %}
+    {% set size_cls = "h-7 px-3 text-sm" %}
+  {% else %}
+    {% set size_cls = "h-6 px-2.5 text-xs" %}
+  {% endif %}
+
+  {# Variant + Color #}
+  {% if variant == "solid" %}
+    {% if color == "info" %}
+      {% set color_cls = "border-info bg-info text-white" %}
+    {% elif color == "success" %}
+      {% set color_cls = "border-success bg-success text-white" %}
+    {% elif color == "warning" %}
+      {% set color_cls = "border-warning bg-warning text-white" %}
+    {% elif color == "error" %}
+      {% set color_cls = "border-error bg-error text-white" %}
+    {% else %}
+      {% set color_cls = "border-content bg-content text-base-100" %}
+    {% endif %}
+  {% elif variant == "outline" %}
+    {% if color == "info" %}
+      {% set color_cls = "border-info/30 bg-transparent text-info" %}
+    {% elif color == "success" %}
+      {% set color_cls = "border-success/30 bg-transparent text-success" %}
+    {% elif color == "warning" %}
+      {% set color_cls = "border-warning/30 bg-transparent text-warning" %}
+    {% elif color == "error" %}
+      {% set color_cls = "border-error/30 bg-transparent text-error" %}
+    {% else %}
+      {% set color_cls = "border-base-400 bg-transparent text-content-muted" %}
+    {% endif %}
+  {% else %}
+    {% if color == "info" %}
+      {% set color_cls = "border-info/15 bg-info/10 text-info" %}
+    {% elif color == "success" %}
+      {% set color_cls = "border-success/15 bg-success/10 text-success" %}
+    {% elif color == "warning" %}
+      {% set color_cls = "border-warning/15 bg-warning/10 text-warning" %}
+    {% elif color == "error" %}
+      {% set color_cls = "border-error/15 bg-error/10 text-error" %}
+    {% else %}
+      {% set color_cls = "border-base-400 bg-base-200 text-content-muted" %}
+    {% endif %}
+  {% endif %}
+
+  {% set all = base ~ " " ~ size_cls ~ " " ~ color_cls %}
+  {% if class %}
+    {% set all = all ~ " " ~ class %}
+  {% endif %}
+
+  <span class="{{ all }}">{{ text }}</span>
+{% endmacro %}
