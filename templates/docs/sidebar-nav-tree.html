@@ -1,0 +1,70 @@
+{% if nav_section.subsections | length > 0 %}
+  {% for sub_path in nav_section.subsections %}
+    {% set sub = get_section(path=sub_path) %}
+    <div x-data="{ open: true }" class="flex flex-col space-y-1">
+      <button
+        type="button"
+        @click="open = !open"
+        class="
+          flex items-center gap-2 w-full px-2 py-1.5
+          text-sm font-medium rounded-md transition-colors text-left
+          {% if current_url == sub.permalink %}text-info{% else %}text-content-muted hover:text-content hover:bg-base-200{% endif %}
+        "
+        :aria-expanded="open.toString()"
+      >
+        {% if sub.extra and sub.extra.icon %}
+          {{ icons::render(name=sub.extra.icon, class="size-4 shrink-0") }}
+        {% endif %}
+        <span class="flex-1 truncate">{{ sub.title }}</span>
+        <span class="flex-none transition-transform duration-200" x-bind:class="open && 'rotate-90'">
+          {{ icons::render(name="chevron-right", class="size-4 shrink-0") }}
+        </span>
+      </button>
+      {% if sub.pages | length > 0 %}
+        <div
+          x-show="open"
+          x-transition
+          class="ml-4 mt-1 flex flex-col space-y-1 pl-3.5 tree-line-v"
+        >
+          {% for child_page in sub.pages %}
+            <div class="tree-line-h">
+              <a
+                href="{{ child_page.permalink | safe }}"
+                class="
+                  flex items-center gap-2 px-2 py-1.5
+                  text-sm font-medium rounded-md transition-colors
+                  {% if current_url == child_page.permalink %}text-info{% else %}text-content-muted hover:text-content hover:bg-base-200{% endif %}
+                "
+                {% if current_url == child_page.permalink %}aria-current="page"{% endif %}
+              >
+                {% if child_page.extra and child_page.extra.icon %}
+                  {{ icons::render(name=child_page.extra.icon, class="size-4 shrink-0") }}
+                {% endif %}
+                <span class="truncate">{{ child_page.title }}</span>
+              </a>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  {% endfor %}
+{% endif %}
+
+{% if nav_section.pages | length > 0 %}
+  {% for child_page in nav_section.pages %}
+    <a
+      href="{{ child_page.permalink | safe }}"
+      class="
+        flex items-center gap-1.5 px-2 py-1.5
+        text-sm font-medium rounded-md transition-colors
+        {% if current_url == child_page.permalink %}text-info{% else %}text-content-muted hover:text-content hover:bg-base-200{% endif %}
+      "
+      {% if current_url == child_page.permalink %}aria-current="page"{% endif %}
+    >
+      {% if child_page.extra and child_page.extra.icon %}
+        {{ icons::render(name=child_page.extra.icon, class="size-4 shrink-0") }}
+      {% endif %}
+      <span class="truncate">{{ child_page.title }}</span>
+    </a>
+  {% endfor %}
+{% endif %}

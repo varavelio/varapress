@@ -174,3 +174,33 @@
     opacity: 0.8;
   }
 }
+
+/* Vertical dashed line for sidebar */
+@utility tree-line-v {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: calc(100% - 0.875rem);
+    border-left-style: dashed;
+    border-left-width: 2px;
+  }
+}
+
+/* Horizontal dashed line for sidebar */
+@utility tree-line-h {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: -0.875rem;
+    top: 0.75rem;
+    width: 0.625rem;
+    border-top-style: dashed;
+    border-top-width: 2px;
+  }
+}

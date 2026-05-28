@@ -1,11 +1,17 @@
 {% set nav_section = false %}
 {% set current_url = "" %}
+
 {% if section %}
   {% set current_url = section.permalink %}
-  {% if section.components and section.components | length > 0 and section.components[0] != "_index" %}
-    {% set nav_section = section %}
+  {% if section.components and section.components | length > 0 %}
+    {% set root_path = section.components[0] %}
+    {% if root_path and root_path != "_index" %}
+      {% set nav_section = get_section(path=root_path ~ "/_index.md") %}
+    {% endif %}
   {% endif %}
-{% elif page %}
+{% endif %}
+
+{% if page %}
   {% set current_url = page.permalink %}
   {% if page.components | length > 0 %}
     {% set root_path = page.components[0] %}
@@ -16,122 +22,43 @@
 {% endif %}
 
 {% if nav_section %}
-  {# Desktop sidebar #}
   <aside class="hidden desk:flex shrink-0 w-64 min-h-0 flex-col border-r border-base-400">
-    <nav class="flex-1 min-h-0 overflow-y-auto px-4 py-4"
-         aria-label="Documentation">
-      {% if nav_section.subsections | length > 0 %}
-        {% for sub_path in nav_section.subsections %}
-          {% set sub = get_section(path=sub_path) %}
-          <div class="mb-4">
-            <a href="{{ sub.permalink | safe }}"
-               class="flex items-center gap-1.5 text-sm font-semibold text-content hover:text-info transition-colors {% if current_url == sub.permalink %}text-info{% endif %}">
-              {% if sub.extra and sub.extra.icon %}{{ icons::render(name=sub.extra.icon, class="size-4 shrink-0") }}{% endif %}
-              {{ sub.title }}
-            </a>
-            {% if sub.pages | length > 0 %}
-              <ul class="mt-1.5 space-y-1">
-                {% for child_page in sub.pages %}
-                  <li>
-                    <a href="{{ child_page.permalink | safe }}"
-                       class="flex items-center gap-1.5 py-1 text-sm text-content-muted hover:text-content hover:bg-base-300 rounded-sm px-2 -mx-2 transition-colors {% if current_url == child_page.permalink %}text-info font-medium bg-base-300{% endif %}">
-                      {% if child_page.extra and child_page.extra.icon %}{{ icons::render(name=child_page.extra.icon, class="size-4 shrink-0") }}{% endif %}
-                      {{ child_page.title }}
-                    </a>
-                  </li>
-                {% endfor %}
-              </ul>
-            {% endif %}
-          </div>
-        {% endfor %}
-      {% endif %}
-      {% if nav_section.pages | length > 0 %}
-        <div class="mb-4">
-          <span class="text-xs font-semibold text-content-muted uppercase tracking-wide">{{ nav_section.title }}</span>
-          <ul class="mt-1.5 space-y-1">
-            {% for child_page in nav_section.pages %}
-              <li>
-                <a href="{{ child_page.permalink | safe }}"
-                   class="flex items-center gap-1.5 py-1 text-sm text-content-muted hover:text-content hover:bg-base-300 rounded-sm px-2 -mx-2 transition-colors {% if current_url == child_page.permalink %}text-info font-medium bg-base-300{% endif %}">
-                  {% if child_page.extra and child_page.extra.icon %}{{ icons::render(name=child_page.extra.icon, class="size-4 shrink-0") }}{% endif %}
-                  {{ child_page.title }}
-                </a>
-              </li>
-            {% endfor %}
-          </ul>
-        </div>
-      {% endif %}
+    <nav
+      class="flex-1 min-h-0 overflow-y-auto px-4 py-4 flex flex-col space-y-1"
+      aria-label="Documentation"
+    >
+      {% include "docs/sidebar-nav-tree.html" %}
     </nav>
   </aside>
 
-  {# Mobile sidebar drawer #}
   <div class="desk:hidden">
-    <div class="fixed inset-0 z-30 bg-black/50 isolate"
-         x-show="sidebarOpen"
-         x-transition.opacity.duration.200
-         x-on:click="toggleSidebar()"
-         aria-hidden="true"></div>
-    <aside class="fixed inset-y-0 left-0 z-40 w-64 max-w-[80vw] bg-base-200 border-r border-base-400 flex flex-col isolate"
-           x-show="sidebarOpen"
-           x-transition:enter="-translate-x-full"
-           x-transition:enter-end="translate-x-0"
-           x-transition:leave="translate-x-0"
-           x-transition:leave-end="-translate-x-full"
-           aria-label="Documentation navigation">
+    <div
+      class="fixed inset-0 z-30 bg-black/50 isolate"
+      x-show="sidebarOpen"
+      x-transition.opacity.duration.200
+      x-on:click="toggleSidebar()"
+      aria-hidden="true"></div>
+    <aside
+      class="fixed inset-y-0 left-0 z-40 w-64 max-w-[80vw] bg-base-200 border-r border-base-400 flex flex-col isolate"
+      x-show="sidebarOpen"
+      x-transition:enter="-translate-x-full"
+      x-transition:enter-end="translate-x-0"
+      x-transition:leave="translate-x-0"
+      x-transition:leave-end="-translate-x-full"
+      aria-label="Documentation navigation"
+    >
       <div class="flex items-center justify-between p-4 border-b border-base-400">
         <span class="font-semibold text-content text-sm">Navigation</span>
-        <button class="p-1.5 rounded-md hover:bg-base-300 transition-colors"
-                x-on:click="toggleSidebar()"
-                aria-label="Close navigation">
+        <button
+          class="p-1.5 rounded-md hover:bg-base-300 transition-colors"
+          x-on:click="toggleSidebar()"
+          aria-label="Close navigation"
+        >
           {{ icons::render(name="x", class="size-5") }}
         </button>
       </div>
-      <nav class="flex-1 min-h-0 overflow-y-auto px-4 py-4">
-        {% if nav_section.subsections | length > 0 %}
-          {% for sub_path in nav_section.subsections %}
-            {% set sub = get_section(path=sub_path) %}
-            <div class="mb-4">
-              <a href="{{ sub.permalink | safe }}"
-                 class="flex items-center gap-1.5 text-sm font-semibold text-content hover:text-info transition-colors {% if current_url == sub.permalink %}text-info{% endif %}"
-              >
-                {% if sub.extra and sub.extra.icon %}{{ icons::render(name=sub.extra.icon, class="size-4 shrink-0") }}{% endif %}
-                {{ sub.title }}
-              </a>
-              {% if sub.pages | length > 0 %}
-                <ul class="mt-1.5 space-y-1">
-                  {% for child_page in sub.pages %}
-                    <li>
-                      <a href="{{ child_page.permalink | safe }}"
-                         class="flex items-center gap-1.5 py-1 text-sm text-content-muted hover:text-content hover:bg-base-300 rounded-sm px-2 -mx-2 transition-colors {% if current_url == child_page.permalink %}text-info font-medium bg-base-300{% endif %}"
-                      >
-                        {% if child_page.extra and child_page.extra.icon %}{{ icons::render(name=child_page.extra.icon, class="size-4 shrink-0") }}{% endif %}
-                        {{ child_page.title }}
-                      </a>
-                    </li>
-                  {% endfor %}
-                </ul>
-              {% endif %}
-            </div>
-          {% endfor %}
-        {% endif %}
-        {% if nav_section.pages | length > 0 %}
-          <div class="mb-4">
-            <span class="text-xs font-semibold text-content-muted uppercase tracking-wide">{{ nav_section.title }}</span>
-            <ul class="mt-1.5 space-y-1">
-              {% for child_page in nav_section.pages %}
-                <li>
-                  <a
-                    href="{{ child_page.permalink | safe }}"
-                    class="flex items-center gap-1.5 py-1 text-sm text-content-muted hover:text-content hover:bg-base-300 rounded-sm px-2 -mx-2 transition-colors {% if current_url == child_page.permalink %}text-info font-medium bg-base-300{% endif %}"
-                  >
-                    {% if child_page.extra and child_page.extra.icon %}{{ icons::render(name=child_page.extra.icon, class="size-4 shrink-0") }}{% endif %}
-                    {{ child_page.title }}
-                  </a>
-                </li>
-              {% endfor %}
-            </ul>
-          </div>
-        {% endif %}
+      <nav class="flex-1 min-h-0 overflow-y-auto px-4 py-4 flex flex-col space-y-1">
+        {% include "docs/sidebar-nav-tree.html" %}
       </nav>
     </aside>
   </div>
