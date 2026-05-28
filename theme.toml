@@ -26,3 +26,5 @@ varapress_logo_light = "https://cdn.jsdelivr.net/gh/varavelio/brand@v1.0.2/dist/
 varapress_logo_dark = "https://cdn.jsdelivr.net/gh/varavelio/brand@v1.0.2/dist/logo-white.svg"
 # Set to false to hide the text title and only show the logo.
 varapress_show_title = true
+# GitHub repository in "user/repo" format. Set to "" to hide the button.
+varapress_github_repo = "varavelio/varapress"
