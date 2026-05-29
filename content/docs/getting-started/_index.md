@@ -1,7 +1,6 @@
 +++
 title = "Getting Started"
 description = "Install and configure VaraPress in your Zola project."
+redirect_to = "docs/getting-started/installation"
 sort_by = "weight"
 +++
-
-Follow these guides to install VaraPress in your Zola project. Each step is straightforward and should only take a few minutes.
