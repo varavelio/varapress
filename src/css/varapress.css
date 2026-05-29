@@ -204,3 +204,5 @@
     border-top-width: 2px;
   }
 }
+
+@import "./docs.css"

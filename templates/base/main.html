@@ -35,8 +35,8 @@
     <link rel="shortcut icon" href="{{ favicon }}">
     <link rel="stylesheet" href="{{ get_url(path='css/varapress.css') }}">
 
-    <script>{{ load_data(path="js/theme-init.js") | safe }}</script>
-    <script src="{{ get_url(path='libs/alpinejs/alpine.min.js') }}" defer></script>
+    <script>{{ load_data(path="js/theme-init.js", format="plain") | safe }}</script>
+    <script src="{{ get_url(path='js/varapress.js') }}" defer></script>
 
     {% block head_extra %}
     {% endblock head_extra %}
