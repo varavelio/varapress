@@ -94,6 +94,21 @@ Try to load JavaScript only where it's used; don't load JavaScript in places whe
 1. **FOUC prevention** — `static/js/theme-init.js` is inlined in `<head>` (separate file kept as canonical source). It runs synchronously before the first paint.
 2. **Runtime API** — Exposes `window.__varapressTheme` with `.get()` and `.set(theme)` methods. Alpine.js store syncs with it via `varapress-theme-change` custom event.
 
+### Anchor links on headings
+
+Prose headings in documentation pages automatically get anchor links with a chain-link icon. The icon appears on hover and allows users to copy direct links to specific sections.
+
+**How it works:**
+
+- `static/js/docs.js` — `injectAnchorLinks()` scans `.prose :is(h1-h6)` elements with an `id` attribute and prepends an `<a class="anchor-link">` with a chain-link SVG icon
+- `static/css/docs.css` — Styles the anchor link as absolutely positioned to the left of the heading, invisible by default, fading in on hover. Includes an invisible `::before` pseudo-element to expand the hover area and prevent the icon from disappearing when moving the mouse to click it
+- `templates/docs/body-extra.html` — Inlines both `docs.css` (in `<style>`) and `docs.js` (in `<script>`) for docs pages only
+- Navigation works by clicking either the heading text or the icon
+- The URL hash updates via `history.pushState` without page reload
+- Accessibility: icon is `aria-hidden` and focusable only via keyboard
+
+**When modifying:** The SVG icon is inlined in `docs.js` (not loaded from `static/icons/`) to avoid extra DOM dependencies. If you need to change the icon, update the `LINK_SVG` constant in the `injectAnchorLinks` function. Docs-specific CSS lives in `static/css/docs.css`, not in `tailwind.css`.
+
 ### Component macros
 
 Tera macros are available in `templates/macros/`. Each file exposes a `render` macro.

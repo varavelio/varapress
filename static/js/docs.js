@@ -28,6 +28,36 @@
  * @see templates/docs/content.html — Main content area with x-data binding
  */
 
+/**
+ * Injects anchor links into prose headings that have an id attribute.
+ * Each anchor link is placed as the last child of the heading element
+ * and becomes visible on heading hover.
+ */
+function injectAnchorLinks() {
+  const LINK_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>`;
+
+  document
+    .querySelectorAll(".prose :is(h1, h2, h3, h4, h5, h6)")
+    .forEach((heading) => {
+      if (heading.id && !heading.querySelector("a.anchor-link")) {
+        const anchor = document.createElement("a");
+        anchor.className = "anchor-link";
+        anchor.href = `#${heading.id}`;
+        anchor.setAttribute("aria-hidden", "true");
+        anchor.tabIndex = -1;
+        anchor.innerHTML = LINK_SVG;
+        anchor.addEventListener("click", (e) => {
+          e.preventDefault();
+          const url = new URL(window.location.href);
+          url.hash = heading.id;
+          history.pushState(null, "", url);
+          heading.scrollIntoView({ behavior: "smooth", block: "start" });
+        });
+        heading.append(anchor);
+      }
+    });
+}
+
 document.addEventListener("alpine:init", () => {
   Alpine.data("varapressDocs", () => ({
     /** @type {boolean} Whether the mobile sidebar drawer is open. */
@@ -130,3 +160,6 @@ document.addEventListener("alpine:init", () => {
     },
   }));
 });
+
+// Inject anchor links into prose headings after DOM is ready
+injectAnchorLinks();
