@@ -1,5 +1,5 @@
 import Alpine from 'alpinejs'
-import { initDocs } from './varapress-docs'
+import { initDocs } from './docs'
  
 initDocs()
 
