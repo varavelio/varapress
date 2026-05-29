@@ -3398,7 +3398,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
   var src_default = alpine_default;
   var module_default = src_default;
 
-  // src/js/varapress-docs.js
+  // src/js/varapress/docs.js
   function injectAnchorLinks() {
     const LINK_SVG = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>`;
     document.querySelectorAll(".prose :is(h1, h2, h3, h4, h5, h6)").forEach((heading) => {
@@ -3514,7 +3514,7 @@ ${expression ? 'Expression: "' + expression + '"\n\n' : ""}`, el);
     addEventListeners();
   }
 
-  // src/js/varapress.js
+  // src/js/varapress/index.js
   initDocs();
   window.Alpine = module_default;
   module_default.start();
