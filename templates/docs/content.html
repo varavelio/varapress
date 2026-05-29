@@ -2,16 +2,15 @@
   x-data="tocScroll"
   class="
     flex-1 min-w-0 min-h-0 overflow-y-auto bg-base-100
-    p-4 not-desk:pb-22 [&:has(>nav:first-child)]:pt-0
+    p-4 not-desk:pb-22 scroll-p-4
   "
 >
   {% if page %}
     {% if page.components | length > 1 %}
       <nav
         class="
-          py-4 bg-base-100 text-content-muted sticky top-0
+          pb-6 bg-base-100 text-content-muted overflow-x-auto
           flex items-center flex-nowrap gap-1.5 text-sm whitespace-nowrap
-          overflow-x-auto
         "
         aria-label="Breadcrumb"
       >
@@ -104,9 +103,8 @@
     {% if section.components | length > 1 %}
       <nav
         class="
-          py-4 bg-base-100 text-content-muted sticky top-0
+          pb-6 bg-base-100 text-content-muted overflow-x-auto
           flex items-center flex-nowrap gap-1.5 text-sm whitespace-nowrap
-          overflow-x-auto
         "
         aria-label="Breadcrumb"
       >

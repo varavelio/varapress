@@ -5,7 +5,7 @@
   transition: opacity 0.15s ease-in-out;
   pointer-events: none;
   text-decoration: none;
-  margin-left: 0.15em;
+  margin-left: 0.20em;
   vertical-align: baseline;
 }
 
@@ -22,8 +22,8 @@
 }
 
 .prose :is(h1, h2, h3, h4, h5, h6) > a.anchor-link svg {
-  width: 0.75em;
-  height: 0.75em;
+  width: 0.85em;
+  height: 0.85em;
   display: inline-block;
   vertical-align: baseline;
   color: var(--color-content-muted);
