@@ -147,62 +147,9 @@
   samp {
     @apply font-mono;
   }
-
-  /* Default icons style */
-  .varapress-icon {
-    @apply size-6 text-current;
-  }
-
-  /* Alpine.js cloak */
-  [x-cloak] {
-    display: none !important;
-  }
-
-  /* Zola syntax highlighter */
-  .giallo-l {
-    display: inline-block;
-    min-height: 1lh;
-    width: 100%;
-  }
-  .giallo-ln {
-    display: inline-block;
-    user-select: none;
-    margin-right: 0.4em;
-    padding: 0.4em;
-    min-width: 3ch;
-    text-align: right;
-    opacity: 0.8;
-  }
 }
 
-/* Vertical dashed line for sidebar */
-@utility tree-line-v {
-  position: relative;
-
-  &::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: calc(100% - 0.875rem);
-    border-left-style: dashed;
-    border-left-width: 2px;
-  }
-}
-
-/* Horizontal dashed line for sidebar */
-@utility tree-line-h {
-  position: relative;
-
-  &::before {
-    content: "";
-    position: absolute;
-    left: -0.875rem;
-    top: 0.75rem;
-    width: 0.625rem;
-    border-top-style: dashed;
-    border-top-width: 2px;
-  }
-}
-
-@import "./docs.css"
+@import "./shared.css";
+@import "./alpine.css";
+@import "./giallo.css";
+@import "./docs.css";
