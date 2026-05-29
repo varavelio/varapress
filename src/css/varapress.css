@@ -147,9 +147,13 @@
   samp {
     @apply font-mono;
   }
+
+  /* Default icons style */
+  .varapress-icon {
+    @apply size-6 text-current;
+  }
 }
 
-@import "./shared.css";
 @import "./alpine.css";
 @import "./giallo.css";
 @import "./docs.css";
