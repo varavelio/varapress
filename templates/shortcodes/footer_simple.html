@@ -1,0 +1,38 @@
+{#
+  Shortcode: footer_simple
+  Simple footer with copyright and links.
+
+  Parameters:
+    copyright   - Custom copyright text (optional, defaults to year + site title)
+    links       - Comma-separated "label|url" pairs (optional)
+    class       - Additional CSS classes
+#}
+
+{% import "macros/icons.html" as icons %}
+
+{% set links = links | default(value="") %}
+{% set year = now() | date(format="%Y") %}
+
+<footer class="shrink-0 border-t border-base-400 bg-base-100{% if class %} {{ class }}{% endif %}">
+    <div class="px-4 py-8 desk:px-8">
+    <div class="flex flex-col items-center justify-between gap-4 desk:flex-row">
+      <p class="text-sm text-content-muted">
+        &copy; {{ year }} {{ config.title }}. Built with
+        <a href="https://www.getzola.org" class="text-content hover:text-info transition-colors">Zola</a>
+        and
+        <a href="https://github.com/varavelio/varapress" class="text-content hover:text-info transition-colors">VaraPress</a>.
+      </p>
+      <div class="flex items-center gap-4">
+        {% for link in links %}
+          {% set parts = link | split(pat="|") %}
+          {% if parts | length == 2 %}
+            <a href="{{ parts[1] }}" class="text-sm text-content-muted hover:text-content transition-colors">{{ parts[0] }}</a>
+          {% endif %}
+        {% endfor %}
+        <a href="https://github.com/varavelio/varapress" class="text-content-muted hover:text-content transition-colors" target="_blank" rel="noopener noreferrer">
+          {{ icons::render(name="github", class="size-5") }}
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>

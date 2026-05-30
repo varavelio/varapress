@@ -1,0 +1,82 @@
+{#
+  Shortcode: button_base
+  An inline button or link styled according to the Varavel design system.
+
+  Parameters:
+    text      - Button label (required)
+    href      - URL to link to (if omitted, renders as a span)
+    target    - Link target (e.g. "_blank")
+    variant   - "solid" (default) | "outline" | "ghost"
+    color     - "neutral" (default) | "info" | "success" | "warning" | "error"
+    size      - "sm" | "md" (default) | "lg"
+    class     - Additional CSS classes
+#}
+
+{% set size = size | default(value="md") %}
+{% set variant = variant | default(value="solid") %}
+{% set color = color | default(value="neutral") %}
+
+{% set base_cls = "relative inline-flex items-center gap-2 border font-medium transition-all duration-75 cursor-pointer select-none active:translate-y-px focus-visible:outline-2" %}
+
+{% if size == "sm" %}
+  {% set size_cls = "h-8 px-3 text-xs" %}
+{% elif size == "lg" %}
+  {% set size_cls = "h-12 px-6 text-base" %}
+{% else %}
+  {% set size_cls = "h-10 px-4 text-sm" %}
+{% endif %}
+
+{% if variant == "solid" %}
+  {% if color == "info" %}
+    {% set color_cls = "border-info bg-info text-white outline-info hover:bg-info/80 focus-visible:outline-offset-2" %}
+  {% elif color == "success" %}
+    {% set color_cls = "border-success bg-success text-white outline-success hover:bg-success/80 focus-visible:outline-offset-2" %}
+  {% elif color == "warning" %}
+    {% set color_cls = "border-warning bg-warning text-white outline-warning hover:bg-warning/80 focus-visible:outline-offset-2" %}
+  {% elif color == "error" %}
+    {% set color_cls = "border-error bg-error text-white outline-error hover:bg-error/80 focus-visible:outline-offset-2" %}
+  {% else %}
+    {% set color_cls = "border-content bg-content text-base-100 outline-content hover:bg-content/80 focus-visible:outline-offset-2" %}
+  {% endif %}
+{% elif variant == "outline" %}
+  {% if color == "info" %}
+    {% set color_cls = "border-info/30 bg-transparent text-info outline-info hover:bg-info/10" %}
+  {% elif color == "success" %}
+    {% set color_cls = "border-success/30 bg-transparent text-success outline-success hover:bg-success/10" %}
+  {% elif color == "warning" %}
+    {% set color_cls = "border-warning/30 bg-transparent text-warning outline-warning hover:bg-warning/10" %}
+  {% elif color == "error" %}
+    {% set color_cls = "border-error/30 bg-transparent text-error outline-error hover:bg-error/10" %}
+  {% else %}
+    {% set color_cls = "border-base-400 bg-transparent text-content outline-content hover:bg-base-300" %}
+  {% endif %}
+{% else %}
+  {% if color == "info" %}
+    {% set color_cls = "border-transparent bg-transparent text-info outline-info hover:bg-info/10" %}
+  {% elif color == "success" %}
+    {% set color_cls = "border-transparent bg-transparent text-success outline-success hover:bg-success/10" %}
+  {% elif color == "warning" %}
+    {% set color_cls = "border-transparent bg-transparent text-warning outline-warning hover:bg-warning/10" %}
+  {% elif color == "error" %}
+    {% set color_cls = "border-transparent bg-transparent text-error outline-error hover:bg-error/10" %}
+  {% else %}
+    {% set color_cls = "border-transparent bg-transparent text-content outline-content hover:bg-base-300" %}
+  {% endif %}
+{% endif %}
+
+{% set all_cls = base_cls ~ " " ~ size_cls ~ " " ~ color_cls %}
+{% if class %}
+  {% set all_cls = all_cls ~ " " ~ class %}
+{% endif %}
+
+{% if href %}
+  {% set resolved_rel = "" %}
+  {% if target == "_blank" %}
+    {% set resolved_rel = ' rel="noopener noreferrer"' %}
+  {% endif %}
+  <a href="{{ href }}"{% if target %} target="{{ target }}"{% endif %}{{ resolved_rel | safe }} class="{{ all_cls }}">
+    {{ text }}
+  </a>
+{% else %}
+  <span class="{{ all_cls }}">{{ text }}</span>
+{% endif %}

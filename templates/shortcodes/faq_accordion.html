@@ -1,0 +1,163 @@
+{#
+  Shortcode: faq_accordion
+  Interactive FAQ section with an Alpine.js-powered accordion.
+
+  Parameters:
+    eyebrow     - Small label above the title (optional)
+    title       - Section heading (optional)
+    description - Section description (optional)
+    bg          - Background: "base-100" (default) | "base-200"
+    q_1         - Question 1
+    a_1         - Answer 1
+    q_2         - Question 2
+    a_2         - Answer 2
+    ... (up to q_10 / a_10)
+#}
+
+<section class="py-16 desk:py-24{% if bg %} bg-{{ bg }}{% endif %}">
+  <div class="px-4 sm:px-6">
+    <div class="space-y-10">
+      {% if eyebrow or title or description %}
+        <div class="mx-auto flex max-w-3xl flex-col gap-4 text-center">
+          {% if eyebrow %}
+            <p class="text-xs font-medium uppercase tracking-[0.24em] text-content-muted">
+              {{ eyebrow }}
+            </p>
+          {% endif %}
+          {% if title %}
+            <h2 class="text-3xl font-semibold tracking-tight text-content desk:text-4xl">
+              {{ title }}
+            </h2>
+          {% endif %}
+          {% if description %}
+            <p class="text-base leading-7 text-content-muted desk:text-lg">
+              {{ description }}
+            </p>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      <div class="w-full rounded-lg border border-base-400 bg-base-200 px-5" x-data="{ open: null }">
+        {% if q_1 %}
+          <div class="border-b border-base-400">
+            <button class="flex w-full cursor-pointer items-center justify-between gap-4 py-5 text-left font-medium text-content focus:outline-none focus-visible:ring-1 focus-visible:ring-content" x-on:click="open === 0 ? open = null : open = 0" x-bind:aria-expanded="open === 0">
+              <span>{{ q_1 }}</span>
+              <svg class="size-5 shrink-0 text-content-muted transition-transform duration-200" x-bind:class="open === 0 ? 'rotate-180' : ''" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="overflow-hidden" x-show="open === 0" x-collapse>
+              <div class="pb-5 text-sm leading-7 text-content-muted desk:text-base">{{ a_1 }}</div>
+            </div>
+          </div>
+        {% endif %}
+
+        {% if q_2 %}
+          <div class="border-b border-base-400">
+            <button class="flex w-full cursor-pointer items-center justify-between gap-4 py-5 text-left font-medium text-content focus:outline-none focus-visible:ring-1 focus-visible:ring-content" x-on:click="open === 1 ? open = null : open = 1" x-bind:aria-expanded="open === 1">
+              <span>{{ q_2 }}</span>
+              <svg class="size-5 shrink-0 text-content-muted transition-transform duration-200" x-bind:class="open === 1 ? 'rotate-180' : ''" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="overflow-hidden" x-show="open === 1" x-collapse>
+              <div class="pb-5 text-sm leading-7 text-content-muted desk:text-base">{{ a_2 }}</div>
+            </div>
+          </div>
+        {% endif %}
+
+        {% if q_3 %}
+          <div class="border-b border-base-400">
+            <button class="flex w-full cursor-pointer items-center justify-between gap-4 py-5 text-left font-medium text-content focus:outline-none focus-visible:ring-1 focus-visible:ring-content" x-on:click="open === 2 ? open = null : open = 2" x-bind:aria-expanded="open === 2">
+              <span>{{ q_3 }}</span>
+              <svg class="size-5 shrink-0 text-content-muted transition-transform duration-200" x-bind:class="open === 2 ? 'rotate-180' : ''" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="overflow-hidden" x-show="open === 2" x-collapse>
+              <div class="pb-5 text-sm leading-7 text-content-muted desk:text-base">{{ a_3 }}</div>
+            </div>
+          </div>
+        {% endif %}
+
+        {% if q_4 %}
+          <div class="border-b border-base-400">
+            <button class="flex w-full cursor-pointer items-center justify-between gap-4 py-5 text-left font-medium text-content focus:outline-none focus-visible:ring-1 focus-visible:ring-content" x-on:click="open === 3 ? open = null : open = 3" x-bind:aria-expanded="open === 3">
+              <span>{{ q_4 }}</span>
+              <svg class="size-5 shrink-0 text-content-muted transition-transform duration-200" x-bind:class="open === 3 ? 'rotate-180' : ''" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="overflow-hidden" x-show="open === 3" x-collapse>
+              <div class="pb-5 text-sm leading-7 text-content-muted desk:text-base">{{ a_4 }}</div>
+            </div>
+          </div>
+        {% endif %}
+
+        {% if q_5 %}
+          <div class="border-b border-base-400">
+            <button class="flex w-full cursor-pointer items-center justify-between gap-4 py-5 text-left font-medium text-content focus:outline-none focus-visible:ring-1 focus-visible:ring-content" x-on:click="open === 4 ? open = null : open = 4" x-bind:aria-expanded="open === 4">
+              <span>{{ q_5 }}</span>
+              <svg class="size-5 shrink-0 text-content-muted transition-transform duration-200" x-bind:class="open === 4 ? 'rotate-180' : ''" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="overflow-hidden" x-show="open === 4" x-collapse>
+              <div class="pb-5 text-sm leading-7 text-content-muted desk:text-base">{{ a_5 }}</div>
+            </div>
+          </div>
+        {% endif %}
+
+        {% if q_6 %}
+          <div class="border-b border-base-400">
+            <button class="flex w-full cursor-pointer items-center justify-between gap-4 py-5 text-left font-medium text-content focus:outline-none focus-visible:ring-1 focus-visible:ring-content" x-on:click="open === 5 ? open = null : open = 5" x-bind:aria-expanded="open === 5">
+              <span>{{ q_6 }}</span>
+              <svg class="size-5 shrink-0 text-content-muted transition-transform duration-200" x-bind:class="open === 5 ? 'rotate-180' : ''" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="overflow-hidden" x-show="open === 5" x-collapse>
+              <div class="pb-5 text-sm leading-7 text-content-muted desk:text-base">{{ a_6 }}</div>
+            </div>
+          </div>
+        {% endif %}
+
+        {% if q_7 %}
+          <div class="border-b border-base-400">
+            <button class="flex w-full cursor-pointer items-center justify-between gap-4 py-5 text-left font-medium text-content focus:outline-none focus-visible:ring-1 focus-visible:ring-content" x-on:click="open === 6 ? open = null : open = 6" x-bind:aria-expanded="open === 6">
+              <span>{{ q_7 }}</span>
+              <svg class="size-5 shrink-0 text-content-muted transition-transform duration-200" x-bind:class="open === 6 ? 'rotate-180' : ''" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="overflow-hidden" x-show="open === 6" x-collapse>
+              <div class="pb-5 text-sm leading-7 text-content-muted desk:text-base">{{ a_7 }}</div>
+            </div>
+          </div>
+        {% endif %}
+
+        {% if q_8 %}
+          <div class="border-b border-base-400">
+            <button class="flex w-full cursor-pointer items-center justify-between gap-4 py-5 text-left font-medium text-content focus:outline-none focus-visible:ring-1 focus-visible:ring-content" x-on:click="open === 7 ? open = null : open = 7" x-bind:aria-expanded="open === 7">
+              <span>{{ q_8 }}</span>
+              <svg class="size-5 shrink-0 text-content-muted transition-transform duration-200" x-bind:class="open === 7 ? 'rotate-180' : ''" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="overflow-hidden" x-show="open === 7" x-collapse>
+              <div class="pb-5 text-sm leading-7 text-content-muted desk:text-base">{{ a_8 }}</div>
+            </div>
+          </div>
+        {% endif %}
+
+        {% if q_9 %}
+          <div class="border-b border-base-400">
+            <button class="flex w-full cursor-pointer items-center justify-between gap-4 py-5 text-left font-medium text-content focus:outline-none focus-visible:ring-1 focus-visible:ring-content" x-on:click="open === 8 ? open = null : open = 8" x-bind:aria-expanded="open === 8">
+              <span>{{ q_9 }}</span>
+              <svg class="size-5 shrink-0 text-content-muted transition-transform duration-200" x-bind:class="open === 8 ? 'rotate-180' : ''" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="overflow-hidden" x-show="open === 8" x-collapse>
+              <div class="pb-5 text-sm leading-7 text-content-muted desk:text-base">{{ a_9 }}</div>
+            </div>
+          </div>
+        {% endif %}
+
+        {% if q_10 %}
+          <div class="last:border-b-0">
+            <button class="flex w-full cursor-pointer items-center justify-between gap-4 py-5 text-left font-medium text-content focus:outline-none focus-visible:ring-1 focus-visible:ring-content" x-on:click="open === 9 ? open = null : open = 9" x-bind:aria-expanded="open === 9">
+              <span>{{ q_10 }}</span>
+              <svg class="size-5 shrink-0 text-content-muted transition-transform duration-200" x-bind:class="open === 9 ? 'rotate-180' : ''" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>
+            </button>
+            <div class="overflow-hidden" x-show="open === 9" x-collapse>
+              <div class="pb-5 text-sm leading-7 text-content-muted desk:text-base">{{ a_10 }}</div>
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>

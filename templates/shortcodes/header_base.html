@@ -1,0 +1,57 @@
+{#
+  Shortcode: header_base
+  Simple header with logo, site title, optional navigation menu, and theme toggle.
+
+  Parameters:
+    logo_light  - Light mode logo URL (optional, falls back to config)
+    logo_dark   - Dark mode logo URL (optional, falls back to config)
+    show_title  - "true" (default) | "false"
+    menu        - Comma-separated "label|url" pairs (optional, e.g. "Docs|/docs,Blog|/blog")
+    class       - Additional CSS classes
+#}
+
+{% import "macros/icons.html" as icons %}
+
+{% set show_title = show_title | default(value="true") %}
+{% set logo_light = logo_light | default(value=config.extra.varapress_logo_light | default(value="https://cdn.jsdelivr.net/gh/varavelio/brand@v1.0.2/dist/logo-black.svg")) %}
+{% set logo_dark = logo_dark | default(value=config.extra.varapress_logo_dark | default(value="https://cdn.jsdelivr.net/gh/varavelio/brand@v1.0.2/dist/logo-white.svg")) %}
+{% set menu = menu | default(value="") %}
+
+<header class="h-14 shrink-0 bg-base-100 border-b border-base-400{% if class %} {{ class }}{% endif %}">
+  <div class="h-full flex items-center justify-between gap-3 px-4">
+    <div class="flex-auto min-w-0 flex items-center justify-start">
+      <a href="/" class="group flex items-center justify-start whitespace-nowrap">
+        {% if logo_light or logo_dark %}
+          <span class="flex-none h-6 mr-2">
+            <img x-show="resolvedTheme === 'light'" src="{{ logo_light }}" class="h-6 w-auto" alt="{{ config.title }}">
+            <img x-show="resolvedTheme === 'dark'" src="{{ logo_dark }}" class="h-6 w-auto" alt="{{ config.title }}">
+          </span>
+        {% endif %}
+        {% if show_title == "true" %}
+          <span class="font-semibold text-content group-hover:text-info transition-colors">
+            {{ config.title }}
+          </span>
+        {% endif %}
+      </a>
+    </div>
+    <nav class="flex items-center gap-1 flex-none">
+      {% for link in menu %}
+        {% set parts = link | split(pat="|") %}
+        {% if parts | length == 2 %}
+          <a href="{{ parts[1] }}" class="hidden desk:inline-flex h-8 items-center rounded-md px-3 text-sm font-medium text-content-muted transition-colors hover:bg-base-200 hover:text-content">
+            {{ parts[0] }}
+          </a>
+        {% endif %}
+      {% endfor %}
+      <button
+        class="p-2 -mr-2 rounded-md hover:bg-base-300 transition-colors"
+        x-on:click="cycleTheme()"
+        aria-label="Toggle theme"
+      >
+        <span x-show="theme === 'system'">{{ icons::render(name="laptop-minimal") }}</span>
+        <span x-show="theme === 'light'">{{ icons::render(name="sun-medium") }}</span>
+        <span x-show="theme === 'dark'">{{ icons::render(name="moon-star") }}</span>
+      </button>
+    </nav>
+  </div>
+</header>

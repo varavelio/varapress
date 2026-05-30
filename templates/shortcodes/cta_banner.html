@@ -1,0 +1,95 @@
+{#
+  Shortcode: cta_banner
+  A bordered card call-to-action section with title and action buttons.
+
+  Parameters:
+    eyebrow          - Small label above the title (optional)
+    title            - Section heading (optional)
+    description      - Section description (optional)
+    action_1_text    - First button label
+    action_1_url     - First button URL
+    action_1_variant - "solid" (default) | "outline" | "ghost"
+    action_1_color   - "neutral" (default) | "info" | "success" | "warning" | "error"
+    action_2_text    - Second button label (optional)
+    action_2_url     - Second button URL
+    action_2_variant - Button style
+    action_2_color   - Button color
+    caption          - Small text below the buttons (optional)
+    bg               - Background: "base-100" (default) | "base-200"
+#}
+
+<section class="py-16 desk:py-24{% if bg %} bg-{{ bg }}{% endif %}">
+  <div class="px-4 sm:px-6">
+    <div class="rounded-lg border border-base-400 bg-base-200 px-6 py-10 text-center desk:px-10 desk:py-12">
+      <div class="space-y-6">
+        {% if eyebrow %}
+          <p class="text-xs font-medium uppercase tracking-[0.24em] text-content-muted">
+            {{ eyebrow }}
+          </p>
+        {% endif %}
+        {% if title %}
+          <h2 class="text-3xl font-semibold tracking-tight text-content desk:text-4xl">
+            {{ title }}
+          </h2>
+        {% endif %}
+        {% if description %}
+          <p class="text-base leading-7 text-content-muted desk:text-lg">
+            {{ description }}
+          </p>
+        {% endif %}
+
+        {% if action_1_text %}
+          <div class="flex flex-wrap justify-center gap-3">
+            {% set a1_variant = action_1_variant | default(value="solid") %}
+            {% set a1_color = action_1_color | default(value="neutral") %}
+            {% if a1_variant == "solid" %}
+              {% if a1_color == "info" %}
+                {% set a1_cls = "border-info bg-info text-white hover:bg-info/80" %}
+              {% else %}
+                {% set a1_cls = "border-content bg-content text-base-100 hover:bg-content/80" %}
+              {% endif %}
+            {% elif a1_variant == "outline" %}
+              {% if a1_color == "info" %}
+                {% set a1_cls = "border-info/30 bg-transparent text-info hover:bg-info/10" %}
+              {% else %}
+                {% set a1_cls = "border-base-400 bg-transparent text-content hover:bg-base-300" %}
+              {% endif %}
+            {% else %}
+              {% set a1_cls = "border-transparent bg-transparent text-content hover:bg-base-300" %}
+            {% endif %}
+            <a href="{{ action_1_url | default(value='#') }}" class="inline-flex h-12 items-center gap-2 rounded-md border px-6 text-base font-medium transition-all duration-75 {{ a1_cls }}">
+              {{ action_1_text }}
+            </a>
+
+            {% if action_2_text %}
+              {% set a2_variant = action_2_variant | default(value="outline") %}
+              {% set a2_color = action_2_color | default(value="neutral") %}
+              {% if a2_variant == "solid" %}
+                {% if a2_color == "info" %}
+                  {% set a2_cls = "border-info bg-info text-white hover:bg-info/80" %}
+                {% else %}
+                  {% set a2_cls = "border-content bg-content text-base-100 hover:bg-content/80" %}
+                {% endif %}
+              {% elif a2_variant == "outline" %}
+                {% if a2_color == "info" %}
+                  {% set a2_cls = "border-info/30 bg-transparent text-info hover:bg-info/10" %}
+                {% else %}
+                  {% set a2_cls = "border-base-400 bg-transparent text-content hover:bg-base-300" %}
+                {% endif %}
+              {% else %}
+                {% set a2_cls = "border-transparent bg-transparent text-content hover:bg-base-300" %}
+              {% endif %}
+              <a href="{{ action_2_url | default(value='#') }}" class="inline-flex h-12 items-center gap-2 rounded-md border px-6 text-base font-medium transition-all duration-75 {{ a2_cls }}">
+                {{ action_2_text }}
+              </a>
+            {% endif %}
+          </div>
+        {% endif %}
+
+        {% if caption %}
+          <p class="text-sm text-content-muted">{{ caption }}</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>

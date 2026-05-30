@@ -1,0 +1,99 @@
+{#
+  Shortcode: hero_centered
+  Full-width centered hero section with title, description, and action buttons.
+
+  Parameters:
+    title            - Main heading (required, supports HTML)
+    description      - Subheading text (optional, supports HTML)
+    announcement     - Small link above the title (optional)
+    announcement_url - URL for the announcement link
+    action_1_text    - First button label
+    action_1_url     - First button URL
+    action_1_variant - "solid" (default) | "outline" | "ghost"
+    action_1_color   - "neutral" (default) | "info" | "success" | "warning" | "error"
+    action_2_text    - Second button label (optional)
+    action_2_url     - Second button URL
+    action_2_variant - Button style
+    action_2_color   - Button color
+    caption          - Small text below the buttons (optional)
+    bg               - Background: "base-100" (default) | "base-200"
+#}
+
+<section class="py-20 desk:py-28{% if bg %} bg-{{ bg }}{% endif %}">
+  <div class="px-4 text-center sm:px-6">
+    {% if announcement %}
+      {% set announcement_url = announcement_url | default(value="#") %}
+      <a href="{{ announcement_url }}" class="mb-6 inline-flex rounded-full border border-base-400 px-4 py-2 text-xs font-medium uppercase tracking-[0.18em] text-content-muted no-underline transition-colors hover:bg-base-200 hover:underline">
+        {{ announcement }}
+      </a>
+    {% endif %}
+
+    <h1 class="max-w-4xl text-4xl font-semibold tracking-tight text-content desk:text-6xl">
+      {{ title | safe }}
+    </h1>
+
+    {% if description %}
+      <p class="mt-6 max-w-3xl text-lg leading-8 text-content-muted desk:text-xl">
+        {{ description | safe }}
+      </p>
+    {% endif %}
+
+    {% if action_1_text %}
+      <div class="mt-10 flex flex-wrap justify-center gap-3">
+        {% set a1_variant = action_1_variant | default(value="solid") %}
+        {% set a1_color = action_1_color | default(value="neutral") %}
+        {% if a1_variant == "solid" %}
+          {% if a1_color == "info" %}
+            {% set a1_cls = "border-info bg-info text-white hover:bg-info/80" %}
+          {% elif a1_color == "success" %}
+            {% set a1_cls = "border-success bg-success text-white hover:bg-success/80" %}
+          {% elif a1_color == "warning" %}
+            {% set a1_cls = "border-warning bg-warning text-white hover:bg-warning/80" %}
+          {% elif a1_color == "error" %}
+            {% set a1_cls = "border-error bg-error text-white hover:bg-error/80" %}
+          {% else %}
+            {% set a1_cls = "border-content bg-content text-base-100 hover:bg-content/80" %}
+          {% endif %}
+        {% elif a1_variant == "outline" %}
+          {% if a1_color == "info" %}
+            {% set a1_cls = "border-info/30 bg-transparent text-info hover:bg-info/10" %}
+          {% else %}
+            {% set a1_cls = "border-base-400 bg-transparent text-content hover:bg-base-300" %}
+          {% endif %}
+        {% else %}
+          {% set a1_cls = "border-transparent bg-transparent text-content hover:bg-base-300" %}
+        {% endif %}
+        <a href="{{ action_1_url | default(value='#') }}" class="inline-flex h-12 items-center gap-2 rounded-md border px-6 text-base font-medium transition-all duration-75 {{ a1_cls }}">
+          {{ action_1_text }}
+        </a>
+
+        {% if action_2_text %}
+          {% set a2_variant = action_2_variant | default(value="outline") %}
+          {% set a2_color = action_2_color | default(value="neutral") %}
+          {% if a2_variant == "solid" %}
+            {% if a2_color == "info" %}
+              {% set a2_cls = "border-info bg-info text-white hover:bg-info/80" %}
+            {% else %}
+              {% set a2_cls = "border-content bg-content text-base-100 hover:bg-content/80" %}
+            {% endif %}
+          {% elif a2_variant == "outline" %}
+            {% if a2_color == "info" %}
+              {% set a2_cls = "border-info/30 bg-transparent text-info hover:bg-info/10" %}
+            {% else %}
+              {% set a2_cls = "border-base-400 bg-transparent text-content hover:bg-base-300" %}
+            {% endif %}
+          {% else %}
+            {% set a2_cls = "border-transparent bg-transparent text-content hover:bg-base-300" %}
+          {% endif %}
+          <a href="{{ action_2_url | default(value='#') }}" class="inline-flex h-12 items-center gap-2 rounded-md border px-6 text-base font-medium transition-all duration-75 {{ a2_cls }}">
+            {{ action_2_text }}
+          </a>
+        {% endif %}
+      </div>
+    {% endif %}
+
+    {% if caption %}
+      <p class="mt-6 text-sm text-content-muted">{{ caption }}</p>
+    {% endif %}
+  </div>
+</section>
