@@ -17,7 +17,7 @@
 {% set logo_dark = logo_dark | default(value=config.extra.varapress_logo_dark | default(value="https://cdn.jsdelivr.net/gh/varavelio/brand@v1.0.2/dist/logo-white.svg")) %}
 {% set menu = menu | default(value="") %}
 
-<header class="h-14 shrink-0 bg-base-100 border-b border-base-400{% if class %} {{ class }}{% endif %}">
+<header class="h-14 shrink-0 bg-base-100 border-b border-base-400{% if class %} {{ class }}{% endif %}" x-data="theme">
   <div class="h-full flex items-center justify-between gap-3 px-4">
     <div class="flex-auto min-w-0 flex items-center justify-start">
       <a href="/" class="group flex items-center justify-start whitespace-nowrap">

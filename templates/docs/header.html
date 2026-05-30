@@ -2,7 +2,7 @@
 {% set logo_light = config.extra.varapress_logo_light | default(value="https://cdn.jsdelivr.net/gh/varavelio/brand@v1.0.2/dist/logo-black.svg") %}
 {% set logo_dark = config.extra.varapress_logo_dark | default(value="https://cdn.jsdelivr.net/gh/varavelio/brand@v1.0.2/dist/logo-white.svg") %}
 
-<header class="h-14 shrink-0 bg-base-100 border-b border-base-400">
+<header class="h-14 shrink-0 bg-base-100 border-b border-base-400" x-data="theme">
   <div class="mx-auto max-w-[80rem] h-full flex items-center justify-between gap-3 px-4">
     <div class="flex-auto min-w-0 flex items-center justify-start">
       <button 
