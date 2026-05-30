@@ -227,8 +227,9 @@ They are downloaded to `static/icons/` by `scripts/download-icons.sh` and render
 ## Testing & quality
 
 - **Linting**: `npm run lint` runs `dprint check` (JSON, Markdown, TOML, CSS, YAML) and `zola check`
+- **Tests**: `npm run test` runs Node.js unit tests with the built-in `node:test` runner
 - **Build**: `npm run build` compiles CSS, bundles JS, builds theme-init, then runs Zola build
-- **CI**: `npm run ci` runs lint then build (used for CI validation)
+- **CI**: `npm run ci` runs lint, tests, then build (used for CI validation)
 - **Format**: `npm run format` runs `dprint fmt`
 - **Local development**: `npm run dev` uses `concurrently` to run CSS watcher, JS watcher, and Zola dev server simultaneously
 
@@ -239,8 +240,9 @@ They are downloaded to `static/icons/` by `scripts/download-icons.sh` and render
 | `npm run build`  | Full build: CSS → JS → theme-init → Zola         |
 | `npm run dev`    | Dev server with hot-reload for CSS, JS, and Zola |
 | `npm run lint`   | `dprint check` + `zola check`                    |
+| `npm run test`   | Run Node.js unit tests                           |
 | `npm run format` | `dprint fmt` auto-formatting                     |
-| `npm run ci`     | `npm run lint && npm run build` (CI pipeline)    |
+| `npm run ci`     | `npm run lint && npm test && npm run build`      |
 
 Always read `package.json` to see the full set of available commands.
 
