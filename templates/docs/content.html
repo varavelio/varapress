@@ -51,7 +51,7 @@
       {% endif %}
     {% endif %}
 
-    {% if parent_section and parent_section.pages | length > 1 %}
+    {% if parent_section and parent_section.pages | length > 0 %}
       {% set siblings = parent_section.pages %}
       {% set prev_page = false %}
       {% set found_current = false %}
@@ -66,32 +66,66 @@
         {% endif %}
       {% endfor %}
 
+      {% if not next_page and page.components | length > 1 %}
+        {% set root_path = page.components[0] %}
+        {% set parent_index_path = parent_path ~ "/_index.md" %}
+        {% set found_parent_section = false %}
+        {% if root_path and root_path != "_index" %}
+          {% set root_section = get_section(path=root_path ~ "/_index.md") %}
+          {% for sub_path in root_section.subsections %}
+            {% if sub_path == parent_index_path %}
+              {% set_global found_parent_section = true %}
+            {% elif found_parent_section and not next_page %}
+              {% set next_section = get_section(path=sub_path) %}
+              {% if next_section.pages | length > 0 %}
+                {% set_global next_page = next_section.pages[0] %}
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      {% endif %}
+
+      {% if not prev_page and page.components | length > 1 %}
+        {% set root_path = page.components[0] %}
+        {% set parent_index_path = parent_path ~ "/_index.md" %}
+        {% set found_parent_section = false %}
+        {% if root_path and root_path != "_index" %}
+          {% set root_section = get_section(path=root_path ~ "/_index.md") %}
+          {% for sub_path in root_section.subsections %}
+            {% if sub_path == parent_index_path %}
+              {% set_global found_parent_section = true %}
+            {% elif not found_parent_section %}
+              {% set prev_section = get_section(path=sub_path) %}
+              {% for section_page in prev_section.pages %}
+                {% set_global prev_page = section_page %}
+              {% endfor %}
+            {% endif %}
+          {% endfor %}
+        {% endif %}
+      {% endif %}
+
       <nav
         class="mt-12 pt-6 border-t border-base-400"
         aria-label="Previous and next navigation"
       >
-        <div class="flex flex-col desk:flex-row desk:justify-between gap-4">
+        <div class="grid grid-cols-1 desk:grid-cols-2 gap-3 desk:gap-4">
           {% if prev_page %}
             <a
               href="{{ prev_page.permalink | safe }}"
-              class="group flex flex-col flex-1 p-4 rounded-lg border border-base-400 hover:border-base-300 hover:bg-base-200 transition-colors desk:items-start"
+              class="group flex min-w-0 min-h-16 flex-col items-start justify-center p-3 rounded-lg border border-base-400 hover:border-base-300 hover:bg-base-200 transition-colors {% if not next_page %}desk:col-start-1{% endif %}"
             >
               <span class="text-xs text-content-muted">Previous</span>
-              <span class="text-sm font-medium text-content group-hover:text-info transition-colors">{{ prev_page.title }}</span>
+              <span class="block w-full truncate text-sm font-medium text-content group-hover:text-info transition-colors">{{ prev_page.title }}</span>
             </a>
-          {% else %}
-            <div class="flex-1 hidden desk:block"></div>
           {% endif %}
           {% if next_page %}
             <a
               href="{{ next_page.permalink | safe }}"
-              class="group flex flex-col flex-1 p-4 rounded-lg border border-base-400 hover:border-base-300 hover:bg-base-200 transition-colors desk:items-end desk:text-right"
+              class="group flex min-w-0 min-h-16 flex-col items-end justify-center p-3 rounded-lg border border-base-400 text-right hover:border-base-300 hover:bg-base-200 transition-colors {% if not prev_page %}desk:col-start-2{% endif %}"
             >
               <span class="text-xs text-content-muted">Next</span>
-              <span class="text-sm font-medium text-content group-hover:text-info transition-colors">{{ next_page.title }}</span>
+              <span class="block w-full truncate text-sm font-medium text-content group-hover:text-info transition-colors">{{ next_page.title }}</span>
             </a>
-          {% else %}
-            <div class="flex-1 hidden desk:block"></div>
           {% endif %}
         </div>
       </nav>
