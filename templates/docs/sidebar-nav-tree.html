@@ -6,9 +6,9 @@
         type="button"
         @click="open = !open"
         class="
-          flex items-center gap-2 w-full
-          text-sm font-medium rounded-md transition-colors text-left
-          {% if current_url == sub.permalink %}text-info{% else %}text-content-muted hover:text-content hover:bg-base-200{% endif %}
+          flex items-center gap-2 w-full px-2 py-1.5
+          text-sm font-medium rounded-md transition-colors text-left border border-transparent
+          {% if current_url == sub.permalink %}bg-info/10 text-info{% else %}text-content/70 hover:text-content hover:bg-base-300{% endif %}
         "
         :aria-expanded="open.toString()"
       >
@@ -32,8 +32,8 @@
                 href="{{ child_page.permalink | safe }}"
                 class="
                   flex items-center gap-2 px-2 py-1.5
-                  text-sm font-medium rounded-md transition-colors
-                  {% if current_url == child_page.permalink %}text-info{% else %}text-content-muted hover:text-content hover:bg-base-200{% endif %}
+                  text-sm font-medium rounded-md transition-colors border border-transparent
+                  {% if current_url == child_page.permalink %}bg-info/10 text-info{% else %}text-content/70 hover:text-content hover:bg-base-300{% endif %}
                 "
                 {% if current_url == child_page.permalink %}aria-current="page"{% endif %}
               >
@@ -55,9 +55,9 @@
     <a
       href="{{ child_page.permalink | safe }}"
       class="
-        flex items-center gap-1.5 px-2 py-1.5
-        text-sm font-medium rounded-md transition-colors
-        {% if current_url == child_page.permalink %}text-info{% else %}text-content-muted hover:text-content hover:bg-base-200{% endif %}
+        flex items-center gap-2 px-2 py-1.5
+        text-sm font-medium rounded-md transition-colors border border-transparent
+        {% if current_url == child_page.permalink %}bg-info/10 text-info{% else %}text-content/70 hover:text-content hover:bg-base-300{% endif %}
       "
       {% if current_url == child_page.permalink %}aria-current="page"{% endif %}
     >
