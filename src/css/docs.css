@@ -21,7 +21,8 @@
     content: "";
     position: absolute;
     left: -0.875rem;
-    top: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
     width: 0.625rem;
     border-top-style: dashed;
     border-top-width: 2px;
