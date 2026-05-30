@@ -47,5 +47,5 @@
 {% endif %}
 
 <div class="w-full {{ width_cls }} {{ pad_cls }} {{ align_cls }}{% if class %} {{ class }}{% endif %}">
-  {{ body | markdown | safe }}
+  {{ body | safe }}
 </div>
