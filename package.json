@@ -14,7 +14,7 @@
   },
   "homepage": "https://github.com/varavelio/varapress#readme",
   "scripts": {
-    "ci": "npm run lint && npm run build",
+    "ci": "npm run lint && npm run test && npm run build",
     "dev": "concurrently 'npm run dev:css' 'npm run dev:js' 'npm run dev:zola'",
     "dev:zola": "zola serve",
     "dev:css": "npm run build:css -- --watch",
@@ -27,6 +27,7 @@
     "lint": "npm run lint:dprint && npm run lint:zola",
     "lint:dprint": "dprint check --config ./dprint.json --log-level warn",
     "lint:zola": "zola check",
+    "test": "node --test",
     "format": "npm run format:dprint",
     "format:dprint": "dprint fmt --config ./dprint.json --log-level warn"
   },
