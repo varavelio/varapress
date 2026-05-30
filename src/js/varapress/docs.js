@@ -29,6 +29,97 @@ function injectAnchorLinks() {
     });
 }
 
+/**
+ * Highlights the active TOC link based on scroll position.
+ *
+ * Groups all `.toc-link` elements by their target heading so both mobile and
+ * desktop duplicates stay in sync. Uses a scroll listener on the main content
+ * area with `requestAnimationFrame` throttling.
+ */
+function initTocHighlight() {
+  const scrollRoot = document.querySelector("main");
+  if (!scrollRoot) return;
+
+  const allLinks = document.querySelectorAll(".toc-link");
+  if (allLinks.length === 0) return;
+
+  const headings = resolveTocHeadings(allLinks);
+  if (headings.size === 0) return;
+
+  const links = Array.from(allLinks);
+  let active = null;
+
+  function update() {
+    const next = scrollRoot.scrollTop <= 0
+      ? null
+      : findActiveHeading(headings, scrollRoot.getBoundingClientRect().top);
+
+    if (next === active) return;
+
+    active = next;
+    links.forEach((link) => link.classList.remove("text-info"));
+
+    if (next) {
+      headings.get(next).forEach((link) => link.classList.add("text-info"));
+    }
+  }
+
+  let ticking = false;
+  scrollRoot.addEventListener("scroll", () => {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(() => { ticking = false; update(); });
+    }
+  }, { passive: true });
+
+  update();
+}
+
+/**
+ * Builds a map from each heading element to all its TOC link elements.
+ *
+ * @param {NodeListOf<Element>} links - All `.toc-link` elements.
+ * @returns {Map<Element, Element[]>} Heading → links mapping.
+ */
+function resolveTocHeadings(links) {
+  const map = new Map();
+
+  links.forEach((link) => {
+    const href = link.getAttribute("href");
+    if (!href) return;
+
+    const id = href.slice(href.lastIndexOf("#") + 1);
+    const heading = document.getElementById(id);
+    if (!heading) return;
+
+    if (!map.has(heading)) map.set(heading, []);
+    map.get(heading).push(link);
+  });
+
+  return map;
+}
+
+/**
+ * Finds the heading closest to (but above) the current scroll position.
+ *
+ * @param {Map<Element, Element[]>} headings - Heading → links map.
+ * @param {number} rootTop - The scroll container's top offset on screen.
+ * @returns {Element | null} The current active heading, or null.
+ */
+function findActiveHeading(headings, rootTop) {
+  const HEADER_OFFSET = 80;
+  let current = null;
+
+  for (const heading of headings.keys()) {
+    const top = heading.getBoundingClientRect().top - rootTop;
+    if (top <= HEADER_OFFSET) {
+      current = heading;
+    }
+  }
+
+  return current;
+}
+
 function registerAlpineVarapressDocs() {
   Alpine.data("varapressDocs", () => ({
     /** @type {boolean} Whether the mobile sidebar drawer is open. */
@@ -47,59 +138,10 @@ function registerAlpineVarapressDocs() {
   }));
 }
 
-function registerAlpineTocScroll() {
-  Alpine.data("tocScroll", () => ({
-    /** @type {string | null} The id of the currently active heading. */
-    activeId: null,
-
-    /** @type {IntersectionObserver | null} */
-    observer: null,
-
-    init() {
-      const links = document.querySelectorAll(".toc-link");
-      const headings = [];
-
-      links.forEach((link) => {
-        const href = link.getAttribute("href");
-        if (!href || !href.startsWith("#")) return;
-        const id = href.slice(1);
-        const heading = document.getElementById(id);
-        if (heading) headings.push({ link, heading });
-      });
-
-      if (headings.length === 0) return;
-
-      this.observer = new IntersectionObserver(
-        (entries) => {
-          const visible = entries.filter((e) => e.isIntersecting);
-          if (visible.length > 0) {
-            headings.forEach(({ link }) => {
-              link.classList.remove("text-info", "font-medium");
-            });
-            const active = headings.find(
-              (h) => h.heading === visible[0].target,
-            );
-            if (active) {
-              active.link.classList.add("text-info", "font-medium");
-            }
-          }
-        },
-        {
-          rootMargin: "-80px 0px -70% 0px",
-        },
-      );
-
-      headings.forEach(({ heading }) => {
-        this.observer.observe(heading);
-      });
-    },
-  }));
-}
-
 export function initDocs() {
   injectAnchorLinks();
+  initTocHighlight();
   document.addEventListener("alpine:init", () => {
     registerAlpineVarapressDocs();
-    registerAlpineTocScroll();
   });
 }

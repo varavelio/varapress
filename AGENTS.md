@@ -66,7 +66,8 @@ Source files are compiled to `static/` during the build. Editing `src/` is the c
   - `theme-init.js` — Theme bootstrapper: FOUC prevention, `window.__varapressTheme` runtime API, localStorage persistence, OS `prefers-color-scheme` listener.
   - `varapress/` — Alpine.js application code (bundled into `static/js/varapress.js`).
     - `index.js` — Entry point: imports Alpine, initializes docs, starts Alpine.
-    - `docs.js` — Docs interactivity: `injectAnchorLinks()`, Alpine data components (`varapressDocs`, `tocScroll`).
+    - `docs.js` — Docs interactivity: `injectAnchorLinks()`, Alpine data component (`varapressDocs` with sidebar, TOC, and scroll observer).
+    - `theme.js` — Standalone Alpine theme component (`theme` with `cycleTheme()`, reactive `theme`/`resolvedTheme`).
 
 ### `templates/` (Zola Templates)
 
