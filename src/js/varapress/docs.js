@@ -1,4 +1,9 @@
 /**
+ * Minimum upward scroll distance before the back-to-top button is shown.
+ */
+const BACK_TO_TOP_SCROLL_THRESHOLD = 300;
+
+/**
  * Injects anchor links into prose headings that have an id attribute.
  * Each anchor link is placed as the last child of the heading element
  * and becomes visible on heading hover.
@@ -120,6 +125,48 @@ function findActiveHeading(headings, rootTop) {
   return current;
 }
 
+export function resolveBackToTopState({
+  currentScrollTop,
+  previousScrollTop,
+  upwardScrollDistance,
+  threshold = BACK_TO_TOP_SCROLL_THRESHOLD,
+}) {
+  const current = Math.max(0, currentScrollTop);
+  const previous = Math.max(0, previousScrollTop);
+
+  if (current <= 0) {
+    return {
+      showBackToTop: false,
+      upwardScrollDistance: 0,
+      previousScrollTop: 0,
+    };
+  }
+
+  if (current > previous) {
+    return {
+      showBackToTop: false,
+      upwardScrollDistance: 0,
+      previousScrollTop: current,
+    };
+  }
+
+  if (current < previous) {
+    const nextUpwardScrollDistance = upwardScrollDistance + previous - current;
+
+    return {
+      showBackToTop: nextUpwardScrollDistance >= threshold,
+      upwardScrollDistance: nextUpwardScrollDistance,
+      previousScrollTop: current,
+    };
+  }
+
+  return {
+    showBackToTop: false,
+    upwardScrollDistance,
+    previousScrollTop: current,
+  };
+}
+
 function registerAlpineVarapressDocs() {
   Alpine.data("varapressDocs", () => ({
     /** @type {boolean} Whether the mobile sidebar drawer is open. */
@@ -128,12 +175,88 @@ function registerAlpineVarapressDocs() {
     /** @type {boolean} Whether the mobile TOC panel is open. */
     tocOpen: false,
 
+    /** @type {boolean} Whether the back-to-top button is visible. */
+    showBackToTop: false,
+
+    backToTopRoot: null,
+    backToTopFrame: null,
+    backToTopResetTimer: null,
+    backToTopProgrammaticScroll: false,
+    previousScrollTop: 0,
+    upwardScrollDistance: 0,
+
+    init() {
+      this.backToTopRoot = document.querySelector("main");
+      if (!this.backToTopRoot) return;
+
+      this.previousScrollTop = this.backToTopRoot.scrollTop;
+      this.backToTopRoot.addEventListener(
+        "scroll",
+        () => {
+          this.queueBackToTopUpdate();
+        },
+        { passive: true },
+      );
+    },
+
     toggleSidebar() {
       this.sidebarOpen = !this.sidebarOpen;
     },
 
     toggleToc() {
       this.tocOpen = !this.tocOpen;
+    },
+
+    queueBackToTopUpdate() {
+      if (this.backToTopFrame) return;
+
+      this.backToTopFrame = requestAnimationFrame(() => {
+        this.backToTopFrame = null;
+        this.updateBackToTop();
+      });
+    },
+
+    updateBackToTop() {
+      if (!this.backToTopRoot) return;
+
+      const currentScrollTop = this.backToTopRoot.scrollTop;
+
+      if (this.backToTopProgrammaticScroll) {
+        this.showBackToTop = false;
+        this.upwardScrollDistance = 0;
+        this.previousScrollTop = currentScrollTop;
+        if (currentScrollTop <= 0) this.backToTopProgrammaticScroll = false;
+        return;
+      }
+
+      const state = resolveBackToTopState({
+        currentScrollTop,
+        previousScrollTop: this.previousScrollTop,
+        upwardScrollDistance: this.upwardScrollDistance,
+      });
+
+      this.showBackToTop = state.showBackToTop;
+      this.upwardScrollDistance = state.upwardScrollDistance;
+      this.previousScrollTop = state.previousScrollTop;
+    },
+
+    scrollMainToTop() {
+      if (!this.backToTopRoot) return;
+
+      this.showBackToTop = false;
+      this.upwardScrollDistance = 0;
+      this.previousScrollTop = this.backToTopRoot.scrollTop;
+      this.backToTopProgrammaticScroll = true;
+
+      if (this.backToTopResetTimer) clearTimeout(this.backToTopResetTimer);
+      this.backToTopResetTimer = setTimeout(() => {
+        this.backToTopProgrammaticScroll = false;
+        this.previousScrollTop = this.backToTopRoot
+          ? this.backToTopRoot.scrollTop
+          : 0;
+      }, 800);
+
+      this.backToTopRoot.scrollTo({ top: 0, behavior: "smooth" });
     },
   }));
 }
