@@ -193,4 +193,26 @@
       {% endif %}
     </article>
   {% endif %}
+  <button
+    type="button"
+    class="
+      fixed bottom-4 left-1/2 z-30 inline-flex -translate-x-1/2 items-center gap-2
+      rounded-full border border-base-400 bg-content px-3.5 py-2 text-sm font-medium
+      text-base-100 shadow-sm transition hover:bg-content/90 focus-visible:outline-2
+      focus-visible:outline-offset-2 focus-visible:outline-content desk:bottom-6 cursor-pointer
+    "
+    x-cloak
+    x-show="showBackToTop"
+    x-transition:enter="transition ease-out duration-200"
+    x-transition:enter-start="opacity-0 translate-y-2 scale-95"
+    x-transition:enter-end="opacity-100 translate-y-0 scale-100"
+    x-transition:leave="transition ease-in duration-150"
+    x-transition:leave-start="opacity-100 translate-y-0 scale-100"
+    x-transition:leave-end="opacity-0 translate-y-2 scale-95"
+    x-on:click="scrollMainToTop()"
+    aria-label="Back to top"
+  >
+    {{ icons::render(name="arrow-up-to-line", class="size-4") }}
+    <span>Back to top</span>
+  </button>
 </main>
