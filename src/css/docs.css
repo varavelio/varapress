@@ -7,7 +7,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    height: calc(100% - 0.875rem);
+    height: calc(100% - 1rem);
     border-left-style: dashed;
     border-left-width: 2px;
   }
