@@ -1,37 +1,62 @@
 {#
   Shortcode: footer_simple
-  Simple footer with copyright and links.
+  Full-width landing footer with centered content, copyright, links, and optional GitHub icon.
 
   Parameters:
+    container   - "xs" | "sm" | "md" | "lg" (default) | "xl" | "full"
     copyright   - Custom copyright text (optional, defaults to year + site title)
     links       - Comma-separated "label|url" pairs (optional)
+    show_github - "true" (default) | "false"
     class       - Additional CSS classes
 #}
 
 {% import "macros/icons.html" as icons %}
 
+{% set container = container | default(value="lg") %}
+{% if container == "xs" %}
+  {% set container_cls = "max-w-md" %}
+{% elif container == "sm" %}
+  {% set container_cls = "max-w-3xl" %}
+{% elif container == "md" %}
+  {% set container_cls = "max-w-6xl" %}
+{% elif container == "xl" %}
+  {% set container_cls = "max-w-[120rem]" %}
+{% elif container == "full" %}
+  {% set container_cls = "max-w-full" %}
+{% else %}
+  {% set container_cls = "max-w-7xl" %}
+{% endif %}
+
 {% set links = links | default(value="") %}
+{% set link_items = links | split(pat=",") %}
+{% set show_github = show_github | default(value="true") %}
 {% set year = now() | date(format="%Y") %}
+{% set resolved_copyright = copyright | default(value="") %}
 
 <footer class="shrink-0 border-t border-base-400 bg-base-100{% if class %} {{ class }}{% endif %}">
-    <div class="px-4 py-8 desk:px-8">
-    <div class="flex flex-col items-center justify-between gap-4 desk:flex-row">
-      <p class="text-sm text-content-muted">
-        &copy; {{ year }} {{ config.title }}. Built with
-        <a href="https://www.getzola.org" class="text-content hover:text-info transition-colors">Zola</a>
+  <div class="mx-auto w-full {{ container_cls }} px-4">
+    <div class="flex flex-col gap-4 py-6 desk:flex-row desk:items-center desk:justify-between">
+      <p class="max-w-2xl text-sm leading-6 text-content-muted">
+        {% if resolved_copyright %}{{ resolved_copyright }}{% else %}&copy; {{ year }} {{ config.title }}.{% endif %} Built with
+        <a href="https://www.getzola.org" class="font-medium text-content no-underline transition-colors hover:text-info">Zola</a>
         and
-        <a href="https://github.com/varavelio/varapress" class="text-content hover:text-info transition-colors">VaraPress</a>.
+        <a href="https://github.com/varavelio/varapress" class="font-medium text-content no-underline transition-colors hover:text-info">VaraPress</a>.
       </p>
-      <div class="flex items-center gap-4">
-        {% for link in links %}
-          {% set parts = link | split(pat="|") %}
+
+      <div class="flex flex-wrap items-center gap-x-4 gap-y-2">
+        {% for link in link_items %}
+          {% set parts = link | trim | split(pat="|") %}
           {% if parts | length == 2 %}
-            <a href="{{ parts[1] }}" class="text-sm text-content-muted hover:text-content transition-colors">{{ parts[0] }}</a>
+            <a href="{{ parts[1] | trim }}" class="text-sm font-medium text-content-muted no-underline transition-colors hover:text-content">
+              {{ parts[0] | trim }}
+            </a>
           {% endif %}
         {% endfor %}
-        <a href="https://github.com/varavelio/varapress" class="text-content-muted hover:text-content transition-colors" target="_blank" rel="noopener noreferrer">
-          {{ icons::render(name="github", class="size-5") }}
-        </a>
+        {% if show_github == "true" %}
+          <a href="https://github.com/varavelio/varapress" class="text-content-muted transition-colors hover:text-content" target="_blank" rel="noopener noreferrer" aria-label="VaraPress on GitHub">
+            {{ icons::render(name="github", class="size-5") }}
+          </a>
+        {% endif %}
       </div>
     </div>
   </div>

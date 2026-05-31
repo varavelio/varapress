@@ -3,87 +3,71 @@
   Pricing plan cards in a responsive grid.
 
   Parameters:
-    eyebrow     - Small label above the title (optional)
-    title       - Section heading (optional)
-    description - Section description (optional)
-    bg          - Background: "base-100" (default) | "base-200"
-    plan_1_name       - Plan 1 name
-    plan_1_price      - Plan 1 price (e.g. "$19")
-    plan_1_period     - Plan 1 period (e.g. "/month")
-    plan_1_desc       - Plan 1 description (optional)
-    plan_1_badge      - Plan 1 badge text (optional)
-    plan_1_featured   - "true" to highlight this plan (optional)
-    plan_1_cta_text   - Plan 1 button label
-    plan_1_cta_url    - Plan 1 button URL
-    plan_1_cta_variant - Plan 1 button style (default "outline")
-    plan_1_cta_color  - Plan 1 button color (default "neutral")
-    plan_1_feat_1     - Plan 1 feature 1
-    plan_1_feat_2     - Plan 1 feature 2
-    plan_1_feat_3     - Plan 1 feature 3
-    plan_1_feat_4     - Plan 1 feature 4 (optional)
-    plan_1_feat_5     - Plan 1 feature 5 (optional)
-    plan_1_footnote   - Plan 1 footnote (optional)
-    ... (up to plan_3)
+    container          - "xs" | "sm" | "md" | "lg" (default) | "xl" | "full"
+    eyebrow            - Small label above the title (optional)
+    title              - Section heading (optional)
+    description        - Section description (optional)
+    bg                 - Background: "base-100" (default) | "base-200"
+    plan_N_name        - Plan name
+    plan_N_price       - Plan price (e.g. "$19")
+    plan_N_period      - Plan period (e.g. "/month")
+    plan_N_desc        - Plan description (optional)
+    plan_N_badge       - Badge text (optional)
+    plan_N_featured    - "true" to highlight this plan (optional)
+    plan_N_cta_text    - Button label
+    plan_N_cta_url     - Button URL
+    plan_N_cta_variant - Button style (default "outline")
+    plan_N_cta_color   - Button color (default "neutral")
+    plan_N_feat_1..5   - Feature list items
+    plan_N_footnote    - Footnote text
+    class              - Additional CSS classes
 #}
 
+{% import "macros/button.html" as button %}
 {% import "macros/icons.html" as icons %}
 
-<section class="py-16 desk:py-24{% if bg %} bg-{{ bg }}{% endif %}">
-  <div class="px-4 sm:px-6">
-    <div class="space-y-10 desk:space-y-12">
+{% set container = container | default(value="lg") %}
+{% if container == "xs" %}
+  {% set container_cls = "max-w-md" %}
+{% elif container == "sm" %}
+  {% set container_cls = "max-w-3xl" %}
+{% elif container == "md" %}
+  {% set container_cls = "max-w-6xl" %}
+{% elif container == "xl" %}
+  {% set container_cls = "max-w-[120rem]" %}
+{% elif container == "full" %}
+  {% set container_cls = "max-w-full" %}
+{% else %}
+  {% set container_cls = "max-w-7xl" %}
+{% endif %}
+
+{% set bg = bg | default(value="base-100") %}
+{% set plan_1_featured = plan_1_featured | default(value="false") %}
+{% set plan_2_featured = plan_2_featured | default(value="false") %}
+{% set plan_3_featured = plan_3_featured | default(value="false") %}
+
+<section class="bg-{{ bg }} py-10 desk:py-20{% if class %} {{ class }}{% endif %}">
+  <div class="mx-auto w-full {{ container_cls }} px-4">
+    <div class="space-y-8 desk:space-y-10">
       {% if eyebrow or title or description %}
-        <div class="mx-auto flex max-w-3xl flex-col gap-4 text-center">
-          {% if eyebrow %}
-            <p class="text-xs font-medium uppercase tracking-[0.24em] text-content-muted">{{ eyebrow }}</p>
-          {% endif %}
-          {% if title %}
-            <h2 class="text-3xl font-semibold tracking-tight text-content desk:text-4xl">{{ title }}</h2>
-          {% endif %}
-          {% if description %}
-            <p class="text-base leading-7 text-content-muted desk:text-lg">{{ description }}</p>
-          {% endif %}
+        <div class="mx-auto flex max-w-3xl flex-col gap-3 text-center">
+          {% if eyebrow %}<p class="text-xs font-medium uppercase tracking-[0.24em] text-content-muted">{{ eyebrow }}</p>{% endif %}
+          {% if title %}<h2 class="text-3xl font-semibold tracking-tight text-content desk:text-4xl">{{ title }}</h2>{% endif %}
+          {% if description %}<p class="text-base leading-7 text-content-muted desk:text-lg">{{ description }}</p>{% endif %}
         </div>
       {% endif %}
 
-      <div class="grid grid-cols-1 gap-6 desk:grid-cols-3">
-        {% for p in range(end=3) %}
-          {% set idx = p + 1 %}
-          {% set prefix = "plan_" ~ idx ~ "_" %}
-          {% set plan_name = "" %}
-        {% endfor %}
-
+      <div class="grid grid-cols-1 gap-4 desk:grid-cols-3 desk:gap-5">
         {% if plan_1_name %}
-          <div class="flex h-full flex-col gap-6 rounded-lg border border-base-400 bg-base-200 p-6{% if plan_1_featured == 'true' %} border-content bg-base-100 shadow-md desk:-translate-y-2{% endif %}">
+          <div class="flex h-full flex-col gap-5 rounded-lg border border-base-400 bg-base-200 p-4 desk:p-6{% if plan_1_featured == 'true' %} border-content bg-base-100{% endif %}">
             <div class="space-y-4">
               <div class="flex items-start justify-between gap-4">
-                <div class="space-y-2">
-                  <h3 class="text-xl font-medium tracking-tight text-content">{{ plan_1_name }}</h3>
-                  {% if plan_1_desc %}<p class="text-sm leading-6 text-content-muted">{{ plan_1_desc }}</p>{% endif %}
-                </div>
-                {% if plan_1_badge %}
-                  <span class="rounded-full border border-base-400 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.2em] text-content-muted">{{ plan_1_badge }}</span>
-                {% endif %}
+                <div class="space-y-2"><h3 class="text-lg font-medium tracking-tight text-content desk:text-xl">{{ plan_1_name }}</h3>{% if plan_1_desc %}<p class="text-sm leading-6 text-content-muted">{{ plan_1_desc }}</p>{% endif %}</div>
+                {% if plan_1_badge %}<span class="rounded-full border border-base-400 px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-content-muted">{{ plan_1_badge }}</span>{% endif %}
               </div>
-              <div class="border-t border-base-400 pt-4">
-                <div class="flex items-end gap-2">
-                  <span class="text-4xl font-semibold tracking-tight text-content">{{ plan_1_price }}</span>
-                  {% if plan_1_period %}<span class="pb-1 text-sm text-content-muted">{{ plan_1_period }}</span>{% endif %}
-                </div>
-                {% if plan_1_footnote %}<p class="mt-2 text-sm text-content-muted">{{ plan_1_footnote }}</p>{% endif %}
-              </div>
+              <div class="border-t border-base-400 pt-4"><div class="flex items-end gap-2"><span class="text-4xl font-semibold tracking-tight text-content">{{ plan_1_price }}</span>{% if plan_1_period %}<span class="pb-1 text-sm text-content-muted">{{ plan_1_period }}</span>{% endif %}</div>{% if plan_1_footnote %}<p class="mt-2 text-sm text-content-muted">{{ plan_1_footnote }}</p>{% endif %}</div>
             </div>
-            {% if plan_1_cta_text %}
-              {% set c1v = plan_1_cta_variant | default(value="outline") %}
-              {% set c1c = plan_1_cta_color | default(value="neutral") %}
-              {% if c1v == "solid" %}
-                {% if c1c == "info" %}{% set c1cls = "border-info bg-info text-white hover:bg-info/80" %}{% else %}{% set c1cls = "border-content bg-content text-base-100 hover:bg-content/80" %}{% endif %}
-              {% elif c1v == "outline" %}
-                {% if c1c == "info" %}{% set c1cls = "border-info/30 bg-transparent text-info hover:bg-info/10" %}{% else %}{% set c1cls = "border-base-400 bg-transparent text-content hover:bg-base-300" %}{% endif %}
-              {% else %}
-                {% set c1cls = "border-transparent bg-transparent text-content hover:bg-base-300" %}
-              {% endif %}
-              <a href="{{ plan_1_cta_url | default(value='#') }}" class="inline-flex h-12 w-full items-center justify-center gap-2 rounded-md border px-6 text-base font-medium transition-all duration-75 {{ c1cls }}">{{ plan_1_cta_text }}</a>
-            {% endif %}
+            {% if plan_1_cta_text %}{{ button::render(text=plan_1_cta_text, href=plan_1_cta_url | default(value="#"), variant=plan_1_cta_variant | default(value="outline"), color=plan_1_cta_color | default(value="neutral"), size="lg", wide="true") }}{% endif %}
             <div class="space-y-3 border-t border-base-400 pt-5">
               {% if plan_1_feat_1 %}<div class="flex items-start gap-3 text-sm leading-6 text-content-muted">{{ icons::render(name="check", class="mt-1 size-4 shrink-0 text-content") }}<span>{{ plan_1_feat_1 }}</span></div>{% endif %}
               {% if plan_1_feat_2 %}<div class="flex items-start gap-3 text-sm leading-6 text-content-muted">{{ icons::render(name="check", class="mt-1 size-4 shrink-0 text-content") }}<span>{{ plan_1_feat_2 }}</span></div>{% endif %}
@@ -95,37 +79,9 @@
         {% endif %}
 
         {% if plan_2_name %}
-          <div class="flex h-full flex-col gap-6 rounded-lg border border-base-400 bg-base-200 p-6{% if plan_2_featured == 'true' %} border-content bg-base-100 shadow-md desk:-translate-y-2{% endif %}">
-            <div class="space-y-4">
-              <div class="flex items-start justify-between gap-4">
-                <div class="space-y-2">
-                  <h3 class="text-xl font-medium tracking-tight text-content">{{ plan_2_name }}</h3>
-                  {% if plan_2_desc %}<p class="text-sm leading-6 text-content-muted">{{ plan_2_desc }}</p>{% endif %}
-                </div>
-                {% if plan_2_badge %}
-                  <span class="rounded-full border border-base-400 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.2em] text-content-muted">{{ plan_2_badge }}</span>
-                {% endif %}
-              </div>
-              <div class="border-t border-base-400 pt-4">
-                <div class="flex items-end gap-2">
-                  <span class="text-4xl font-semibold tracking-tight text-content">{{ plan_2_price }}</span>
-                  {% if plan_2_period %}<span class="pb-1 text-sm text-content-muted">{{ plan_2_period }}</span>{% endif %}
-                </div>
-                {% if plan_2_footnote %}<p class="mt-2 text-sm text-content-muted">{{ plan_2_footnote }}</p>{% endif %}
-              </div>
-            </div>
-            {% if plan_2_cta_text %}
-              {% set c2v = plan_2_cta_variant | default(value="outline") %}
-              {% set c2c = plan_2_cta_color | default(value="neutral") %}
-              {% if c2v == "solid" %}
-                {% if c2c == "info" %}{% set c2cls = "border-info bg-info text-white hover:bg-info/80" %}{% else %}{% set c2cls = "border-content bg-content text-base-100 hover:bg-content/80" %}{% endif %}
-              {% elif c2v == "outline" %}
-                {% if c2c == "info" %}{% set c2cls = "border-info/30 bg-transparent text-info hover:bg-info/10" %}{% else %}{% set c2cls = "border-base-400 bg-transparent text-content hover:bg-base-300" %}{% endif %}
-              {% else %}
-                {% set c2cls = "border-transparent bg-transparent text-content hover:bg-base-300" %}
-              {% endif %}
-              <a href="{{ plan_2_cta_url | default(value='#') }}" class="inline-flex h-12 w-full items-center justify-center gap-2 rounded-md border px-6 text-base font-medium transition-all duration-75 {{ c2cls }}">{{ plan_2_cta_text }}</a>
-            {% endif %}
+          <div class="flex h-full flex-col gap-5 rounded-lg border border-base-400 bg-base-200 p-4 desk:p-6{% if plan_2_featured == 'true' %} border-content bg-base-100{% endif %}">
+            <div class="space-y-4"><div class="flex items-start justify-between gap-4"><div class="space-y-2"><h3 class="text-lg font-medium tracking-tight text-content desk:text-xl">{{ plan_2_name }}</h3>{% if plan_2_desc %}<p class="text-sm leading-6 text-content-muted">{{ plan_2_desc }}</p>{% endif %}</div>{% if plan_2_badge %}<span class="rounded-full border border-base-400 px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-content-muted">{{ plan_2_badge }}</span>{% endif %}</div><div class="border-t border-base-400 pt-4"><div class="flex items-end gap-2"><span class="text-4xl font-semibold tracking-tight text-content">{{ plan_2_price }}</span>{% if plan_2_period %}<span class="pb-1 text-sm text-content-muted">{{ plan_2_period }}</span>{% endif %}</div>{% if plan_2_footnote %}<p class="mt-2 text-sm text-content-muted">{{ plan_2_footnote }}</p>{% endif %}</div></div>
+            {% if plan_2_cta_text %}{{ button::render(text=plan_2_cta_text, href=plan_2_cta_url | default(value="#"), variant=plan_2_cta_variant | default(value="outline"), color=plan_2_cta_color | default(value="neutral"), size="lg", wide="true") }}{% endif %}
             <div class="space-y-3 border-t border-base-400 pt-5">
               {% if plan_2_feat_1 %}<div class="flex items-start gap-3 text-sm leading-6 text-content-muted">{{ icons::render(name="check", class="mt-1 size-4 shrink-0 text-content") }}<span>{{ plan_2_feat_1 }}</span></div>{% endif %}
               {% if plan_2_feat_2 %}<div class="flex items-start gap-3 text-sm leading-6 text-content-muted">{{ icons::render(name="check", class="mt-1 size-4 shrink-0 text-content") }}<span>{{ plan_2_feat_2 }}</span></div>{% endif %}
@@ -137,37 +93,9 @@
         {% endif %}
 
         {% if plan_3_name %}
-          <div class="flex h-full flex-col gap-6 rounded-lg border border-base-400 bg-base-200 p-6{% if plan_3_featured == 'true' %} border-content bg-base-100 shadow-md desk:-translate-y-2{% endif %}">
-            <div class="space-y-4">
-              <div class="flex items-start justify-between gap-4">
-                <div class="space-y-2">
-                  <h3 class="text-xl font-medium tracking-tight text-content">{{ plan_3_name }}</h3>
-                  {% if plan_3_desc %}<p class="text-sm leading-6 text-content-muted">{{ plan_3_desc }}</p>{% endif %}
-                </div>
-                {% if plan_3_badge %}
-                  <span class="rounded-full border border-base-400 px-3 py-1 text-[11px] font-medium uppercase tracking-[0.2em] text-content-muted">{{ plan_3_badge }}</span>
-                {% endif %}
-              </div>
-              <div class="border-t border-base-400 pt-4">
-                <div class="flex items-end gap-2">
-                  <span class="text-4xl font-semibold tracking-tight text-content">{{ plan_3_price }}</span>
-                  {% if plan_3_period %}<span class="pb-1 text-sm text-content-muted">{{ plan_3_period }}</span>{% endif %}
-                </div>
-                {% if plan_3_footnote %}<p class="mt-2 text-sm text-content-muted">{{ plan_3_footnote }}</p>{% endif %}
-              </div>
-            </div>
-            {% if plan_3_cta_text %}
-              {% set c3v = plan_3_cta_variant | default(value="outline") %}
-              {% set c3c = plan_3_cta_color | default(value="neutral") %}
-              {% if c3v == "solid" %}
-                {% if c3c == "info" %}{% set c3cls = "border-info bg-info text-white hover:bg-info/80" %}{% else %}{% set c3cls = "border-content bg-content text-base-100 hover:bg-content/80" %}{% endif %}
-              {% elif c3v == "outline" %}
-                {% if c3c == "info" %}{% set c3cls = "border-info/30 bg-transparent text-info hover:bg-info/10" %}{% else %}{% set c3cls = "border-base-400 bg-transparent text-content hover:bg-base-300" %}{% endif %}
-              {% else %}
-                {% set c3cls = "border-transparent bg-transparent text-content hover:bg-base-300" %}
-              {% endif %}
-              <a href="{{ plan_3_cta_url | default(value='#') }}" class="inline-flex h-12 w-full items-center justify-center gap-2 rounded-md border px-6 text-base font-medium transition-all duration-75 {{ c3cls }}">{{ plan_3_cta_text }}</a>
-            {% endif %}
+          <div class="flex h-full flex-col gap-5 rounded-lg border border-base-400 bg-base-200 p-4 desk:p-6{% if plan_3_featured == 'true' %} border-content bg-base-100{% endif %}">
+            <div class="space-y-4"><div class="flex items-start justify-between gap-4"><div class="space-y-2"><h3 class="text-lg font-medium tracking-tight text-content desk:text-xl">{{ plan_3_name }}</h3>{% if plan_3_desc %}<p class="text-sm leading-6 text-content-muted">{{ plan_3_desc }}</p>{% endif %}</div>{% if plan_3_badge %}<span class="rounded-full border border-base-400 px-2.5 py-1 text-[11px] font-medium uppercase tracking-[0.18em] text-content-muted">{{ plan_3_badge }}</span>{% endif %}</div><div class="border-t border-base-400 pt-4"><div class="flex items-end gap-2"><span class="text-4xl font-semibold tracking-tight text-content">{{ plan_3_price }}</span>{% if plan_3_period %}<span class="pb-1 text-sm text-content-muted">{{ plan_3_period }}</span>{% endif %}</div>{% if plan_3_footnote %}<p class="mt-2 text-sm text-content-muted">{{ plan_3_footnote }}</p>{% endif %}</div></div>
+            {% if plan_3_cta_text %}{{ button::render(text=plan_3_cta_text, href=plan_3_cta_url | default(value="#"), variant=plan_3_cta_variant | default(value="outline"), color=plan_3_cta_color | default(value="neutral"), size="lg", wide="true") }}{% endif %}
             <div class="space-y-3 border-t border-base-400 pt-5">
               {% if plan_3_feat_1 %}<div class="flex items-start gap-3 text-sm leading-6 text-content-muted">{{ icons::render(name="check", class="mt-1 size-4 shrink-0 text-content") }}<span>{{ plan_3_feat_1 }}</span></div>{% endif %}
               {% if plan_3_feat_2 %}<div class="flex items-start gap-3 text-sm leading-6 text-content-muted">{{ icons::render(name="check", class="mt-1 size-4 shrink-0 text-content") }}<span>{{ plan_3_feat_2 }}</span></div>{% endif %}
@@ -177,7 +105,6 @@
             </div>
           </div>
         {% endif %}
-
       </div>
     </div>
   </div>

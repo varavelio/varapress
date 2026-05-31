@@ -1,0 +1,74 @@
+{#
+  Shortcode: comparison_table
+  Bordered comparison table for positioning against alternatives.
+
+  Parameters:
+    container       - "xs" | "sm" | "md" | "lg" (default) | "xl" | "full"
+    eyebrow         - Small label above the title (optional)
+    title           - Section heading (optional)
+    description     - Section description (optional)
+    primary_label   - Primary column label (default config.title)
+    secondary_label - Secondary column label (default "Alternative")
+    row_N_feature   - Feature label (up to 8)
+    row_N_primary   - "true" | "false" | custom text
+    row_N_secondary - "true" | "false" | custom text
+    bg              - Background: "base-100" (default) | "base-200"
+    class           - Additional CSS classes
+#}
+
+{% import "macros/icons.html" as icons %}
+
+{% set container = container | default(value="lg") %}
+{% if container == "xs" %}
+  {% set container_cls = "max-w-md" %}
+{% elif container == "sm" %}
+  {% set container_cls = "max-w-3xl" %}
+{% elif container == "md" %}
+  {% set container_cls = "max-w-6xl" %}
+{% elif container == "xl" %}
+  {% set container_cls = "max-w-[120rem]" %}
+{% elif container == "full" %}
+  {% set container_cls = "max-w-full" %}
+{% else %}
+  {% set container_cls = "max-w-7xl" %}
+{% endif %}
+
+{% set bg = bg | default(value="base-100") %}
+{% set primary_label = primary_label | default(value=config.title) %}
+{% set secondary_label = secondary_label | default(value="Alternative") %}
+
+<section class="bg-{{ bg }} py-10 desk:py-20{% if class %} {{ class }}{% endif %}">
+  <div class="mx-auto w-full {{ container_cls }} px-4">
+    <div class="space-y-8 desk:space-y-10">
+      {% if eyebrow or title or description %}
+        <div class="mx-auto flex max-w-3xl flex-col gap-3 text-center">
+          {% if eyebrow %}<p class="text-xs font-medium uppercase tracking-[0.24em] text-content-muted">{{ eyebrow }}</p>{% endif %}
+          {% if title %}<h2 class="text-3xl font-semibold tracking-tight text-content desk:text-4xl">{{ title }}</h2>{% endif %}
+          {% if description %}<p class="text-base leading-7 text-content-muted desk:text-lg">{{ description }}</p>{% endif %}
+        </div>
+      {% endif %}
+
+      <div class="overflow-x-auto rounded-lg border border-base-400 bg-base-200 p-4 desk:p-6">
+        <table class="w-full min-w-[40rem] border-collapse text-left text-sm">
+          <thead>
+            <tr class="border-b border-base-400 text-content">
+              <th class="py-3 pr-4 font-medium">Capability</th>
+              <th class="px-4 py-3 font-medium">{{ primary_label }}</th>
+              <th class="px-4 py-3 font-medium">{{ secondary_label }}</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-base-400">
+            {% if row_1_feature %}<tr><td class="py-4 pr-4 font-medium text-content">{{ row_1_feature }}</td><td class="px-4 py-4 text-content-muted">{% if row_1_primary == "true" %}{{ icons::render(name="check", class="size-4 text-content") }}{% elif row_1_primary == "false" %}{{ icons::render(name="x", class="size-4 text-content-muted") }}{% else %}{{ row_1_primary }}{% endif %}</td><td class="px-4 py-4 text-content-muted">{% if row_1_secondary == "true" %}{{ icons::render(name="check", class="size-4 text-content") }}{% elif row_1_secondary == "false" %}{{ icons::render(name="x", class="size-4 text-content-muted") }}{% else %}{{ row_1_secondary }}{% endif %}</td></tr>{% endif %}
+            {% if row_2_feature %}<tr><td class="py-4 pr-4 font-medium text-content">{{ row_2_feature }}</td><td class="px-4 py-4 text-content-muted">{% if row_2_primary == "true" %}{{ icons::render(name="check", class="size-4 text-content") }}{% elif row_2_primary == "false" %}{{ icons::render(name="x", class="size-4 text-content-muted") }}{% else %}{{ row_2_primary }}{% endif %}</td><td class="px-4 py-4 text-content-muted">{% if row_2_secondary == "true" %}{{ icons::render(name="check", class="size-4 text-content") }}{% elif row_2_secondary == "false" %}{{ icons::render(name="x", class="size-4 text-content-muted") }}{% else %}{{ row_2_secondary }}{% endif %}</td></tr>{% endif %}
+            {% if row_3_feature %}<tr><td class="py-4 pr-4 font-medium text-content">{{ row_3_feature }}</td><td class="px-4 py-4 text-content-muted">{% if row_3_primary == "true" %}{{ icons::render(name="check", class="size-4 text-content") }}{% elif row_3_primary == "false" %}{{ icons::render(name="x", class="size-4 text-content-muted") }}{% else %}{{ row_3_primary }}{% endif %}</td><td class="px-4 py-4 text-content-muted">{% if row_3_secondary == "true" %}{{ icons::render(name="check", class="size-4 text-content") }}{% elif row_3_secondary == "false" %}{{ icons::render(name="x", class="size-4 text-content-muted") }}{% else %}{{ row_3_secondary }}{% endif %}</td></tr>{% endif %}
+            {% if row_4_feature %}<tr><td class="py-4 pr-4 font-medium text-content">{{ row_4_feature }}</td><td class="px-4 py-4 text-content-muted">{% if row_4_primary == "true" %}{{ icons::render(name="check", class="size-4 text-content") }}{% elif row_4_primary == "false" %}{{ icons::render(name="x", class="size-4 text-content-muted") }}{% else %}{{ row_4_primary }}{% endif %}</td><td class="px-4 py-4 text-content-muted">{% if row_4_secondary == "true" %}{{ icons::render(name="check", class="size-4 text-content") }}{% elif row_4_secondary == "false" %}{{ icons::render(name="x", class="size-4 text-content-muted") }}{% else %}{{ row_4_secondary }}{% endif %}</td></tr>{% endif %}
+            {% if row_5_feature %}<tr><td class="py-4 pr-4 font-medium text-content">{{ row_5_feature }}</td><td class="px-4 py-4 text-content-muted">{% if row_5_primary == "true" %}{{ icons::render(name="check", class="size-4 text-content") }}{% elif row_5_primary == "false" %}{{ icons::render(name="x", class="size-4 text-content-muted") }}{% else %}{{ row_5_primary }}{% endif %}</td><td class="px-4 py-4 text-content-muted">{% if row_5_secondary == "true" %}{{ icons::render(name="check", class="size-4 text-content") }}{% elif row_5_secondary == "false" %}{{ icons::render(name="x", class="size-4 text-content-muted") }}{% else %}{{ row_5_secondary }}{% endif %}</td></tr>{% endif %}
+            {% if row_6_feature %}<tr><td class="py-4 pr-4 font-medium text-content">{{ row_6_feature }}</td><td class="px-4 py-4 text-content-muted">{% if row_6_primary == "true" %}{{ icons::render(name="check", class="size-4 text-content") }}{% elif row_6_primary == "false" %}{{ icons::render(name="x", class="size-4 text-content-muted") }}{% else %}{{ row_6_primary }}{% endif %}</td><td class="px-4 py-4 text-content-muted">{% if row_6_secondary == "true" %}{{ icons::render(name="check", class="size-4 text-content") }}{% elif row_6_secondary == "false" %}{{ icons::render(name="x", class="size-4 text-content-muted") }}{% else %}{{ row_6_secondary }}{% endif %}</td></tr>{% endif %}
+            {% if row_7_feature %}<tr><td class="py-4 pr-4 font-medium text-content">{{ row_7_feature }}</td><td class="px-4 py-4 text-content-muted">{% if row_7_primary == "true" %}{{ icons::render(name="check", class="size-4 text-content") }}{% elif row_7_primary == "false" %}{{ icons::render(name="x", class="size-4 text-content-muted") }}{% else %}{{ row_7_primary }}{% endif %}</td><td class="px-4 py-4 text-content-muted">{% if row_7_secondary == "true" %}{{ icons::render(name="check", class="size-4 text-content") }}{% elif row_7_secondary == "false" %}{{ icons::render(name="x", class="size-4 text-content-muted") }}{% else %}{{ row_7_secondary }}{% endif %}</td></tr>{% endif %}
+            {% if row_8_feature %}<tr><td class="py-4 pr-4 font-medium text-content">{{ row_8_feature }}</td><td class="px-4 py-4 text-content-muted">{% if row_8_primary == "true" %}{{ icons::render(name="check", class="size-4 text-content") }}{% elif row_8_primary == "false" %}{{ icons::render(name="x", class="size-4 text-content-muted") }}{% else %}{{ row_8_primary }}{% endif %}</td><td class="px-4 py-4 text-content-muted">{% if row_8_secondary == "true" %}{{ icons::render(name="check", class="size-4 text-content") }}{% elif row_8_secondary == "false" %}{{ icons::render(name="x", class="size-4 text-content-muted") }}{% else %}{{ row_8_secondary }}{% endif %}</td></tr>{% endif %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>

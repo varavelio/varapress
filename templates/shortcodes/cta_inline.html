@@ -1,0 +1,55 @@
+{#
+  Shortcode: cta_inline
+  Compact horizontal CTA for mid-page conversion points.
+
+  Parameters:
+    container        - "xs" | "sm" | "md" | "lg" (default) | "xl" | "full"
+    eyebrow          - Small label (optional)
+    title            - CTA title
+    description      - CTA description
+    action_1_text    - First button label
+    action_1_url     - First button URL
+    action_1_variant - "solid" (default) | "outline" | "ghost"
+    action_1_color   - "neutral" (default) | "info" | "success" | "warning" | "error"
+    action_2_text    - Second button label (optional)
+    action_2_url     - Second button URL
+    bg               - Background: "base-100" (default) | "base-200"
+    class            - Additional CSS classes
+#}
+
+{% import "macros/button.html" as button %}
+
+{% set container = container | default(value="lg") %}
+{% if container == "xs" %}
+  {% set container_cls = "max-w-md" %}
+{% elif container == "sm" %}
+  {% set container_cls = "max-w-3xl" %}
+{% elif container == "md" %}
+  {% set container_cls = "max-w-6xl" %}
+{% elif container == "xl" %}
+  {% set container_cls = "max-w-[120rem]" %}
+{% elif container == "full" %}
+  {% set container_cls = "max-w-full" %}
+{% else %}
+  {% set container_cls = "max-w-7xl" %}
+{% endif %}
+
+{% set bg = bg | default(value="base-100") %}
+
+<section class="bg-{{ bg }} py-6 desk:py-10{% if class %} {{ class }}{% endif %}">
+  <div class="mx-auto w-full {{ container_cls }} px-4">
+    <div class="flex flex-col gap-4 rounded-lg border border-base-400 bg-base-200 p-4 desk:flex-row desk:items-center desk:justify-between desk:p-6">
+      <div class="max-w-2xl">
+        {% if eyebrow %}<p class="text-xs font-medium uppercase tracking-[0.24em] text-content-muted">{{ eyebrow }}</p>{% endif %}
+        {% if title %}<h2 class="mt-1 text-2xl font-semibold tracking-tight text-content desk:text-3xl">{{ title }}</h2>{% endif %}
+        {% if description %}<p class="mt-2 text-sm leading-6 text-content-muted desk:text-base">{{ description }}</p>{% endif %}
+      </div>
+      {% if action_1_text %}
+        <div class="flex shrink-0 flex-col gap-3 desk:flex-row">
+          {{ button::render(text=action_1_text, href=action_1_url | default(value="#"), variant=action_1_variant | default(value="solid"), color=action_1_color | default(value="neutral"), wide="true", class="desk:w-auto") }}
+          {% if action_2_text %}{{ button::render(text=action_2_text, href=action_2_url | default(value="#"), variant="outline", color="neutral", wide="true", class="desk:w-auto") }}{% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</section>

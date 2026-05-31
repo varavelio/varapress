@@ -1,10 +1,10 @@
 {#
   Shortcode: container
-  Constrains content width inside a full-width section. Use as a block shortcode.
+  Constrains arbitrary content width. Use as a block shortcode.
 
   Parameters:
     max_width - "xs" (28rem) | "sm" (48rem) | "md" (72rem, default) | "lg" (80rem) | "xl" (120rem) | "full"
-    padded    - "true" (default) | "false" — adds px-4 on mobile, px-8 on desktop
+    padded    - "true" (default) | "false" — adds px-4
     align     - "left" | "center" (default) | "right"
     class     - Additional CSS classes
 
@@ -33,7 +33,7 @@
 {% endif %}
 
 {% if padded == "true" %}
-  {% set pad_cls = "px-4 desk:px-8" %}
+  {% set pad_cls = "px-4" %}
 {% else %}
   {% set pad_cls = "" %}
 {% endif %}

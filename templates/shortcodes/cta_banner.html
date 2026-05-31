@@ -1,8 +1,9 @@
 {#
   Shortcode: cta_banner
-  A bordered card call-to-action section with title and action buttons.
+  Bordered call-to-action section with centered copy and action buttons.
 
   Parameters:
+    container        - "xs" | "sm" | "md" | "lg" (default) | "xl" | "full"
     eyebrow          - Small label above the title (optional)
     title            - Section heading (optional)
     description      - Section description (optional)
@@ -16,12 +17,32 @@
     action_2_color   - Button color
     caption          - Small text below the buttons (optional)
     bg               - Background: "base-100" (default) | "base-200"
+    class            - Additional CSS classes
 #}
 
-<section class="py-16 desk:py-24{% if bg %} bg-{{ bg }}{% endif %}">
-  <div class="px-4 sm:px-6">
-    <div class="rounded-lg border border-base-400 bg-base-200 px-6 py-10 text-center desk:px-10 desk:py-12">
-      <div class="space-y-6">
+{% import "macros/button.html" as button %}
+
+{% set container = container | default(value="lg") %}
+{% if container == "xs" %}
+  {% set container_cls = "max-w-md" %}
+{% elif container == "sm" %}
+  {% set container_cls = "max-w-3xl" %}
+{% elif container == "md" %}
+  {% set container_cls = "max-w-6xl" %}
+{% elif container == "xl" %}
+  {% set container_cls = "max-w-[120rem]" %}
+{% elif container == "full" %}
+  {% set container_cls = "max-w-full" %}
+{% else %}
+  {% set container_cls = "max-w-7xl" %}
+{% endif %}
+
+{% set bg = bg | default(value="base-100") %}
+
+<section class="bg-{{ bg }} py-10 desk:py-20{% if class %} {{ class }}{% endif %}">
+  <div class="mx-auto w-full {{ container_cls }} px-4">
+    <div class="rounded-lg border border-base-400 bg-base-200 p-4 text-center desk:p-8">
+      <div class="mx-auto flex max-w-3xl flex-col items-center gap-5">
         {% if eyebrow %}
           <p class="text-xs font-medium uppercase tracking-[0.24em] text-content-muted">
             {{ eyebrow }}
@@ -39,55 +60,33 @@
         {% endif %}
 
         {% if action_1_text %}
-          <div class="flex flex-wrap justify-center gap-3">
-            {% set a1_variant = action_1_variant | default(value="solid") %}
-            {% set a1_color = action_1_color | default(value="neutral") %}
-            {% if a1_variant == "solid" %}
-              {% if a1_color == "info" %}
-                {% set a1_cls = "border-info bg-info text-white hover:bg-info/80" %}
-              {% else %}
-                {% set a1_cls = "border-content bg-content text-base-100 hover:bg-content/80" %}
-              {% endif %}
-            {% elif a1_variant == "outline" %}
-              {% if a1_color == "info" %}
-                {% set a1_cls = "border-info/30 bg-transparent text-info hover:bg-info/10" %}
-              {% else %}
-                {% set a1_cls = "border-base-400 bg-transparent text-content hover:bg-base-300" %}
-              {% endif %}
-            {% else %}
-              {% set a1_cls = "border-transparent bg-transparent text-content hover:bg-base-300" %}
-            {% endif %}
-            <a href="{{ action_1_url | default(value='#') }}" class="inline-flex h-12 items-center gap-2 rounded-md border px-6 text-base font-medium transition-all duration-75 {{ a1_cls }}">
-              {{ action_1_text }}
-            </a>
+          <div class="flex w-full flex-col justify-center gap-3 desk:w-auto desk:flex-row">
+            {{ button::render(
+              text=action_1_text,
+              href=action_1_url | default(value="#"),
+              variant=action_1_variant | default(value="solid"),
+              color=action_1_color | default(value="neutral"),
+              size="lg",
+              wide="true",
+              class="desk:w-auto"
+            ) }}
 
             {% if action_2_text %}
-              {% set a2_variant = action_2_variant | default(value="outline") %}
-              {% set a2_color = action_2_color | default(value="neutral") %}
-              {% if a2_variant == "solid" %}
-                {% if a2_color == "info" %}
-                  {% set a2_cls = "border-info bg-info text-white hover:bg-info/80" %}
-                {% else %}
-                  {% set a2_cls = "border-content bg-content text-base-100 hover:bg-content/80" %}
-                {% endif %}
-              {% elif a2_variant == "outline" %}
-                {% if a2_color == "info" %}
-                  {% set a2_cls = "border-info/30 bg-transparent text-info hover:bg-info/10" %}
-                {% else %}
-                  {% set a2_cls = "border-base-400 bg-transparent text-content hover:bg-base-300" %}
-                {% endif %}
-              {% else %}
-                {% set a2_cls = "border-transparent bg-transparent text-content hover:bg-base-300" %}
-              {% endif %}
-              <a href="{{ action_2_url | default(value='#') }}" class="inline-flex h-12 items-center gap-2 rounded-md border px-6 text-base font-medium transition-all duration-75 {{ a2_cls }}">
-                {{ action_2_text }}
-              </a>
+              {{ button::render(
+                text=action_2_text,
+                href=action_2_url | default(value="#"),
+                variant=action_2_variant | default(value="outline"),
+                color=action_2_color | default(value="neutral"),
+                size="lg",
+                wide="true",
+                class="desk:w-auto"
+              ) }}
             {% endif %}
           </div>
         {% endif %}
 
         {% if caption %}
-          <p class="text-sm text-content-muted">{{ caption }}</p>
+          <p class="text-sm leading-6 text-content-muted">{{ caption }}</p>
         {% endif %}
       </div>
     </div>

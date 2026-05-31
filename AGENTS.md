@@ -100,14 +100,20 @@ templates/
     kbd.html                  → Keyboard key indicator
   shortcodes/                 → Zola shortcodes for Markdown content
     icon.html                 → Inline icon in markdown (wrapper around icons macro)
-    button_base.html          → Base button shortcode
+    button_base.html          → Base button shortcode backed by the button macro
+    comparison_table.html     → Product/alternative comparison table section
     container.html            → Centered content container
     cta_banner.html           → Call-to-action banner section
+    cta_inline.html           → Compact inline call-to-action section
     faq_accordion.html        → FAQ accordion section
     features_grid.html        → Feature cards grid section
+    features_list.html        → Split feature list section
+    feature_tabs.html         → Alpine-powered tabbed feature showcase
     footer_simple.html        → Simple footer section
     header_base.html          → Base header section
     hero_centered.html        → Centered hero section with title/actions
+    hero_split.html           → Split hero section with proof/visual panel
+    lead_capture_card.html    → Lead capture form card section
     logo_cloud_grid.html      → Logo cloud / trust bar section
     pricing_cards.html        → Pricing cards section
     stats_grid.html           → Statistics grid section
@@ -121,6 +127,13 @@ templates/
 - `index.html` extends `landing.html`.
 - `landing.html` extends `base/main.html` with a full-width layout (no sidebar, no TOC).
 - `blog.html` is a placeholder (TODO, extends `base/main.html`).
+
+### Landing shortcode conventions
+
+- Full-width landing sections keep the outer section full width for backgrounds and borders, then center their inner content with a `container` parameter (`xs`, `sm`, `md`, `lg`, `xl`, `full`).
+- The `container` block shortcode remains for arbitrary Markdown/custom content. Do not wrap standard landing section shortcodes just to constrain width; set `container="..."` on the section instead.
+- Mobile spacing in landing cards should stay compact (`p-4` base, larger only behind `desk:`) to preserve usable mobile layouts.
+- Small Alpine interactions can live inline in shortcode HTML when they remain local to the component (for example menus, accordions, tabs, or no-backend lead form confirmations).
 
 ## Script loading
 

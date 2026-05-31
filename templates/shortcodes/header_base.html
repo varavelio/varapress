@@ -1,60 +1,131 @@
 {#
   Shortcode: header_base
-  Simple header with logo, site title, optional navigation menu, and theme toggle.
+  Full-width landing header with centered content, logo, nav, mobile menu, CTA, and theme toggle.
 
   Parameters:
-    logo_light  - Light mode logo URL (optional, falls back to config)
-    logo_dark   - Dark mode logo URL (optional, falls back to config)
-    show_title  - "true" (default) | "false"
-    menu        - Comma-separated "label|url" pairs (optional, e.g. "Docs|/docs,Blog|/blog")
-    class       - Additional CSS classes
+    container           - "xs" | "sm" | "md" | "lg" (default) | "xl" | "full"
+    logo_light          - Light mode logo URL (optional, falls back to config)
+    logo_dark           - Dark mode logo URL (optional, falls back to config)
+    show_title          - "true" (default) | "false"
+    menu                - Comma-separated "label|url" pairs (optional)
+    cta_text            - Optional desktop/mobile CTA label
+    cta_url             - Optional CTA URL
+    cta_variant         - "solid" (default) | "outline" | "ghost"
+    cta_color           - "neutral" (default) | "info" | "success" | "warning" | "error"
+    show_theme          - "true" (default) | "false"
+    sticky              - "true" | "false" (default)
+    class               - Additional CSS classes
 #}
 
+{% import "macros/button.html" as button %}
 {% import "macros/icons.html" as icons %}
 
+{% set container = container | default(value="lg") %}
+{% if container == "xs" %}
+  {% set container_cls = "max-w-md" %}
+{% elif container == "sm" %}
+  {% set container_cls = "max-w-3xl" %}
+{% elif container == "md" %}
+  {% set container_cls = "max-w-6xl" %}
+{% elif container == "xl" %}
+  {% set container_cls = "max-w-[120rem]" %}
+{% elif container == "full" %}
+  {% set container_cls = "max-w-full" %}
+{% else %}
+  {% set container_cls = "max-w-7xl" %}
+{% endif %}
+
 {% set show_title = show_title | default(value="true") %}
+{% set show_theme = show_theme | default(value="true") %}
+{% set sticky = sticky | default(value="false") %}
 {% set logo_light = logo_light | default(value=config.extra.varapress_logo_light | default(value="https://cdn.jsdelivr.net/gh/varavelio/brand@v1.0.2/dist/logo-black.svg")) %}
 {% set logo_dark = logo_dark | default(value=config.extra.varapress_logo_dark | default(value="https://cdn.jsdelivr.net/gh/varavelio/brand@v1.0.2/dist/logo-white.svg")) %}
 {% set menu = menu | default(value="") %}
+{% set menu_items = menu | split(pat=",") %}
+{% set cta_variant = cta_variant | default(value="solid") %}
+{% set cta_color = cta_color | default(value="neutral") %}
 
 <header
-  class="h-14 shrink-0 bg-base-100 border-b border-base-400{% if class %} {{ class }}{% endif %}"
-  x-data="theme"
+  class="z-30 shrink-0 border-b border-base-400 bg-base-100/95 backdrop-blur{% if sticky == 'true' %} sticky top-0{% endif %}{% if class %} {{ class }}{% endif %}"
+  x-data="{ open: false }"
 >
-  <div class="h-full flex items-center justify-between gap-3 px-4">
-    <div class="flex-auto min-w-0 flex items-center justify-start">
-      <a href="/" class="group flex items-center justify-start whitespace-nowrap">
+  <div class="mx-auto w-full {{ container_cls }} px-4">
+    <div class="flex h-14 items-center justify-between gap-3">
+      <a href="/" class="group flex min-w-0 items-center gap-2 whitespace-nowrap no-underline">
         {% if logo_light or logo_dark %}
-          <span class="flex-none h-6 mr-2">
-            <img x-show="resolvedTheme === 'light'" src="{{ logo_light }}" class="h-6 w-auto" alt="{{ config.title }}">
-            <img x-show="resolvedTheme === 'dark'" src="{{ logo_dark }}" class="h-6 w-auto" alt="{{ config.title }}">
+          <span class="flex h-6 shrink-0 items-center">
+            <img src="{{ logo_light }}" class="h-6 w-auto dark:hidden" alt="{{ config.title }}">
+            <img src="{{ logo_dark }}" class="hidden h-6 w-auto dark:block" alt="{{ config.title }}">
           </span>
         {% endif %}
         {% if show_title == "true" %}
-          <span class="font-semibold text-content group-hover:text-info transition-colors">
+          <span class="truncate text-sm font-semibold text-content transition-colors group-hover:text-info desk:text-base">
             {{ config.title }}
           </span>
         {% endif %}
       </a>
-    </div>
-    <nav class="flex items-center gap-1 flex-none">
-      {% for link in menu %}
-        {% set parts = link | split(pat="|") %}
-        {% if parts | length == 2 %}
-          <a href="{{ parts[1] }}" class="hidden desk:inline-flex h-8 items-center rounded-md px-3 text-sm font-medium text-content-muted transition-colors hover:bg-base-200 hover:text-content">
-            {{ parts[0] }}
-          </a>
+
+      <nav class="hidden items-center gap-1 desk:flex" aria-label="Primary navigation">
+        {% for link in menu_items %}
+          {% set parts = link | trim | split(pat="|") %}
+          {% if parts | length == 2 %}
+            <a href="{{ parts[1] | trim }}" class="inline-flex h-8 items-center rounded-md px-3 text-sm font-medium text-content-muted no-underline transition-colors hover:bg-base-200 hover:text-content focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-content">
+              {{ parts[0] | trim }}
+            </a>
+          {% endif %}
+        {% endfor %}
+      </nav>
+
+      <div class="flex shrink-0 items-center gap-1">
+        {% if cta_text %}
+          <div class="hidden desk:block">
+            {{ button::render(text=cta_text, href=cta_url | default(value="#"), size="sm", variant=cta_variant, color=cta_color) }}
+          </div>
         {% endif %}
-      {% endfor %}
-      <button
-        class="p-2 -mr-2 cursor-pointer rounded-md hover:bg-base-300 transition-colors"
-        x-on:click="cycleTheme()"
-        aria-label="Toggle theme"
-      >
-        <span x-show="theme === 'system'">{{ icons::render(name="laptop-minimal") }}</span>
-        <span x-show="theme === 'light'">{{ icons::render(name="sun-medium") }}</span>
-        <span x-show="theme === 'dark'">{{ icons::render(name="moon-star") }}</span>
-      </button>
-    </nav>
+        {% if show_theme == "true" %}
+          <button
+            class="inline-flex size-9 cursor-pointer items-center justify-center rounded-md border border-transparent text-content-muted transition-colors hover:bg-base-200 hover:text-content focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-content"
+            x-data="theme"
+            x-on:click="cycleTheme()"
+            aria-label="Toggle theme"
+          >
+            <span x-show="theme === 'system'" x-cloak>{{ icons::render(name="laptop-minimal", class="size-4") }}</span>
+            <span x-show="theme === 'light'" x-cloak>{{ icons::render(name="sun-medium", class="size-4") }}</span>
+            <span x-show="theme === 'dark'" x-cloak>{{ icons::render(name="moon-star", class="size-4") }}</span>
+          </button>
+        {% endif %}
+        {% if menu %}
+          <button
+            class="inline-flex size-9 cursor-pointer items-center justify-center rounded-md border border-transparent text-content-muted transition-colors hover:bg-base-200 hover:text-content focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-content desk:hidden"
+            x-on:click="open = !open"
+            x-bind:aria-expanded="open"
+            aria-label="Toggle navigation"
+          >
+            <span x-show="!open">{{ icons::render(name="menu", class="size-5") }}</span>
+            <span x-show="open" x-cloak>{{ icons::render(name="x", class="size-5") }}</span>
+          </button>
+        {% endif %}
+      </div>
+    </div>
+
+    {% if menu %}
+      <div class="border-t border-base-400 py-3 desk:hidden" x-show="open" x-cloak>
+        <nav class="grid gap-1" aria-label="Mobile navigation">
+          {% for link in menu_items %}
+            {% set parts = link | trim | split(pat="|") %}
+            {% if parts | length == 2 %}
+              <a href="{{ parts[1] | trim }}" class="rounded-md px-3 py-2 text-sm font-medium text-content-muted no-underline transition-colors hover:bg-base-200 hover:text-content focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-content">
+                {{ parts[0] | trim }}
+              </a>
+            {% endif %}
+          {% endfor %}
+          {% if cta_text %}
+            <div class="pt-2">
+              {{ button::render(text=cta_text, href=cta_url | default(value="#"), size="sm", variant=cta_variant, color=cta_color, wide="true") }}
+            </div>
+          {% endif %}
+        </nav>
+      </div>
+    {% endif %}
   </div>
 </header>

@@ -1,0 +1,112 @@
+{#
+  Shortcode: hero_split
+  Split hero with copy on one side and a bordered product/proof panel on the other.
+
+  Parameters:
+    container        - "xs" | "sm" | "md" | "lg" (default) | "xl" | "full"
+    eyebrow          - Small label above the title (optional)
+    title            - Main heading (required, supports HTML)
+    description      - Subheading text (optional, supports HTML)
+    action_1_text    - First button label
+    action_1_url     - First button URL
+    action_1_variant - "solid" (default) | "outline" | "ghost"
+    action_1_color   - "neutral" (default) | "info" | "success" | "warning" | "error"
+    action_2_text    - Second button label (optional)
+    action_2_url     - Second button URL
+    action_2_variant - Button style
+    action_2_color   - Button color
+    caption          - Small text below the buttons (optional)
+    image_src        - Optional visual image URL
+    image_alt        - Optional image alt text
+    panel_label      - Visual panel label
+    panel_title      - Visual panel title
+    panel_desc       - Visual panel description
+    metric_N_value   - Metric value for visual panel (up to 3)
+    metric_N_label   - Metric label for visual panel (up to 3)
+    check_N          - Checklist item (up to 3)
+    bg               - Background: "base-100" (default) | "base-200"
+    reverse          - "true" to place visual first on desktop
+    class            - Additional CSS classes
+#}
+
+{% import "macros/button.html" as button %}
+{% import "macros/icons.html" as icons %}
+
+{% set container = container | default(value="lg") %}
+{% if container == "xs" %}
+  {% set container_cls = "max-w-md" %}
+{% elif container == "sm" %}
+  {% set container_cls = "max-w-3xl" %}
+{% elif container == "md" %}
+  {% set container_cls = "max-w-6xl" %}
+{% elif container == "xl" %}
+  {% set container_cls = "max-w-[120rem]" %}
+{% elif container == "full" %}
+  {% set container_cls = "max-w-full" %}
+{% else %}
+  {% set container_cls = "max-w-7xl" %}
+{% endif %}
+
+{% set bg = bg | default(value="base-100") %}
+{% set reverse = reverse | default(value="false") %}
+{% set image_alt = image_alt | default(value=title) %}
+
+<section class="bg-{{ bg }} py-12 desk:py-24{% if class %} {{ class }}{% endif %}">
+  <div class="mx-auto w-full {{ container_cls }} px-4">
+    <div class="grid items-center gap-8 desk:grid-cols-2 desk:gap-10">
+      <div class="flex flex-col items-start{% if reverse == 'true' %} desk:order-2{% endif %}">
+        {% if eyebrow %}
+          <p class="mb-4 inline-flex rounded-full border border-base-400 bg-base-200 px-3 py-1.5 text-xs font-medium uppercase tracking-[0.18em] text-content-muted">
+            {{ eyebrow }}
+          </p>
+        {% endif %}
+        <h1 class="max-w-3xl text-4xl font-semibold tracking-tight text-content desk:text-6xl">
+          {{ title | safe }}
+        </h1>
+        {% if description %}
+          <p class="mt-5 max-w-2xl text-base leading-7 text-content-muted desk:text-xl desk:leading-8">
+            {{ description | safe }}
+          </p>
+        {% endif %}
+        {% if action_1_text %}
+          <div class="mt-8 flex w-full flex-col gap-3 desk:w-auto desk:flex-row">
+            {{ button::render(text=action_1_text, href=action_1_url | default(value="#"), variant=action_1_variant | default(value="solid"), color=action_1_color | default(value="neutral"), size="lg", wide="true", class="desk:w-auto") }}
+            {% if action_2_text %}
+              {{ button::render(text=action_2_text, href=action_2_url | default(value="#"), variant=action_2_variant | default(value="outline"), color=action_2_color | default(value="neutral"), size="lg", wide="true", class="desk:w-auto") }}
+            {% endif %}
+          </div>
+        {% endif %}
+        {% if caption %}<p class="mt-4 text-sm leading-6 text-content-muted">{{ caption }}</p>{% endif %}
+      </div>
+
+      <div class="rounded-lg border border-base-400 bg-base-200 p-4 desk:p-6{% if reverse == 'true' %} desk:order-1{% endif %}">
+        {% if image_src %}
+          <img src="{{ image_src }}" alt="{{ image_alt }}" class="aspect-[4/3] w-full rounded-md border border-base-400 object-cover" />
+        {% else %}
+          <div class="rounded-md border border-base-400 bg-base-100 p-4">
+            <div class="mb-4 flex items-center justify-between gap-3 border-b border-base-400 pb-3">
+              <div>
+                {% if panel_label %}<p class="text-xs font-medium uppercase tracking-[0.18em] text-content-muted">{{ panel_label }}</p>{% endif %}
+                {% if panel_title %}<h2 class="mt-1 text-xl font-medium tracking-tight text-content">{{ panel_title }}</h2>{% endif %}
+              </div>
+              <div class="flex size-10 items-center justify-center rounded-md border border-base-400 bg-base-200">
+                {{ icons::render(name="chart-no-axes-column-increasing", class="size-5 text-content") }}
+              </div>
+            </div>
+            {% if panel_desc %}<p class="text-sm leading-6 text-content-muted">{{ panel_desc }}</p>{% endif %}
+            <div class="mt-5 grid grid-cols-1 gap-3 desk:grid-cols-3">
+              {% if metric_1_value %}<div class="rounded-md border border-base-400 bg-base-200 p-3"><p class="font-mono text-2xl font-semibold text-content">{{ metric_1_value }}</p><p class="mt-1 text-xs text-content-muted">{{ metric_1_label }}</p></div>{% endif %}
+              {% if metric_2_value %}<div class="rounded-md border border-base-400 bg-base-200 p-3"><p class="font-mono text-2xl font-semibold text-content">{{ metric_2_value }}</p><p class="mt-1 text-xs text-content-muted">{{ metric_2_label }}</p></div>{% endif %}
+              {% if metric_3_value %}<div class="rounded-md border border-base-400 bg-base-200 p-3"><p class="font-mono text-2xl font-semibold text-content">{{ metric_3_value }}</p><p class="mt-1 text-xs text-content-muted">{{ metric_3_label }}</p></div>{% endif %}
+            </div>
+            <div class="mt-5 space-y-3">
+              {% if check_1 %}<div class="flex items-start gap-3 text-sm leading-6 text-content-muted">{{ icons::render(name="check", class="mt-1 size-4 shrink-0 text-content") }}<span>{{ check_1 }}</span></div>{% endif %}
+              {% if check_2 %}<div class="flex items-start gap-3 text-sm leading-6 text-content-muted">{{ icons::render(name="check", class="mt-1 size-4 shrink-0 text-content") }}<span>{{ check_2 }}</span></div>{% endif %}
+              {% if check_3 %}<div class="flex items-start gap-3 text-sm leading-6 text-content-muted">{{ icons::render(name="check", class="mt-1 size-4 shrink-0 text-content") }}<span>{{ check_3 }}</span></div>{% endif %}
+            </div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</section>

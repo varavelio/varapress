@@ -1,119 +1,58 @@
 {#
   Shortcode: stats_grid
-  Numerical statistics displayed in a grid.
+  Numerical statistics displayed in a responsive grid.
 
   Parameters:
-    eyebrow     - Small label above the title (optional)
-    title       - Section heading (optional)
-    description - Section description (optional)
-    columns     - "2" | "3" | "4" (default)
-    bg          - Background: "base-100" (default) | "base-200"
-    stat_1_value - Statistic value (e.g. "10k+")
-    stat_1_label - Statistic label (e.g. "Downloads")
-    stat_1_desc  - Statistic description (optional)
-    ... (up to stat_8)
+    container    - "xs" | "sm" | "md" | "lg" (default) | "xl" | "full"
+    eyebrow      - Small label above the title (optional)
+    title        - Section heading (optional)
+    description  - Section description (optional)
+    columns      - "2" | "3" | "4" (default)
+    bg           - Background: "base-100" (default) | "base-200"
+    stat_N_value - Statistic value (e.g. "10k+")
+    stat_N_label - Statistic label (e.g. "Downloads")
+    stat_N_desc  - Statistic description (optional)
+    class        - Additional CSS classes
 #}
 
-<section class="py-16 desk:py-24{% if bg %} bg-{{ bg }}{% endif %}">
-  <div class="px-4 sm:px-6">
-    <div class="space-y-10">
+{% set container = container | default(value="lg") %}
+{% if container == "xs" %}
+  {% set container_cls = "max-w-md" %}
+{% elif container == "sm" %}
+  {% set container_cls = "max-w-3xl" %}
+{% elif container == "md" %}
+  {% set container_cls = "max-w-6xl" %}
+{% elif container == "xl" %}
+  {% set container_cls = "max-w-[120rem]" %}
+{% elif container == "full" %}
+  {% set container_cls = "max-w-full" %}
+{% else %}
+  {% set container_cls = "max-w-7xl" %}
+{% endif %}
+
+{% set bg = bg | default(value="base-100") %}
+
+<section class="bg-{{ bg }} py-10 desk:py-20{% if class %} {{ class }}{% endif %}">
+  <div class="mx-auto w-full {{ container_cls }} px-4">
+    <div class="space-y-8 desk:space-y-10">
       {% if eyebrow or title or description %}
-        <div class="mx-auto flex max-w-3xl flex-col gap-4 text-center">
-          {% if eyebrow %}
-            <p class="text-xs font-medium uppercase tracking-[0.24em] text-content-muted">{{ eyebrow }}</p>
-          {% endif %}
-          {% if title %}
-            <h2 class="text-3xl font-semibold tracking-tight text-content desk:text-4xl">{{ title }}</h2>
-          {% endif %}
-          {% if description %}
-            <p class="text-base leading-7 text-content-muted desk:text-lg">{{ description }}</p>
-          {% endif %}
+        <div class="mx-auto flex max-w-3xl flex-col gap-3 text-center">
+          {% if eyebrow %}<p class="text-xs font-medium uppercase tracking-[0.24em] text-content-muted">{{ eyebrow }}</p>{% endif %}
+          {% if title %}<h2 class="text-3xl font-semibold tracking-tight text-content desk:text-4xl">{{ title }}</h2>{% endif %}
+          {% if description %}<p class="text-base leading-7 text-content-muted desk:text-lg">{{ description }}</p>{% endif %}
         </div>
       {% endif %}
 
       {% set cols = columns | default(value="4") %}
-      <div class="grid grid-cols-1 gap-4 sm:grid-cols-2{% if cols == '2' %} desk:grid-cols-2{% elif cols == '3' %} desk:grid-cols-3{% else %} desk:grid-cols-4{% endif %}">
-
-        {% if stat_1_value %}
-          <div class="rounded-lg border border-base-400 bg-base-200 px-5 py-6">
-            <p class="text-4xl font-semibold tracking-tight text-content desk:text-5xl">{{ stat_1_value }}</p>
-            <div class="mt-3 space-y-1">
-              <p class="font-medium text-content">{{ stat_1_label }}</p>
-              {% if stat_1_desc %}<p class="text-sm leading-6 text-content-muted">{{ stat_1_desc }}</p>{% endif %}
-            </div>
-          </div>
-        {% endif %}
-
-        {% if stat_2_value %}
-          <div class="rounded-lg border border-base-400 bg-base-200 px-5 py-6">
-            <p class="text-4xl font-semibold tracking-tight text-content desk:text-5xl">{{ stat_2_value }}</p>
-            <div class="mt-3 space-y-1">
-              <p class="font-medium text-content">{{ stat_2_label }}</p>
-              {% if stat_2_desc %}<p class="text-sm leading-6 text-content-muted">{{ stat_2_desc }}</p>{% endif %}
-            </div>
-          </div>
-        {% endif %}
-
-        {% if stat_3_value %}
-          <div class="rounded-lg border border-base-400 bg-base-200 px-5 py-6">
-            <p class="text-4xl font-semibold tracking-tight text-content desk:text-5xl">{{ stat_3_value }}</p>
-            <div class="mt-3 space-y-1">
-              <p class="font-medium text-content">{{ stat_3_label }}</p>
-              {% if stat_3_desc %}<p class="text-sm leading-6 text-content-muted">{{ stat_3_desc }}</p>{% endif %}
-            </div>
-          </div>
-        {% endif %}
-
-        {% if stat_4_value %}
-          <div class="rounded-lg border border-base-400 bg-base-200 px-5 py-6">
-            <p class="text-4xl font-semibold tracking-tight text-content desk:text-5xl">{{ stat_4_value }}</p>
-            <div class="mt-3 space-y-1">
-              <p class="font-medium text-content">{{ stat_4_label }}</p>
-              {% if stat_4_desc %}<p class="text-sm leading-6 text-content-muted">{{ stat_4_desc }}</p>{% endif %}
-            </div>
-          </div>
-        {% endif %}
-
-        {% if stat_5_value %}
-          <div class="rounded-lg border border-base-400 bg-base-200 px-5 py-6">
-            <p class="text-4xl font-semibold tracking-tight text-content desk:text-5xl">{{ stat_5_value }}</p>
-            <div class="mt-3 space-y-1">
-              <p class="font-medium text-content">{{ stat_5_label }}</p>
-              {% if stat_5_desc %}<p class="text-sm leading-6 text-content-muted">{{ stat_5_desc }}</p>{% endif %}
-            </div>
-          </div>
-        {% endif %}
-
-        {% if stat_6_value %}
-          <div class="rounded-lg border border-base-400 bg-base-200 px-5 py-6">
-            <p class="text-4xl font-semibold tracking-tight text-content desk:text-5xl">{{ stat_6_value }}</p>
-            <div class="mt-3 space-y-1">
-              <p class="font-medium text-content">{{ stat_6_label }}</p>
-              {% if stat_6_desc %}<p class="text-sm leading-6 text-content-muted">{{ stat_6_desc }}</p>{% endif %}
-            </div>
-          </div>
-        {% endif %}
-
-        {% if stat_7_value %}
-          <div class="rounded-lg border border-base-400 bg-base-200 px-5 py-6">
-            <p class="text-4xl font-semibold tracking-tight text-content desk:text-5xl">{{ stat_7_value }}</p>
-            <div class="mt-3 space-y-1">
-              <p class="font-medium text-content">{{ stat_7_label }}</p>
-              {% if stat_7_desc %}<p class="text-sm leading-6 text-content-muted">{{ stat_7_desc }}</p>{% endif %}
-            </div>
-          </div>
-        {% endif %}
-
-        {% if stat_8_value %}
-          <div class="rounded-lg border border-base-400 bg-base-200 px-5 py-6">
-            <p class="text-4xl font-semibold tracking-tight text-content desk:text-5xl">{{ stat_8_value }}</p>
-            <div class="mt-3 space-y-1">
-              <p class="font-medium text-content">{{ stat_8_label }}</p>
-              {% if stat_8_desc %}<p class="text-sm leading-6 text-content-muted">{{ stat_8_desc }}</p>{% endif %}
-            </div>
-          </div>
-        {% endif %}
-
+      <div class="grid grid-cols-1 gap-4 desk:gap-5{% if cols == '2' %} desk:grid-cols-2{% elif cols == '3' %} desk:grid-cols-3{% else %} desk:grid-cols-4{% endif %}">
+        {% if stat_1_value %}<div class="rounded-lg border border-base-400 bg-base-200 p-4 desk:p-6"><p class="font-mono text-4xl font-semibold tracking-tight text-content desk:text-5xl">{{ stat_1_value }}</p><div class="mt-3 space-y-1"><p class="font-medium text-content">{{ stat_1_label }}</p>{% if stat_1_desc %}<p class="text-sm leading-6 text-content-muted">{{ stat_1_desc }}</p>{% endif %}</div></div>{% endif %}
+        {% if stat_2_value %}<div class="rounded-lg border border-base-400 bg-base-200 p-4 desk:p-6"><p class="font-mono text-4xl font-semibold tracking-tight text-content desk:text-5xl">{{ stat_2_value }}</p><div class="mt-3 space-y-1"><p class="font-medium text-content">{{ stat_2_label }}</p>{% if stat_2_desc %}<p class="text-sm leading-6 text-content-muted">{{ stat_2_desc }}</p>{% endif %}</div></div>{% endif %}
+        {% if stat_3_value %}<div class="rounded-lg border border-base-400 bg-base-200 p-4 desk:p-6"><p class="font-mono text-4xl font-semibold tracking-tight text-content desk:text-5xl">{{ stat_3_value }}</p><div class="mt-3 space-y-1"><p class="font-medium text-content">{{ stat_3_label }}</p>{% if stat_3_desc %}<p class="text-sm leading-6 text-content-muted">{{ stat_3_desc }}</p>{% endif %}</div></div>{% endif %}
+        {% if stat_4_value %}<div class="rounded-lg border border-base-400 bg-base-200 p-4 desk:p-6"><p class="font-mono text-4xl font-semibold tracking-tight text-content desk:text-5xl">{{ stat_4_value }}</p><div class="mt-3 space-y-1"><p class="font-medium text-content">{{ stat_4_label }}</p>{% if stat_4_desc %}<p class="text-sm leading-6 text-content-muted">{{ stat_4_desc }}</p>{% endif %}</div></div>{% endif %}
+        {% if stat_5_value %}<div class="rounded-lg border border-base-400 bg-base-200 p-4 desk:p-6"><p class="font-mono text-4xl font-semibold tracking-tight text-content desk:text-5xl">{{ stat_5_value }}</p><div class="mt-3 space-y-1"><p class="font-medium text-content">{{ stat_5_label }}</p>{% if stat_5_desc %}<p class="text-sm leading-6 text-content-muted">{{ stat_5_desc }}</p>{% endif %}</div></div>{% endif %}
+        {% if stat_6_value %}<div class="rounded-lg border border-base-400 bg-base-200 p-4 desk:p-6"><p class="font-mono text-4xl font-semibold tracking-tight text-content desk:text-5xl">{{ stat_6_value }}</p><div class="mt-3 space-y-1"><p class="font-medium text-content">{{ stat_6_label }}</p>{% if stat_6_desc %}<p class="text-sm leading-6 text-content-muted">{{ stat_6_desc }}</p>{% endif %}</div></div>{% endif %}
+        {% if stat_7_value %}<div class="rounded-lg border border-base-400 bg-base-200 p-4 desk:p-6"><p class="font-mono text-4xl font-semibold tracking-tight text-content desk:text-5xl">{{ stat_7_value }}</p><div class="mt-3 space-y-1"><p class="font-medium text-content">{{ stat_7_label }}</p>{% if stat_7_desc %}<p class="text-sm leading-6 text-content-muted">{{ stat_7_desc }}</p>{% endif %}</div></div>{% endif %}
+        {% if stat_8_value %}<div class="rounded-lg border border-base-400 bg-base-200 p-4 desk:p-6"><p class="font-mono text-4xl font-semibold tracking-tight text-content desk:text-5xl">{{ stat_8_value }}</p><div class="mt-3 space-y-1"><p class="font-medium text-content">{{ stat_8_label }}</p>{% if stat_8_desc %}<p class="text-sm leading-6 text-content-muted">{{ stat_8_desc }}</p>{% endif %}</div></div>{% endif %}
       </div>
     </div>
   </div>

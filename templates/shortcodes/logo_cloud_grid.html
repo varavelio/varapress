@@ -3,192 +3,61 @@
   Partner or trusted-by logos displayed in a bordered grid with grayscale treatment.
 
   Parameters:
+    container   - "xs" | "sm" | "md" | "lg" (default) | "xl" | "full"
     eyebrow     - Small label above the title (optional)
     title       - Section heading (optional)
     description - Section description (optional)
     columns     - "2" | "3" | "4" | "5" (default) | "6"
     bg          - Background: "base-100" (default) | "base-200"
-    logo_1_name - Logo name (required, displayed as text if no src)
-    logo_1_src  - Logo image URL (optional, renders image if provided)
-    logo_1_alt  - Alt text (optional, defaults to name)
-    logo_1_href - Link URL (optional)
-    ... (up to logo_12)
+    logo_N_name - Logo name (required, displayed as text if no src)
+    logo_N_src  - Logo image URL (optional, renders image if provided)
+    logo_N_alt  - Alt text (optional, defaults to name)
+    logo_N_href - Link URL (optional)
+    class       - Additional CSS classes
 #}
 
-<section class="py-16 desk:py-24{% if bg %} bg-{{ bg }}{% endif %}">
-  <div class="px-4 sm:px-6">
-    <div class="space-y-10">
+{% set container = container | default(value="lg") %}
+{% if container == "xs" %}
+  {% set container_cls = "max-w-md" %}
+{% elif container == "sm" %}
+  {% set container_cls = "max-w-3xl" %}
+{% elif container == "md" %}
+  {% set container_cls = "max-w-6xl" %}
+{% elif container == "xl" %}
+  {% set container_cls = "max-w-[120rem]" %}
+{% elif container == "full" %}
+  {% set container_cls = "max-w-full" %}
+{% else %}
+  {% set container_cls = "max-w-7xl" %}
+{% endif %}
+
+{% set bg = bg | default(value="base-100") %}
+
+<section class="bg-{{ bg }} py-10 desk:py-20{% if class %} {{ class }}{% endif %}">
+  <div class="mx-auto w-full {{ container_cls }} px-4">
+    <div class="space-y-8 desk:space-y-10">
       {% if eyebrow or title or description %}
-        <div class="mx-auto flex max-w-3xl flex-col gap-4 text-center">
-          {% if eyebrow %}
-            <p class="text-xs font-medium uppercase tracking-[0.24em] text-content-muted">{{ eyebrow }}</p>
-          {% endif %}
-          {% if title %}
-            <h2 class="text-3xl font-semibold tracking-tight text-content desk:text-4xl">{{ title }}</h2>
-          {% endif %}
-          {% if description %}
-            <p class="text-base leading-7 text-content-muted desk:text-lg">{{ description }}</p>
-          {% endif %}
+        <div class="mx-auto flex max-w-3xl flex-col gap-3 text-center">
+          {% if eyebrow %}<p class="text-xs font-medium uppercase tracking-[0.24em] text-content-muted">{{ eyebrow }}</p>{% endif %}
+          {% if title %}<h2 class="text-3xl font-semibold tracking-tight text-content desk:text-4xl">{{ title }}</h2>{% endif %}
+          {% if description %}<p class="text-base leading-7 text-content-muted desk:text-lg">{{ description }}</p>{% endif %}
         </div>
       {% endif %}
 
       {% set cols = columns | default(value="5") %}
-      <div class="grid grid-cols-2 overflow-hidden rounded-lg border border-base-400
-        {% if cols == '2' %}desk:grid-cols-2
-        {% elif cols == '3' %}desk:grid-cols-3
-        {% elif cols == '4' %}desk:grid-cols-4
-        {% elif cols == '6' %}desk:grid-cols-6
-        {% else %}desk:grid-cols-5{% endif %}">
-
-        {% for n in range(end=12) %}
-          {% set idx = n + 1 %}
-          {% set logo_name_var = "logo_" ~ idx ~ "_name" %}
-        {% endfor %}
-
-        {% if logo_1_name %}
-          <div class="flex min-h-24 items-center justify-center border-r border-b border-base-400 bg-base-200 px-5 py-6 last:border-r-0 [&:nth-child(2n)]:border-r-0">
-            {% if logo_1_href %}<a href="{{ logo_1_href }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center">{% endif %}
-            {% if logo_1_src %}
-              <img src="{{ logo_1_src }}" alt="{{ logo_1_alt | default(value=logo_1_name) }}" class="max-h-8 w-auto opacity-70 grayscale" />
-            {% else %}
-              <span class="text-sm font-medium uppercase tracking-[0.2em] text-content-muted">{{ logo_1_name }}</span>
-            {% endif %}
-            {% if logo_1_href %}</a>{% endif %}
-          </div>
-        {% endif %}
-
-        {% if logo_2_name %}
-          <div class="flex min-h-24 items-center justify-center border-r border-b border-base-400 bg-base-200 px-5 py-6 last:border-r-0 [&:nth-child(2n)]:border-r-0">
-            {% if logo_2_href %}<a href="{{ logo_2_href }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center">{% endif %}
-            {% if logo_2_src %}
-              <img src="{{ logo_2_src }}" alt="{{ logo_2_alt | default(value=logo_2_name) }}" class="max-h-8 w-auto opacity-70 grayscale" />
-            {% else %}
-              <span class="text-sm font-medium uppercase tracking-[0.2em] text-content-muted">{{ logo_2_name }}</span>
-            {% endif %}
-            {% if logo_2_href %}</a>{% endif %}
-          </div>
-        {% endif %}
-
-        {% if logo_3_name %}
-          <div class="flex min-h-24 items-center justify-center border-r border-b border-base-400 bg-base-200 px-5 py-6 last:border-r-0 [&:nth-child(2n)]:border-r-0">
-            {% if logo_3_href %}<a href="{{ logo_3_href }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center">{% endif %}
-            {% if logo_3_src %}
-              <img src="{{ logo_3_src }}" alt="{{ logo_3_alt | default(value=logo_3_name) }}" class="max-h-8 w-auto opacity-70 grayscale" />
-            {% else %}
-              <span class="text-sm font-medium uppercase tracking-[0.2em] text-content-muted">{{ logo_3_name }}</span>
-            {% endif %}
-            {% if logo_3_href %}</a>{% endif %}
-          </div>
-        {% endif %}
-
-        {% if logo_4_name %}
-          <div class="flex min-h-24 items-center justify-center border-r border-b border-base-400 bg-base-200 px-5 py-6 last:border-r-0 [&:nth-child(2n)]:border-r-0">
-            {% if logo_4_href %}<a href="{{ logo_4_href }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center">{% endif %}
-            {% if logo_4_src %}
-              <img src="{{ logo_4_src }}" alt="{{ logo_4_alt | default(value=logo_4_name) }}" class="max-h-8 w-auto opacity-70 grayscale" />
-            {% else %}
-              <span class="text-sm font-medium uppercase tracking-[0.2em] text-content-muted">{{ logo_4_name }}</span>
-            {% endif %}
-            {% if logo_4_href %}</a>{% endif %}
-          </div>
-        {% endif %}
-
-        {% if logo_5_name %}
-          <div class="flex min-h-24 items-center justify-center border-r border-b border-base-400 bg-base-200 px-5 py-6 last:border-r-0 [&:nth-child(2n)]:border-r-0">
-            {% if logo_5_href %}<a href="{{ logo_5_href }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center">{% endif %}
-            {% if logo_5_src %}
-              <img src="{{ logo_5_src }}" alt="{{ logo_5_alt | default(value=logo_5_name) }}" class="max-h-8 w-auto opacity-70 grayscale" />
-            {% else %}
-              <span class="text-sm font-medium uppercase tracking-[0.2em] text-content-muted">{{ logo_5_name }}</span>
-            {% endif %}
-            {% if logo_5_href %}</a>{% endif %}
-          </div>
-        {% endif %}
-
-        {% if logo_6_name %}
-          <div class="flex min-h-24 items-center justify-center border-r border-b border-base-400 bg-base-200 px-5 py-6 last:border-r-0 [&:nth-child(2n)]:border-r-0">
-            {% if logo_6_href %}<a href="{{ logo_6_href }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center">{% endif %}
-            {% if logo_6_src %}
-              <img src="{{ logo_6_src }}" alt="{{ logo_6_alt | default(value=logo_6_name) }}" class="max-h-8 w-auto opacity-70 grayscale" />
-            {% else %}
-              <span class="text-sm font-medium uppercase tracking-[0.2em] text-content-muted">{{ logo_6_name }}</span>
-            {% endif %}
-            {% if logo_6_href %}</a>{% endif %}
-          </div>
-        {% endif %}
-
-        {% if logo_7_name %}
-          <div class="flex min-h-24 items-center justify-center border-r border-b border-base-400 bg-base-200 px-5 py-6 last:border-r-0 [&:nth-child(2n)]:border-r-0">
-            {% if logo_7_href %}<a href="{{ logo_7_href }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center">{% endif %}
-            {% if logo_7_src %}
-              <img src="{{ logo_7_src }}" alt="{{ logo_7_alt | default(value=logo_7_name) }}" class="max-h-8 w-auto opacity-70 grayscale" />
-            {% else %}
-              <span class="text-sm font-medium uppercase tracking-[0.2em] text-content-muted">{{ logo_7_name }}</span>
-            {% endif %}
-            {% if logo_7_href %}</a>{% endif %}
-          </div>
-        {% endif %}
-
-        {% if logo_8_name %}
-          <div class="flex min-h-24 items-center justify-center border-r border-b border-base-400 bg-base-200 px-5 py-6 last:border-r-0 [&:nth-child(2n)]:border-r-0">
-            {% if logo_8_href %}<a href="{{ logo_8_href }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center">{% endif %}
-            {% if logo_8_src %}
-              <img src="{{ logo_8_src }}" alt="{{ logo_8_alt | default(value=logo_8_name) }}" class="max-h-8 w-auto opacity-70 grayscale" />
-            {% else %}
-              <span class="text-sm font-medium uppercase tracking-[0.2em] text-content-muted">{{ logo_8_name }}</span>
-            {% endif %}
-            {% if logo_8_href %}</a>{% endif %}
-          </div>
-        {% endif %}
-
-        {% if logo_9_name %}
-          <div class="flex min-h-24 items-center justify-center border-r border-b border-base-400 bg-base-200 px-5 py-6 last:border-r-0 [&:nth-child(2n)]:border-r-0">
-            {% if logo_9_href %}<a href="{{ logo_9_href }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center">{% endif %}
-            {% if logo_9_src %}
-              <img src="{{ logo_9_src }}" alt="{{ logo_9_alt | default(value=logo_9_name) }}" class="max-h-8 w-auto opacity-70 grayscale" />
-            {% else %}
-              <span class="text-sm font-medium uppercase tracking-[0.2em] text-content-muted">{{ logo_9_name }}</span>
-            {% endif %}
-            {% if logo_9_href %}</a>{% endif %}
-          </div>
-        {% endif %}
-
-        {% if logo_10_name %}
-          <div class="flex min-h-24 items-center justify-center border-r border-b border-base-400 bg-base-200 px-5 py-6 last:border-r-0 [&:nth-child(2n)]:border-r-0">
-            {% if logo_10_href %}<a href="{{ logo_10_href }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center">{% endif %}
-            {% if logo_10_src %}
-              <img src="{{ logo_10_src }}" alt="{{ logo_10_alt | default(value=logo_10_name) }}" class="max-h-8 w-auto opacity-70 grayscale" />
-            {% else %}
-              <span class="text-sm font-medium uppercase tracking-[0.2em] text-content-muted">{{ logo_10_name }}</span>
-            {% endif %}
-            {% if logo_10_href %}</a>{% endif %}
-          </div>
-        {% endif %}
-
-        {% if logo_11_name %}
-          <div class="flex min-h-24 items-center justify-center border-r border-b border-base-400 bg-base-200 px-5 py-6 last:border-r-0 [&:nth-child(2n)]:border-r-0">
-            {% if logo_11_href %}<a href="{{ logo_11_href }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center">{% endif %}
-            {% if logo_11_src %}
-              <img src="{{ logo_11_src }}" alt="{{ logo_11_alt | default(value=logo_11_name) }}" class="max-h-8 w-auto opacity-70 grayscale" />
-            {% else %}
-              <span class="text-sm font-medium uppercase tracking-[0.2em] text-content-muted">{{ logo_11_name }}</span>
-            {% endif %}
-            {% if logo_11_href %}</a>{% endif %}
-          </div>
-        {% endif %}
-
-        {% if logo_12_name %}
-          <div class="flex min-h-24 items-center justify-center border-r border-b border-base-400 bg-base-200 px-5 py-6 last:border-r-0 [&:nth-child(2n)]:border-r-0">
-            {% if logo_12_href %}<a href="{{ logo_12_href }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center">{% endif %}
-            {% if logo_12_src %}
-              <img src="{{ logo_12_src }}" alt="{{ logo_12_alt | default(value=logo_12_name) }}" class="max-h-8 w-auto opacity-70 grayscale" />
-            {% else %}
-              <span class="text-sm font-medium uppercase tracking-[0.2em] text-content-muted">{{ logo_12_name }}</span>
-            {% endif %}
-            {% if logo_12_href %}</a>{% endif %}
-          </div>
-        {% endif %}
-
+      <div class="grid grid-cols-2 overflow-hidden rounded-lg border border-base-400{% if cols == '2' %} desk:grid-cols-2{% elif cols == '3' %} desk:grid-cols-3{% elif cols == '4' %} desk:grid-cols-4{% elif cols == '6' %} desk:grid-cols-6{% else %} desk:grid-cols-5{% endif %}">
+        {% if logo_1_name %}<div class="flex min-h-20 items-center justify-center border-r border-b border-base-400 bg-base-200 p-4 last:border-r-0 [&:nth-child(2n)]:border-r-0 desk:[&:nth-child(2n)]:border-r">{% if logo_1_href %}<a href="{{ logo_1_href }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center">{% endif %}{% if logo_1_src %}<img src="{{ logo_1_src }}" alt="{{ logo_1_alt | default(value=logo_1_name) }}" class="max-h-8 w-auto opacity-70 grayscale" />{% else %}<span class="text-sm font-medium uppercase tracking-[0.18em] text-content-muted">{{ logo_1_name }}</span>{% endif %}{% if logo_1_href %}</a>{% endif %}</div>{% endif %}
+        {% if logo_2_name %}<div class="flex min-h-20 items-center justify-center border-r border-b border-base-400 bg-base-200 p-4 last:border-r-0 [&:nth-child(2n)]:border-r-0 desk:[&:nth-child(2n)]:border-r">{% if logo_2_href %}<a href="{{ logo_2_href }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center">{% endif %}{% if logo_2_src %}<img src="{{ logo_2_src }}" alt="{{ logo_2_alt | default(value=logo_2_name) }}" class="max-h-8 w-auto opacity-70 grayscale" />{% else %}<span class="text-sm font-medium uppercase tracking-[0.18em] text-content-muted">{{ logo_2_name }}</span>{% endif %}{% if logo_2_href %}</a>{% endif %}</div>{% endif %}
+        {% if logo_3_name %}<div class="flex min-h-20 items-center justify-center border-r border-b border-base-400 bg-base-200 p-4 last:border-r-0 [&:nth-child(2n)]:border-r-0 desk:[&:nth-child(2n)]:border-r">{% if logo_3_href %}<a href="{{ logo_3_href }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center">{% endif %}{% if logo_3_src %}<img src="{{ logo_3_src }}" alt="{{ logo_3_alt | default(value=logo_3_name) }}" class="max-h-8 w-auto opacity-70 grayscale" />{% else %}<span class="text-sm font-medium uppercase tracking-[0.18em] text-content-muted">{{ logo_3_name }}</span>{% endif %}{% if logo_3_href %}</a>{% endif %}</div>{% endif %}
+        {% if logo_4_name %}<div class="flex min-h-20 items-center justify-center border-r border-b border-base-400 bg-base-200 p-4 last:border-r-0 [&:nth-child(2n)]:border-r-0 desk:[&:nth-child(2n)]:border-r">{% if logo_4_href %}<a href="{{ logo_4_href }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center">{% endif %}{% if logo_4_src %}<img src="{{ logo_4_src }}" alt="{{ logo_4_alt | default(value=logo_4_name) }}" class="max-h-8 w-auto opacity-70 grayscale" />{% else %}<span class="text-sm font-medium uppercase tracking-[0.18em] text-content-muted">{{ logo_4_name }}</span>{% endif %}{% if logo_4_href %}</a>{% endif %}</div>{% endif %}
+        {% if logo_5_name %}<div class="flex min-h-20 items-center justify-center border-r border-b border-base-400 bg-base-200 p-4 last:border-r-0 [&:nth-child(2n)]:border-r-0 desk:[&:nth-child(2n)]:border-r">{% if logo_5_href %}<a href="{{ logo_5_href }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center">{% endif %}{% if logo_5_src %}<img src="{{ logo_5_src }}" alt="{{ logo_5_alt | default(value=logo_5_name) }}" class="max-h-8 w-auto opacity-70 grayscale" />{% else %}<span class="text-sm font-medium uppercase tracking-[0.18em] text-content-muted">{{ logo_5_name }}</span>{% endif %}{% if logo_5_href %}</a>{% endif %}</div>{% endif %}
+        {% if logo_6_name %}<div class="flex min-h-20 items-center justify-center border-r border-b border-base-400 bg-base-200 p-4 last:border-r-0 [&:nth-child(2n)]:border-r-0 desk:[&:nth-child(2n)]:border-r">{% if logo_6_href %}<a href="{{ logo_6_href }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center">{% endif %}{% if logo_6_src %}<img src="{{ logo_6_src }}" alt="{{ logo_6_alt | default(value=logo_6_name) }}" class="max-h-8 w-auto opacity-70 grayscale" />{% else %}<span class="text-sm font-medium uppercase tracking-[0.18em] text-content-muted">{{ logo_6_name }}</span>{% endif %}{% if logo_6_href %}</a>{% endif %}</div>{% endif %}
+        {% if logo_7_name %}<div class="flex min-h-20 items-center justify-center border-r border-b border-base-400 bg-base-200 p-4 last:border-r-0 [&:nth-child(2n)]:border-r-0 desk:[&:nth-child(2n)]:border-r">{% if logo_7_href %}<a href="{{ logo_7_href }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center">{% endif %}{% if logo_7_src %}<img src="{{ logo_7_src }}" alt="{{ logo_7_alt | default(value=logo_7_name) }}" class="max-h-8 w-auto opacity-70 grayscale" />{% else %}<span class="text-sm font-medium uppercase tracking-[0.18em] text-content-muted">{{ logo_7_name }}</span>{% endif %}{% if logo_7_href %}</a>{% endif %}</div>{% endif %}
+        {% if logo_8_name %}<div class="flex min-h-20 items-center justify-center border-r border-b border-base-400 bg-base-200 p-4 last:border-r-0 [&:nth-child(2n)]:border-r-0 desk:[&:nth-child(2n)]:border-r">{% if logo_8_href %}<a href="{{ logo_8_href }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center">{% endif %}{% if logo_8_src %}<img src="{{ logo_8_src }}" alt="{{ logo_8_alt | default(value=logo_8_name) }}" class="max-h-8 w-auto opacity-70 grayscale" />{% else %}<span class="text-sm font-medium uppercase tracking-[0.18em] text-content-muted">{{ logo_8_name }}</span>{% endif %}{% if logo_8_href %}</a>{% endif %}</div>{% endif %}
+        {% if logo_9_name %}<div class="flex min-h-20 items-center justify-center border-r border-b border-base-400 bg-base-200 p-4 last:border-r-0 [&:nth-child(2n)]:border-r-0 desk:[&:nth-child(2n)]:border-r">{% if logo_9_href %}<a href="{{ logo_9_href }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center">{% endif %}{% if logo_9_src %}<img src="{{ logo_9_src }}" alt="{{ logo_9_alt | default(value=logo_9_name) }}" class="max-h-8 w-auto opacity-70 grayscale" />{% else %}<span class="text-sm font-medium uppercase tracking-[0.18em] text-content-muted">{{ logo_9_name }}</span>{% endif %}{% if logo_9_href %}</a>{% endif %}</div>{% endif %}
+        {% if logo_10_name %}<div class="flex min-h-20 items-center justify-center border-r border-b border-base-400 bg-base-200 p-4 last:border-r-0 [&:nth-child(2n)]:border-r-0 desk:[&:nth-child(2n)]:border-r">{% if logo_10_href %}<a href="{{ logo_10_href }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center">{% endif %}{% if logo_10_src %}<img src="{{ logo_10_src }}" alt="{{ logo_10_alt | default(value=logo_10_name) }}" class="max-h-8 w-auto opacity-70 grayscale" />{% else %}<span class="text-sm font-medium uppercase tracking-[0.18em] text-content-muted">{{ logo_10_name }}</span>{% endif %}{% if logo_10_href %}</a>{% endif %}</div>{% endif %}
+        {% if logo_11_name %}<div class="flex min-h-20 items-center justify-center border-r border-b border-base-400 bg-base-200 p-4 last:border-r-0 [&:nth-child(2n)]:border-r-0 desk:[&:nth-child(2n)]:border-r">{% if logo_11_href %}<a href="{{ logo_11_href }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center">{% endif %}{% if logo_11_src %}<img src="{{ logo_11_src }}" alt="{{ logo_11_alt | default(value=logo_11_name) }}" class="max-h-8 w-auto opacity-70 grayscale" />{% else %}<span class="text-sm font-medium uppercase tracking-[0.18em] text-content-muted">{{ logo_11_name }}</span>{% endif %}{% if logo_11_href %}</a>{% endif %}</div>{% endif %}
+        {% if logo_12_name %}<div class="flex min-h-20 items-center justify-center border-r border-b border-base-400 bg-base-200 p-4 last:border-r-0 [&:nth-child(2n)]:border-r-0 desk:[&:nth-child(2n)]:border-r">{% if logo_12_href %}<a href="{{ logo_12_href }}" target="_blank" rel="noopener noreferrer" class="flex items-center justify-center">{% endif %}{% if logo_12_src %}<img src="{{ logo_12_src }}" alt="{{ logo_12_alt | default(value=logo_12_name) }}" class="max-h-8 w-auto opacity-70 grayscale" />{% else %}<span class="text-sm font-medium uppercase tracking-[0.18em] text-content-muted">{{ logo_12_name }}</span>{% endif %}{% if logo_12_href %}</a>{% endif %}</div>{% endif %}
       </div>
     </div>
   </div>
