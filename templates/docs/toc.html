@@ -9,7 +9,7 @@
   {% if toc_has_headings %}
     {# Mobile TOC floating button #}
     <div class="desk:hidden fixed bottom-4 right-4 z-30">
-      <button class="flex items-center justify-center size-12 rounded-full bg-base-200 border border-base-400 shadow-sm hover:bg-base-300 transition-colors"
+      <button class="flex items-center justify-center size-12 cursor-pointer rounded-full bg-base-200 border border-base-400 shadow-sm hover:bg-base-300 transition-colors"
               x-on:click="toggleToc()"
               aria-label="Table of contents">
         {{ icons::render(name="list", class="size-5") }}
@@ -32,7 +32,7 @@
              aria-label="Table of contents">
         <div class="flex items-center justify-between p-4 border-b border-base-400">
           <span class="font-semibold text-content text-sm">On this page</span>
-          <button class="p-1.5 rounded-md hover:bg-base-300 transition-colors"
+          <button class="p-1.5 cursor-pointer rounded-md hover:bg-base-300 transition-colors"
                   x-on:click="tocOpen = false"
                   aria-label="Close table of contents">
             {{ icons::render(name="x", class="size-5") }}

@@ -6,7 +6,7 @@
   <div class="mx-auto max-w-[80rem] h-full flex items-center justify-between gap-3 px-4">
     <div class="flex-auto min-w-0 flex items-center justify-start">
       <button 
-        class="desk:hidden flex-none p-2 -ml-2 mr-2 rounded-md hover:bg-base-300 transition-colors"
+        class="desk:hidden flex-none p-2 -ml-2 mr-2 cursor-pointer rounded-md hover:bg-base-300 transition-colors"
         x-on:click="toggleSidebar()"
         aria-label="Toggle navigation"
       >
@@ -37,7 +37,7 @@
       {% endif %}
 
       <button
-        class="p-2 -mr-2 rounded-md hover:bg-base-300 transition-colors"
+        class="p-2 -mr-2 cursor-pointer rounded-md hover:bg-base-300 transition-colors"
         x-on:click="cycleTheme()"
         aria-label="Toggle theme"
       >

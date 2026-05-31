@@ -227,7 +227,7 @@ They are downloaded to `static/icons/` by `scripts/download-icons.sh` and render
 ## Testing & quality
 
 - **Linting**: `npm run lint` runs `dprint check` (JSON, Markdown, TOML, CSS, YAML) and `zola check`
-- **Tests**: `npm run test` runs Node.js unit tests with the built-in `node:test` runner
+- **Tests**: `npm run test` runs Node.js unit tests with the built-in `node:test` runner. Source-level tests may live near their source files.
 - **Build**: `npm run build` compiles CSS, bundles JS, builds theme-init, then runs Zola build
 - **CI**: `npm run ci` runs lint, tests, then build (used for CI validation)
 - **Format**: `npm run format` runs `dprint fmt`
